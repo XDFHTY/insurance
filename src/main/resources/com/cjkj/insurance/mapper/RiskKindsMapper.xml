@@ -1,0 +1,267 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjkj.insurance.mapper.RiskKindsMapper" >
+  <resultMap id="BaseResultMap" type="com.cjkj.insurance.entity.RiskKinds" >
+    <id column="risk_kinds_id" property="riskKindsId" jdbcType="INTEGER" />
+    <result column="insureinfo_id" property="insureinfoId" jdbcType="INTEGER" />
+    <result column="risk_code" property="riskCode" jdbcType="VARCHAR" />
+    <result column="risk_name" property="riskName" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="not_deductible" property="notDeductible" jdbcType="CHAR" />
+    <result column="premium" property="premium" jdbcType="DECIMAL" />
+    <result column="ncf_premium" property="ncfPremium" jdbcType="DECIMAL" />
+    <result column="resp_msg_id" property="respMsgId" jdbcType="INTEGER" />
+    <result column="car_info_id" property="carInfoId" jdbcType="INTEGER" />
+    <result column="task_id" property="taskId" jdbcType="VARCHAR" />
+    <result column="prv_id" property="prvId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    risk_kinds_id, insureinfo_id, risk_code, risk_name, amount, not_deductible, premium, 
+    ncf_premium, resp_msg_id, car_info_id, task_id, prv_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from risk_kinds
+    where risk_kinds_id = #{riskKindsId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from risk_kinds
+    where risk_kinds_id = #{riskKindsId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cjkj.insurance.entity.RiskKinds" >
+    insert into risk_kinds (risk_kinds_id, insureinfo_id, risk_code, 
+      risk_name, amount, not_deductible, 
+      premium, ncf_premium, resp_msg_id, 
+      car_info_id, task_id, prv_id
+      )
+    values (#{riskKindsId,jdbcType=INTEGER}, #{insureinfoId,jdbcType=INTEGER}, #{riskCode,jdbcType=VARCHAR}, 
+      #{riskName,jdbcType=VARCHAR}, #{amount,jdbcType=DECIMAL}, #{notDeductible,jdbcType=CHAR}, 
+      #{premium,jdbcType=DECIMAL}, #{ncfPremium,jdbcType=DECIMAL}, #{respMsgId,jdbcType=INTEGER}, 
+      #{carInfoId,jdbcType=INTEGER}, #{taskId,jdbcType=VARCHAR}, #{prvId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cjkj.insurance.entity.RiskKinds" >
+    insert into risk_kinds
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="riskKindsId != null" >
+        risk_kinds_id,
+      </if>
+      <if test="insureinfoId != null" >
+        insureinfo_id,
+      </if>
+      <if test="riskCode != null" >
+        risk_code,
+      </if>
+      <if test="riskName != null" >
+        risk_name,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="notDeductible != null" >
+        not_deductible,
+      </if>
+      <if test="premium != null" >
+        premium,
+      </if>
+      <if test="ncfPremium != null" >
+        ncf_premium,
+      </if>
+      <if test="respMsgId != null" >
+        resp_msg_id,
+      </if>
+      <if test="carInfoId != null" >
+        car_info_id,
+      </if>
+      <if test="taskId != null" >
+        task_id,
+      </if>
+      <if test="prvId != null" >
+        prv_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="riskKindsId != null" >
+        #{riskKindsId,jdbcType=INTEGER},
+      </if>
+      <if test="insureinfoId != null" >
+        #{insureinfoId,jdbcType=INTEGER},
+      </if>
+      <if test="riskCode != null" >
+        #{riskCode,jdbcType=VARCHAR},
+      </if>
+      <if test="riskName != null" >
+        #{riskName,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="notDeductible != null" >
+        #{notDeductible,jdbcType=CHAR},
+      </if>
+      <if test="premium != null" >
+        #{premium,jdbcType=DECIMAL},
+      </if>
+      <if test="ncfPremium != null" >
+        #{ncfPremium,jdbcType=DECIMAL},
+      </if>
+      <if test="respMsgId != null" >
+        #{respMsgId,jdbcType=INTEGER},
+      </if>
+      <if test="carInfoId != null" >
+        #{carInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="prvId != null" >
+        #{prvId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cjkj.insurance.entity.RiskKinds" >
+    update risk_kinds
+    <set >
+      <if test="insureinfoId != null" >
+        insureinfo_id = #{insureinfoId,jdbcType=INTEGER},
+      </if>
+      <if test="riskCode != null" >
+        risk_code = #{riskCode,jdbcType=VARCHAR},
+      </if>
+      <if test="riskName != null" >
+        risk_name = #{riskName,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="notDeductible != null" >
+        not_deductible = #{notDeductible,jdbcType=CHAR},
+      </if>
+      <if test="premium != null" >
+        premium = #{premium,jdbcType=DECIMAL},
+      </if>
+      <if test="ncfPremium != null" >
+        ncf_premium = #{ncfPremium,jdbcType=DECIMAL},
+      </if>
+      <if test="respMsgId != null" >
+        resp_msg_id = #{respMsgId,jdbcType=INTEGER},
+      </if>
+      <if test="carInfoId != null" >
+        car_info_id = #{carInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="prvId != null" >
+        prv_id = #{prvId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where risk_kinds_id = #{riskKindsId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cjkj.insurance.entity.RiskKinds" >
+    update risk_kinds
+    set insureinfo_id = #{insureinfoId,jdbcType=INTEGER},
+      risk_code = #{riskCode,jdbcType=VARCHAR},
+      risk_name = #{riskName,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      not_deductible = #{notDeductible,jdbcType=CHAR},
+      premium = #{premium,jdbcType=DECIMAL},
+      ncf_premium = #{ncfPremium,jdbcType=DECIMAL},
+      resp_msg_id = #{respMsgId,jdbcType=INTEGER},
+      car_info_id = #{carInfoId,jdbcType=INTEGER},
+      task_id = #{taskId,jdbcType=VARCHAR},
+      prv_id = #{prvId,jdbcType=VARCHAR}
+    where risk_kinds_id = #{riskKindsId,jdbcType=INTEGER}
+  </update>
+
+  <!--批量添加数据-->
+  <insert id="addRiskKinds" parameterType="java.util.List">
+    <foreach collection ="list" item="riskKinds" separator =",">
+      insert into risk_kinds
+      <trim prefix="(" suffix=")" suffixOverrides=",">
+        <if test="riskKinds.riskKindsId != null">
+          risk_kinds_id,
+        </if>
+        <if test="riskKinds.insureinfoId != null">
+          insureinfo_id,
+        </if>
+        <if test="riskKinds.riskCode != null">
+          risk_code,
+        </if>
+        <if test="riskKinds.riskName != null">
+          risk_name,
+        </if>
+        <if test="riskKinds.amount != null">
+          amount,
+        </if>
+        <if test="riskKinds.notDeductible != null">
+          not_deductible,
+        </if>
+        <if test="riskKinds.premium != null">
+          premium,
+        </if>
+        <if test="riskKinds.ncfPremium != null">
+          ncf_premium,
+        </if>
+        <if test="riskKinds.respMsgId != null">
+          resp_msg_id,
+        </if>
+        <if test="riskKinds.carInfoId != null">
+          car_info_id,
+        </if>
+        <if test="riskKinds.taskId != null">
+          task_id,
+        </if>
+        <if test="riskKinds.prvId != null">
+          prv_id,
+        </if>
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="riskKinds.riskKindsId != null">
+          #{riskKinds.riskKindsId,jdbcType=INTEGER},
+        </if>
+        <if test="riskKinds.insureinfoId != null">
+          #{riskKinds.insureinfoId,jdbcType=INTEGER},
+        </if>
+        <if test="riskKinds.riskCode != null">
+          #{riskKinds.riskCode,jdbcType=VARCHAR},
+        </if>
+        <if test="riskKinds.riskName != null">
+          #{riskKinds.riskName,jdbcType=VARCHAR},
+        </if>
+        <if test="riskKinds.amount != null">
+          #{riskKinds.amount,jdbcType=DECIMAL},
+        </if>
+        <if test="riskKinds.notDeductible != null">
+          #{riskKinds.notDeductible,jdbcType=CHAR},
+        </if>
+        <if test="riskKinds.premium != null">
+          #{riskKinds.premium,jdbcType=DECIMAL},
+        </if>
+        <if test="riskKinds.ncfPremium != null">
+          #{riskKinds.ncfPremium,jdbcType=DECIMAL},
+        </if>
+        <if test="riskKinds.respMsgId != null">
+          #{riskKinds.respMsgId,jdbcType=INTEGER},
+        </if>
+        <if test="riskKinds.carInfoId != null">
+          #{riskKinds.carInfoId,jdbcType=INTEGER},
+        </if>
+        <if test="riskKinds.taskId != null">
+          #{riskKinds.taskId,jdbcType=VARCHAR},
+        </if>
+        <if test="riskKinds.prvId != null">
+          #{riskKinds.prvId,jdbcType=VARCHAR},
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+
+  <select id="findAllRiskKindsByTaskId" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT * FROM
+    risk_kinds rk
+    WHERE
+    rk.task_id = #{taskId}
+  </select>
+</mapper>

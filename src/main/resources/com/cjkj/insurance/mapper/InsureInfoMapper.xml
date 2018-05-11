@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjkj.insurance.mapper.InsureInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.cjkj.insurance.entity.InsureInfo" >
+    <id column="insure_info_id" property="insureInfoId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="car_info_id" property="carInfoId" jdbcType="INTEGER" />
+    <result column="msg_type" property="msgType" jdbcType="CHAR" />
+    <result column="start_date" property="startDate" jdbcType="DATE" />
+    <result column="end_date" property="endDate" jdbcType="DATE" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="premium" property="premium" jdbcType="DECIMAL" />
+    <result column="policy_no" property="policyNo" jdbcType="VARCHAR" />
+    <result column="discount_rate" property="discountRate" jdbcType="DECIMAL" />
+    <result column="is_payment_tax" property="isPaymentTax" jdbcType="CHAR" />
+    <result column="tax_fee" property="taxFee" jdbcType="DECIMAL" />
+    <result column="late_fee" property="lateFee" jdbcType="DECIMAL" />
+    <result column="nfc_premium" property="nfcPremium" jdbcType="DECIMAL" />
+    <result column="total_premium" property="totalPremium" jdbcType="DECIMAL" />
+    <result column="resp_msg_id" property="respMsgId" jdbcType="INTEGER" />
+    <result column="task_id" property="taskId" jdbcType="VARCHAR" />
+    <result column="prv_id" property="prvId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    insure_info_id, user_id, car_info_id, msg_type, start_date, end_date, amount, premium, 
+    policy_no, discount_rate, is_payment_tax, tax_fee, late_fee, nfc_premium, total_premium, 
+    resp_msg_id, task_id, prv_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from insure_info
+    where insure_info_id = #{insureInfoId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from insure_info
+    where insure_info_id = #{insureInfoId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cjkj.insurance.entity.InsureInfo" >
+    insert into insure_info (insure_info_id, user_id, car_info_id, 
+      msg_type, start_date, end_date, 
+      amount, premium, policy_no, 
+      discount_rate, is_payment_tax, tax_fee, 
+      late_fee, nfc_premium, total_premium, 
+      resp_msg_id, task_id, prv_id
+      )
+    values (#{insureInfoId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{carInfoId,jdbcType=INTEGER}, 
+      #{msgType,jdbcType=CHAR}, #{startDate,jdbcType=DATE}, #{endDate,jdbcType=DATE}, 
+      #{amount,jdbcType=DECIMAL}, #{premium,jdbcType=DECIMAL}, #{policyNo,jdbcType=VARCHAR}, 
+      #{discountRate,jdbcType=DECIMAL}, #{isPaymentTax,jdbcType=CHAR}, #{taxFee,jdbcType=DECIMAL}, 
+      #{lateFee,jdbcType=DECIMAL}, #{nfcPremium,jdbcType=DECIMAL}, #{totalPremium,jdbcType=DECIMAL}, 
+      #{respMsgId,jdbcType=INTEGER}, #{taskId,jdbcType=VARCHAR}, #{prvId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cjkj.insurance.entity.InsureInfo" >
+    insert into insure_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="insureInfoId != null" >
+        insure_info_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="carInfoId != null" >
+        car_info_id,
+      </if>
+      <if test="msgType != null" >
+        msg_type,
+      </if>
+      <if test="startDate != null" >
+        start_date,
+      </if>
+      <if test="endDate != null" >
+        end_date,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="premium != null" >
+        premium,
+      </if>
+      <if test="policyNo != null" >
+        policy_no,
+      </if>
+      <if test="discountRate != null" >
+        discount_rate,
+      </if>
+      <if test="isPaymentTax != null" >
+        is_payment_tax,
+      </if>
+      <if test="taxFee != null" >
+        tax_fee,
+      </if>
+      <if test="lateFee != null" >
+        late_fee,
+      </if>
+      <if test="nfcPremium != null" >
+        nfc_premium,
+      </if>
+      <if test="totalPremium != null" >
+        total_premium,
+      </if>
+      <if test="respMsgId != null" >
+        resp_msg_id,
+      </if>
+      <if test="taskId != null" >
+        task_id,
+      </if>
+      <if test="prvId != null" >
+        prv_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="insureInfoId != null" >
+        #{insureInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="carInfoId != null" >
+        #{carInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="msgType != null" >
+        #{msgType,jdbcType=CHAR},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=DATE},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="premium != null" >
+        #{premium,jdbcType=DECIMAL},
+      </if>
+      <if test="policyNo != null" >
+        #{policyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="discountRate != null" >
+        #{discountRate,jdbcType=DECIMAL},
+      </if>
+      <if test="isPaymentTax != null" >
+        #{isPaymentTax,jdbcType=CHAR},
+      </if>
+      <if test="taxFee != null" >
+        #{taxFee,jdbcType=DECIMAL},
+      </if>
+      <if test="lateFee != null" >
+        #{lateFee,jdbcType=DECIMAL},
+      </if>
+      <if test="nfcPremium != null" >
+        #{nfcPremium,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPremium != null" >
+        #{totalPremium,jdbcType=DECIMAL},
+      </if>
+      <if test="respMsgId != null" >
+        #{respMsgId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="prvId != null" >
+        #{prvId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cjkj.insurance.entity.InsureInfo" >
+    update insure_info
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="carInfoId != null" >
+        car_info_id = #{carInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="msgType != null" >
+        msg_type = #{msgType,jdbcType=CHAR},
+      </if>
+      <if test="startDate != null" >
+        start_date = #{startDate,jdbcType=DATE},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=DATE},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="premium != null" >
+        premium = #{premium,jdbcType=DECIMAL},
+      </if>
+      <if test="policyNo != null" >
+        policy_no = #{policyNo,jdbcType=VARCHAR},
+      </if>
+      <if test="discountRate != null" >
+        discount_rate = #{discountRate,jdbcType=DECIMAL},
+      </if>
+      <if test="isPaymentTax != null" >
+        is_payment_tax = #{isPaymentTax,jdbcType=CHAR},
+      </if>
+      <if test="taxFee != null" >
+        tax_fee = #{taxFee,jdbcType=DECIMAL},
+      </if>
+      <if test="lateFee != null" >
+        late_fee = #{lateFee,jdbcType=DECIMAL},
+      </if>
+      <if test="nfcPremium != null" >
+        nfc_premium = #{nfcPremium,jdbcType=DECIMAL},
+      </if>
+      <if test="totalPremium != null" >
+        total_premium = #{totalPremium,jdbcType=DECIMAL},
+      </if>
+      <if test="respMsgId != null" >
+        resp_msg_id = #{respMsgId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="prvId != null" >
+        prv_id = #{prvId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where insure_info_id = #{insureInfoId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cjkj.insurance.entity.InsureInfo" >
+    update insure_info
+    set user_id = #{userId,jdbcType=INTEGER},
+      car_info_id = #{carInfoId,jdbcType=INTEGER},
+      msg_type = #{msgType,jdbcType=CHAR},
+      start_date = #{startDate,jdbcType=DATE},
+      end_date = #{endDate,jdbcType=DATE},
+      amount = #{amount,jdbcType=DECIMAL},
+      premium = #{premium,jdbcType=DECIMAL},
+      policy_no = #{policyNo,jdbcType=VARCHAR},
+      discount_rate = #{discountRate,jdbcType=DECIMAL},
+      is_payment_tax = #{isPaymentTax,jdbcType=CHAR},
+      tax_fee = #{taxFee,jdbcType=DECIMAL},
+      late_fee = #{lateFee,jdbcType=DECIMAL},
+      nfc_premium = #{nfcPremium,jdbcType=DECIMAL},
+      total_premium = #{totalPremium,jdbcType=DECIMAL},
+      resp_msg_id = #{respMsgId,jdbcType=INTEGER},
+      task_id = #{taskId,jdbcType=VARCHAR},
+      prv_id = #{prvId,jdbcType=VARCHAR}
+    where insure_info_id = #{insureInfoId,jdbcType=INTEGER}
+  </update>
+
+  <!--批量添加数据-->
+  <insert id="addInsureInfos" parameterType="java.util.List">
+    <foreach collection ="list" item="insureInfo" separator =",">
+      INSERT INTO  insure_info
+      <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="insureInfo.insureInfoId != null" >
+          insure_info_id,
+        </if>
+        <if test="insureInfo.userId != null" >
+          user_id,
+        </if>
+        <if test="insureInfo.carInfoId != null" >
+          car_info_id,
+        </if>
+        <if test="insureInfo.msgType != null" >
+          msg_type,
+        </if>
+        <if test="insureInfo.startDate != null" >
+          start_date,
+        </if>
+        <if test="insureInfo.endDate != null" >
+          end_date,
+        </if>
+        <if test="insureInfo.amount != null" >
+          amount,
+        </if>
+        <if test="insureInfo.premium != null" >
+          premium,
+        </if>
+        <if test="insureInfo.policyNo != null" >
+          policy_no,
+        </if>
+        <if test="insureInfo.discountRate != null" >
+          discount_rate,
+        </if>
+        <if test="insureInfo.isPaymentTax != null" >
+          is_payment_tax,
+        </if>
+        <if test="insureInfo.taxFee != null" >
+          tax_fee,
+        </if>
+        <if test="insureInfo.lateFee != null" >
+          late_fee,
+        </if>
+        <if test="insureInfo.nfcPremium != null" >
+          nfc_premium,
+        </if>
+        <if test="insureInfo.totalPremium != null" >
+          total_premium,
+        </if>
+        <if test="insureInfo.respMsgId != null" >
+          resp_msg_id,
+        </if>
+        <if test="insureInfo.taskId != null" >
+          task_id,
+        </if>
+        <if test="insureInfo.prvId != null" >
+          prv_id,
+        </if>
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="insureInfo.insureInfoId != null" >
+          #{insureInfo.insureInfoId,jdbcType=INTEGER},
+        </if>
+        <if test="insureInfo.userId != null" >
+          #{insureInfo.userId,jdbcType=INTEGER},
+        </if>
+        <if test="insureInfo.carInfoId != null" >
+          #{insureInfo.carInfoId,jdbcType=INTEGER},
+        </if>
+        <if test="insureInfo.msgType != null" >
+          #{insureInfo.msgType,jdbcType=CHAR},
+        </if>
+        <if test="insureInfo.startDate != null" >
+          #{insureInfo.startDate,jdbcType=DATE},
+        </if>
+        <if test="insureInfo.endDate != null" >
+          #{insureInfo.endDate,jdbcType=DATE},
+        </if>
+        <if test="insureInfo.amount != null" >
+          #{insureInfo.amount,jdbcType=DECIMAL},
+        </if>
+        <if test="insureInfo.premium != null" >
+          #{insureInfo.premium,jdbcType=DECIMAL},
+        </if>
+        <if test="insureInfo.policyNo != null" >
+          #{insureInfo.policyNo,jdbcType=VARCHAR},
+        </if>
+        <if test="insureInfo.discountRate != null" >
+          #{insureInfo.discountRate,jdbcType=DECIMAL},
+        </if>
+        <if test="insureInfo.isPaymentTax != null" >
+          #{insureInfo.isPaymentTax,jdbcType=CHAR},
+        </if>
+        <if test="insureInfo.taxFee != null" >
+          #{insureInfo.taxFee,jdbcType=DECIMAL},
+        </if>
+        <if test="insureInfo.lateFee != null" >
+          #{insureInfo.lateFee,jdbcType=DECIMAL},
+        </if>
+        <if test="insureInfo.nfcPremium != null" >
+          #{insureInfo.nfcPremium,jdbcType=DECIMAL},
+        </if>
+        <if test="insureInfo.totalPremium != null" >
+          #{insureInfo.totalPremium,jdbcType=DECIMAL},
+        </if>
+        <if test="insureInfo.respMsgId != null" >
+          #{insureInfo.respMsgId,jdbcType=INTEGER},
+        </if>
+        <if test="insureInfo.taskId != null" >
+          #{insureInfo.taskId,jdbcType=VARCHAR},
+        </if>
+        <if test="insureInfo.prvId != null" >
+          #{insureInfo.prvId,jdbcType=VARCHAR},
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+
+  <select id="findAllInsureInfoByMap" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT * FROM
+    insure_info ii
+    WHERE
+    ii.car_info_id = #{carInfoId}
+    AND
+    ii.resp_msg_id = #{respMsgId}
+    AND
+    ii.task_id = #{taskId}
+    AND
+    ii.prv_id = #{prvId}
+  </select>
+</mapper>

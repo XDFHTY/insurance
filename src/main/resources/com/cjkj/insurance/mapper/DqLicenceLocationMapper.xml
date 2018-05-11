@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjkj.insurance.mapper.DqLicenceLocationMapper" >
+  <resultMap id="BaseResultMap" type="com.cjkj.insurance.entity.DqLicenceLocation" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="city_id" property="cityId" jdbcType="VARCHAR" />
+    <result column="licence_location" property="licenceLocation" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, city_id, licence_location
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from dq_licence_location
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from dq_licence_location
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cjkj.insurance.entity.DqLicenceLocation" >
+    insert into dq_licence_location (id, city_id, licence_location
+      )
+    values (#{id,jdbcType=INTEGER}, #{cityId,jdbcType=VARCHAR}, #{licenceLocation,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cjkj.insurance.entity.DqLicenceLocation" >
+    insert into dq_licence_location
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="cityId != null" >
+        city_id,
+      </if>
+      <if test="licenceLocation != null" >
+        licence_location,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="cityId != null" >
+        #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="licenceLocation != null" >
+        #{licenceLocation,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cjkj.insurance.entity.DqLicenceLocation" >
+    update dq_licence_location
+    <set >
+      <if test="cityId != null" >
+        city_id = #{cityId,jdbcType=VARCHAR},
+      </if>
+      <if test="licenceLocation != null" >
+        licence_location = #{licenceLocation,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cjkj.insurance.entity.DqLicenceLocation" >
+    update dq_licence_location
+    set city_id = #{cityId,jdbcType=VARCHAR},
+      licence_location = #{licenceLocation,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

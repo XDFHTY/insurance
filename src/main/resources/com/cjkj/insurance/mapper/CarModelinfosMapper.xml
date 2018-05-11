@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjkj.insurance.mapper.CarModelinfosMapper" >
+  <resultMap id="BaseResultMap" type="com.cjkj.insurance.entity.CarModelinfos" >
+    <id column="car_modelinfos_id" property="carModelinfosId" jdbcType="INTEGER" />
+    <result column="vehicle_id" property="vehicleId" jdbcType="INTEGER" />
+    <result column="maket_date" property="maketDate" jdbcType="CHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="seat" property="seat" jdbcType="INTEGER" />
+    <result column="tax_price" property="taxPrice" jdbcType="DECIMAL" />
+    <result column="vehicle_code" property="vehicleCode" jdbcType="VARCHAR" />
+    <result column="vehicle_name" property="vehicleName" jdbcType="VARCHAR" />
+    <result column="yearStyle" property="yearstyle" jdbcType="CHAR" />
+    <result column="gearbox" property="gearbox" jdbcType="VARCHAR" />
+    <result column="displacement" property="displacement" jdbcType="DOUBLE" />
+    <result column="full_weight" property="fullWeight" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    car_modelinfos_id, vehicle_id, maket_date, price, seat, tax_price, vehicle_code, 
+    vehicle_name, yearStyle, gearbox, displacement, full_weight
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from car_modelinfos
+    where car_modelinfos_id = #{carModelinfosId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from car_modelinfos
+    where car_modelinfos_id = #{carModelinfosId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cjkj.insurance.entity.CarModelinfos" >
+    insert into car_modelinfos (car_modelinfos_id, vehicle_id, maket_date, 
+      price, seat, tax_price, 
+      vehicle_code, vehicle_name, yearStyle, 
+      gearbox, displacement, full_weight
+      )
+    values (#{carModelinfosId,jdbcType=INTEGER}, #{vehicleId,jdbcType=INTEGER}, #{maketDate,jdbcType=CHAR}, 
+      #{price,jdbcType=DECIMAL}, #{seat,jdbcType=INTEGER}, #{taxPrice,jdbcType=DECIMAL}, 
+      #{vehicleCode,jdbcType=VARCHAR}, #{vehicleName,jdbcType=VARCHAR}, #{yearstyle,jdbcType=CHAR}, 
+      #{gearbox,jdbcType=VARCHAR}, #{displacement,jdbcType=DOUBLE}, #{fullWeight,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cjkj.insurance.entity.CarModelinfos" >
+    insert into car_modelinfos
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="carModelinfosId != null" >
+        car_modelinfos_id,
+      </if>
+      <if test="vehicleId != null" >
+        vehicle_id,
+      </if>
+      <if test="maketDate != null" >
+        maket_date,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="seat != null" >
+        seat,
+      </if>
+      <if test="taxPrice != null" >
+        tax_price,
+      </if>
+      <if test="vehicleCode != null" >
+        vehicle_code,
+      </if>
+      <if test="vehicleName != null" >
+        vehicle_name,
+      </if>
+      <if test="yearstyle != null" >
+        yearStyle,
+      </if>
+      <if test="gearbox != null" >
+        gearbox,
+      </if>
+      <if test="displacement != null" >
+        displacement,
+      </if>
+      <if test="fullWeight != null" >
+        full_weight,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="carModelinfosId != null" >
+        #{carModelinfosId,jdbcType=INTEGER},
+      </if>
+      <if test="vehicleId != null" >
+        #{vehicleId,jdbcType=INTEGER},
+      </if>
+      <if test="maketDate != null" >
+        #{maketDate,jdbcType=CHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="seat != null" >
+        #{seat,jdbcType=INTEGER},
+      </if>
+      <if test="taxPrice != null" >
+        #{taxPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="vehicleCode != null" >
+        #{vehicleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleName != null" >
+        #{vehicleName,jdbcType=VARCHAR},
+      </if>
+      <if test="yearstyle != null" >
+        #{yearstyle,jdbcType=CHAR},
+      </if>
+      <if test="gearbox != null" >
+        #{gearbox,jdbcType=VARCHAR},
+      </if>
+      <if test="displacement != null" >
+        #{displacement,jdbcType=DOUBLE},
+      </if>
+      <if test="fullWeight != null" >
+        #{fullWeight,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cjkj.insurance.entity.CarModelinfos" >
+    update car_modelinfos
+    <set >
+      <if test="vehicleId != null" >
+        vehicle_id = #{vehicleId,jdbcType=INTEGER},
+      </if>
+      <if test="maketDate != null" >
+        maket_date = #{maketDate,jdbcType=CHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="seat != null" >
+        seat = #{seat,jdbcType=INTEGER},
+      </if>
+      <if test="taxPrice != null" >
+        tax_price = #{taxPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="vehicleCode != null" >
+        vehicle_code = #{vehicleCode,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleName != null" >
+        vehicle_name = #{vehicleName,jdbcType=VARCHAR},
+      </if>
+      <if test="yearstyle != null" >
+        yearStyle = #{yearstyle,jdbcType=CHAR},
+      </if>
+      <if test="gearbox != null" >
+        gearbox = #{gearbox,jdbcType=VARCHAR},
+      </if>
+      <if test="displacement != null" >
+        displacement = #{displacement,jdbcType=DOUBLE},
+      </if>
+      <if test="fullWeight != null" >
+        full_weight = #{fullWeight,jdbcType=INTEGER},
+      </if>
+    </set>
+    where car_modelinfos_id = #{carModelinfosId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cjkj.insurance.entity.CarModelinfos" >
+    update car_modelinfos
+    set vehicle_id = #{vehicleId,jdbcType=INTEGER},
+      maket_date = #{maketDate,jdbcType=CHAR},
+      price = #{price,jdbcType=DECIMAL},
+      seat = #{seat,jdbcType=INTEGER},
+      tax_price = #{taxPrice,jdbcType=DECIMAL},
+      vehicle_code = #{vehicleCode,jdbcType=VARCHAR},
+      vehicle_name = #{vehicleName,jdbcType=VARCHAR},
+      yearStyle = #{yearstyle,jdbcType=CHAR},
+      gearbox = #{gearbox,jdbcType=VARCHAR},
+      displacement = #{displacement,jdbcType=DOUBLE},
+      full_weight = #{fullWeight,jdbcType=INTEGER}
+    where car_modelinfos_id = #{carModelinfosId,jdbcType=INTEGER}
+  </update>
+</mapper>

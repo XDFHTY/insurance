@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjkj.insurance.mapper.ReqMsgMapper" >
+  <resultMap id="BaseResultMap" type="com.cjkj.insurance.entity.ReqMsg" >
+    <id column="req_msg_id" property="reqMsgId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="car_info_id" property="carInfoId" jdbcType="INTEGER" />
+    <result column="req_type" property="reqType" jdbcType="CHAR" />
+    <result column="insure_area_code" property="insureAreaCode" jdbcType="VARCHAR" />
+    <result column="channeI_user_id" property="channeiUserId" jdbcType="VARCHAR" />
+    <result column="taskId" property="taskid" jdbcType="VARCHAR" />
+    <result column="prvId" property="prvid" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    req_msg_id, user_id, car_info_id, req_type, insure_area_code, channeI_user_id, taskId, 
+    prvId, remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from req_msg
+    where req_msg_id = #{reqMsgId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from req_msg
+    where req_msg_id = #{reqMsgId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cjkj.insurance.entity.ReqMsg" >
+    insert into req_msg (req_msg_id, user_id, car_info_id, 
+      req_type, insure_area_code, channeI_user_id, 
+      taskId, prvId, remark
+      )
+    values (#{reqMsgId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{carInfoId,jdbcType=INTEGER}, 
+      #{reqType,jdbcType=CHAR}, #{insureAreaCode,jdbcType=VARCHAR}, #{channeiUserId,jdbcType=VARCHAR}, 
+      #{taskid,jdbcType=VARCHAR}, #{prvid,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cjkj.insurance.entity.ReqMsg" >
+    insert into req_msg
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="reqMsgId != null" >
+        req_msg_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="carInfoId != null" >
+        car_info_id,
+      </if>
+      <if test="reqType != null" >
+        req_type,
+      </if>
+      <if test="insureAreaCode != null" >
+        insure_area_code,
+      </if>
+      <if test="channeiUserId != null" >
+        channeI_user_id,
+      </if>
+      <if test="taskid != null" >
+        taskId,
+      </if>
+      <if test="prvid != null" >
+        prvId,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="reqMsgId != null" >
+        #{reqMsgId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="carInfoId != null" >
+        #{carInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="reqType != null" >
+        #{reqType,jdbcType=CHAR},
+      </if>
+      <if test="insureAreaCode != null" >
+        #{insureAreaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channeiUserId != null" >
+        #{channeiUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="taskid != null" >
+        #{taskid,jdbcType=VARCHAR},
+      </if>
+      <if test="prvid != null" >
+        #{prvid,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cjkj.insurance.entity.ReqMsg" >
+    update req_msg
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="carInfoId != null" >
+        car_info_id = #{carInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="reqType != null" >
+        req_type = #{reqType,jdbcType=CHAR},
+      </if>
+      <if test="insureAreaCode != null" >
+        insure_area_code = #{insureAreaCode,jdbcType=VARCHAR},
+      </if>
+      <if test="channeiUserId != null" >
+        channeI_user_id = #{channeiUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="taskid != null" >
+        taskId = #{taskid,jdbcType=VARCHAR},
+      </if>
+      <if test="prvid != null" >
+        prvId = #{prvid,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where req_msg_id = #{reqMsgId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cjkj.insurance.entity.ReqMsg" >
+    update req_msg
+    set user_id = #{userId,jdbcType=INTEGER},
+      car_info_id = #{carInfoId,jdbcType=INTEGER},
+      req_type = #{reqType,jdbcType=CHAR},
+      insure_area_code = #{insureAreaCode,jdbcType=VARCHAR},
+      channeI_user_id = #{channeiUserId,jdbcType=VARCHAR},
+      taskId = #{taskid,jdbcType=VARCHAR},
+      prvId = #{prvid,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR}
+    where req_msg_id = #{reqMsgId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjkj.insurance.mapper.DeliveryMapper" >
+  <resultMap id="BaseResultMap" type="com.cjkj.insurance.entity.Delivery" >
+    <id column="delivery_id" property="deliveryId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="car_info_id" property="carInfoId" jdbcType="INTEGER" />
+    <result column="delivery_type" property="deliveryType" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="task_id" property="taskId" jdbcType="VARCHAR" />
+    <result column="prv_id" property="prvId" jdbcType="VARCHAR" />
+    <result column="zip" property="zip" jdbcType="CHAR" />
+    <result column="express_company_name" property="expressCompanyName" jdbcType="VARCHAR" />
+    <result column="express_number" property="expressNumber" jdbcType="VARCHAR" />
+    <result column="sy_elec_policy_file_path" property="syElecPolicyFilePath" jdbcType="VARCHAR" />
+    <result column="jp_elec_policy_file_path" property="jpElecPolicyFilePath" jdbcType="VARCHAR" />
+    <result column="out_dept" property="outDept" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    delivery_id, user_id, car_info_id, delivery_type, name, phone, province, city, area,
+    address, task_id, prv_id, zip, express_company_name, express_number, sy_elec_policy_file_path,
+    jp_elec_policy_file_path, out_dept
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from delivery
+    where delivery_id = #{deliveryId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from delivery
+    where delivery_id = #{deliveryId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cjkj.insurance.entity.Delivery" >
+    insert into delivery (delivery_id, user_id, car_info_id,
+    delivery_type, name, phone,
+    province, city, area,
+    address, task_id, prv_id,
+    zip, express_company_name, express_number,
+    sy_elec_policy_file_path, jp_elec_policy_file_path,
+    out_dept)
+    values (#{deliveryId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{carInfoId,jdbcType=INTEGER},
+    #{deliveryType,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
+    #{province,jdbcType=VARCHAR}, #{city,jdbcType=VARCHAR}, #{area,jdbcType=VARCHAR},
+    #{address,jdbcType=VARCHAR}, #{taskId,jdbcType=VARCHAR}, #{prvId,jdbcType=VARCHAR},
+    #{zip,jdbcType=CHAR}, #{expressCompanyName,jdbcType=VARCHAR}, #{expressNumber,jdbcType=VARCHAR},
+    #{syElecPolicyFilePath,jdbcType=VARCHAR}, #{jpElecPolicyFilePath,jdbcType=VARCHAR},
+    #{outDept,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cjkj.insurance.entity.Delivery" >
+    insert into delivery
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="deliveryId != null" >
+        delivery_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="carInfoId != null" >
+        car_info_id,
+      </if>
+      <if test="deliveryType != null" >
+        delivery_type,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="province != null" >
+        province,
+      </if>
+      <if test="city != null" >
+        city,
+      </if>
+      <if test="area != null" >
+        area,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="taskId != null" >
+        task_id,
+      </if>
+      <if test="prvId != null" >
+        prv_id,
+      </if>
+      <if test="zip != null" >
+        zip,
+      </if>
+      <if test="expressCompanyName != null" >
+        express_company_name,
+      </if>
+      <if test="expressNumber != null" >
+        express_number,
+      </if>
+      <if test="syElecPolicyFilePath != null" >
+        sy_elec_policy_file_path,
+      </if>
+      <if test="jpElecPolicyFilePath != null" >
+        jp_elec_policy_file_path,
+      </if>
+      <if test="outDept != null" >
+        out_dept,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="deliveryId != null" >
+        #{deliveryId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="carInfoId != null" >
+        #{carInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryType != null" >
+        #{deliveryType,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null" >
+        #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="prvId != null" >
+        #{prvId,jdbcType=VARCHAR},
+      </if>
+      <if test="zip != null" >
+        #{zip,jdbcType=CHAR},
+      </if>
+      <if test="expressCompanyName != null" >
+        #{expressCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="expressNumber != null" >
+        #{expressNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="syElecPolicyFilePath != null" >
+        #{syElecPolicyFilePath,jdbcType=VARCHAR},
+      </if>
+      <if test="jpElecPolicyFilePath != null" >
+        #{jpElecPolicyFilePath,jdbcType=VARCHAR},
+      </if>
+      <if test="outDept != null" >
+        #{outDept,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cjkj.insurance.entity.Delivery" >
+    update delivery
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="carInfoId != null" >
+        car_info_id = #{carInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="deliveryType != null" >
+        delivery_type = #{deliveryType,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="province != null" >
+        province = #{province,jdbcType=VARCHAR},
+      </if>
+      <if test="city != null" >
+        city = #{city,jdbcType=VARCHAR},
+      </if>
+      <if test="area != null" >
+        area = #{area,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="prvId != null" >
+        prv_id = #{prvId,jdbcType=VARCHAR},
+      </if>
+      <if test="zip != null" >
+        zip = #{zip,jdbcType=CHAR},
+      </if>
+      <if test="expressCompanyName != null" >
+        express_company_name = #{expressCompanyName,jdbcType=VARCHAR},
+      </if>
+      <if test="expressNumber != null" >
+        express_number = #{expressNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="syElecPolicyFilePath != null" >
+        sy_elec_policy_file_path = #{syElecPolicyFilePath,jdbcType=VARCHAR},
+      </if>
+      <if test="jpElecPolicyFilePath != null" >
+        jp_elec_policy_file_path = #{jpElecPolicyFilePath,jdbcType=VARCHAR},
+      </if>
+      <if test="outDept != null" >
+        out_dept = #{outDept,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where delivery_id = #{deliveryId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cjkj.insurance.entity.Delivery" >
+    update delivery
+    set user_id = #{userId,jdbcType=INTEGER},
+    car_info_id = #{carInfoId,jdbcType=INTEGER},
+    delivery_type = #{deliveryType,jdbcType=CHAR},
+    name = #{name,jdbcType=VARCHAR},
+    phone = #{phone,jdbcType=VARCHAR},
+    province = #{province,jdbcType=VARCHAR},
+    city = #{city,jdbcType=VARCHAR},
+    area = #{area,jdbcType=VARCHAR},
+    address = #{address,jdbcType=VARCHAR},
+    task_id = #{taskId,jdbcType=VARCHAR},
+    prv_id = #{prvId,jdbcType=VARCHAR},
+    zip = #{zip,jdbcType=CHAR},
+    express_company_name = #{expressCompanyName,jdbcType=VARCHAR},
+    express_number = #{expressNumber,jdbcType=VARCHAR},
+    sy_elec_policy_file_path = #{syElecPolicyFilePath,jdbcType=VARCHAR},
+    jp_elec_policy_file_path = #{jpElecPolicyFilePath,jdbcType=VARCHAR},
+    out_dept = #{outDept,jdbcType=VARCHAR}
+    where delivery_id = #{deliveryId,jdbcType=INTEGER}
+  </update>
+
+
+
+  <select id="findDeliveryByTaskId" parameterType="java.lang.String" resultMap="BaseResultMap">
+  SELECT * FROM
+  delivery d
+  WHERE
+  d.task_id = #{taskId}
+  </select>
+</mapper>

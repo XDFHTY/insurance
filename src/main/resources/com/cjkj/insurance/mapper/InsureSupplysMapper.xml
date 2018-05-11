@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjkj.insurance.mapper.InsureSupplysMapper" >
+  <resultMap id="BaseResultMap" type="com.cjkj.insurance.entity.InsureSupplys" >
+    <id column="insure_supplys_id" property="insureSupplysId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="car_info_id" property="carInfoId" jdbcType="INTEGER" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="item_value" property="itemValue" jdbcType="VARCHAR" />
+    <result column="task_id" property="taskId" jdbcType="VARCHAR" />
+    <result column="prv_id" property="prvId" jdbcType="VARCHAR" />
+    <result column="item_input_type" property="itemInputType" jdbcType="VARCHAR" />
+    <result column="item_options" property="itemOptions" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    insure_supplys_id, user_id, car_info_id, item_code, item_value, task_id, prv_id, 
+    item_input_type, item_options
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from insure_supplys
+    where insure_supplys_id = #{insureSupplysId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from insure_supplys
+    where insure_supplys_id = #{insureSupplysId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cjkj.insurance.entity.InsureSupplys" >
+    insert into insure_supplys (insure_supplys_id, user_id, car_info_id, 
+      item_code, item_value, task_id, 
+      prv_id, item_input_type, item_options
+      )
+    values (#{insureSupplysId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{carInfoId,jdbcType=INTEGER}, 
+      #{itemCode,jdbcType=VARCHAR}, #{itemValue,jdbcType=VARCHAR}, #{taskId,jdbcType=VARCHAR}, 
+      #{prvId,jdbcType=VARCHAR}, #{itemInputType,jdbcType=VARCHAR}, #{itemOptions,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cjkj.insurance.entity.InsureSupplys" >
+    insert into insure_supplys
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="insureSupplysId != null" >
+        insure_supplys_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="carInfoId != null" >
+        car_info_id,
+      </if>
+      <if test="itemCode != null" >
+        item_code,
+      </if>
+      <if test="itemValue != null" >
+        item_value,
+      </if>
+      <if test="taskId != null" >
+        task_id,
+      </if>
+      <if test="prvId != null" >
+        prv_id,
+      </if>
+      <if test="itemInputType != null" >
+        item_input_type,
+      </if>
+      <if test="itemOptions != null" >
+        item_options,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="insureSupplysId != null" >
+        #{insureSupplysId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="carInfoId != null" >
+        #{carInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="itemCode != null" >
+        #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemValue != null" >
+        #{itemValue,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null" >
+        #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="prvId != null" >
+        #{prvId,jdbcType=VARCHAR},
+      </if>
+      <if test="itemInputType != null" >
+        #{itemInputType,jdbcType=VARCHAR},
+      </if>
+      <if test="itemOptions != null" >
+        #{itemOptions,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cjkj.insurance.entity.InsureSupplys" >
+    update insure_supplys
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="carInfoId != null" >
+        car_info_id = #{carInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="itemCode != null" >
+        item_code = #{itemCode,jdbcType=VARCHAR},
+      </if>
+      <if test="itemValue != null" >
+        item_value = #{itemValue,jdbcType=VARCHAR},
+      </if>
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="prvId != null" >
+        prv_id = #{prvId,jdbcType=VARCHAR},
+      </if>
+      <if test="itemInputType != null" >
+        item_input_type = #{itemInputType,jdbcType=VARCHAR},
+      </if>
+      <if test="itemOptions != null" >
+        item_options = #{itemOptions,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where insure_supplys_id = #{insureSupplysId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cjkj.insurance.entity.InsureSupplys" >
+    update insure_supplys
+    set user_id = #{userId,jdbcType=INTEGER},
+      car_info_id = #{carInfoId,jdbcType=INTEGER},
+      item_code = #{itemCode,jdbcType=VARCHAR},
+      item_value = #{itemValue,jdbcType=VARCHAR},
+      task_id = #{taskId,jdbcType=VARCHAR},
+      prv_id = #{prvId,jdbcType=VARCHAR},
+      item_input_type = #{itemInputType,jdbcType=VARCHAR},
+      item_options = #{itemOptions,jdbcType=VARCHAR}
+    where insure_supplys_id = #{insureSupplysId,jdbcType=INTEGER}
+  </update>
+
+  <insert id="addInsureSupplys" parameterType="java.util.List">
+    <foreach collection ="list" item="insureSupply" separator =",">
+      insert into insure_supplys
+      <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="insureSupply.insureSupplysId != null" >
+          insure_supplys_id,
+        </if>
+        <if test="insureSupply.userId != null" >
+          user_id,
+        </if>
+        <if test="insureSupply.carInfoId != null" >
+          car_info_id,
+        </if>
+        <if test="insureSupply.itemCode != null" >
+          item_code,
+        </if>
+        <if test="insureSupply.itemValue != null" >
+          item_value,
+        </if>
+        <if test="insureSupply.taskId != null" >
+          task_id,
+        </if>
+        <if test="insureSupply.prvId != null" >
+          prv_id,
+        </if>
+        <if test="insureSupply.itemInputType != null" >
+          item_input_type,
+        </if>
+        <if test="insureSupply.itemOptions != null" >
+          item_options,
+        </if>
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="insureSupply.insureSupplysId != null" >
+          #{insureSupply.insureSupplysId,jdbcType=INTEGER},
+        </if>
+        <if test="insureSupply.userId != null" >
+          #{insureSupply.userId,jdbcType=INTEGER},
+        </if>
+        <if test="insureSupply.carInfoId != null" >
+          #{insureSupply.carInfoId,jdbcType=INTEGER},
+        </if>
+        <if test="insureSupply.itemCode != null" >
+          #{insureSupply.itemCode,jdbcType=VARCHAR},
+        </if>
+        <if test="insureSupply.itemValue != null" >
+          #{insureSupply.itemValue,jdbcType=VARCHAR},
+        </if>
+        <if test="insureSupply.taskId != null" >
+          #{insureSupply.taskId,jdbcType=VARCHAR},
+        </if>
+        <if test="insureSupply.prvId != null" >
+          #{insureSupply.prvId,jdbcType=VARCHAR},
+        </if>
+        <if test="insureSupply.itemInputType != null" >
+          #{insureSupply.itemInputType,jdbcType=VARCHAR},
+        </if>
+        <if test="insureSupply.itemOptions != null" >
+          #{insureSupply.itemOptions,jdbcType=VARCHAR},
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+  <select id="findAllInsureSupplysByTaskId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT *
+    FROM
+    insure_supplys is2
+    WHERE
+    is2.task_id = #{taskId}
+  </select>
+</mapper>

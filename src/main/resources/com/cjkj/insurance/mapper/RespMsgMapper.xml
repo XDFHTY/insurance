@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjkj.insurance.mapper.RespMsgMapper" >
+  <resultMap id="BaseResultMap" type="com.cjkj.insurance.entity.RespMsg" >
+    <id column="resp_msg_id" property="respMsgId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="car_info_id" property="carInfoId" jdbcType="INTEGER" />
+    <result column="task_id" property="taskId" jdbcType="VARCHAR" />
+    <result column="prv_id" property="prvId" jdbcType="VARCHAR" />
+    <result column="prv_name" property="prvName" jdbcType="VARCHAR" />
+    <result column="resp_code" property="respCode" jdbcType="VARCHAR" />
+    <result column="error_msg" property="errorMsg" jdbcType="VARCHAR" />
+    <result column="channel_id" property="channelId" jdbcType="VARCHAR" />
+    <result column="channel_user_id" property="channelUserId" jdbcType="VARCHAR" />
+    <result column="task_state" property="taskState" jdbcType="VARCHAR" />
+    <result column="task_state_description" property="taskStateDescription" jdbcType="VARCHAR" />
+    <result column="msg_type" property="msgType" jdbcType="VARCHAR" />
+    <result column="inspection_code" property="inspectionCode" jdbcType="VARCHAR" />
+    <result column="quote_valid_time" property="quoteValidTime" jdbcType="TIMESTAMP" />
+    <result column="pay_valid_time" property="payValidTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    resp_msg_id, user_id, car_info_id, task_id, prv_id, prv_name, resp_code, error_msg, 
+    channel_id, channel_user_id, task_state, task_state_description, msg_type, inspection_code, 
+    quote_valid_time, pay_valid_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from resp_msg
+    where resp_msg_id = #{respMsgId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from resp_msg
+    where resp_msg_id = #{respMsgId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cjkj.insurance.entity.RespMsg" >
+    insert into resp_msg (resp_msg_id, user_id, car_info_id, 
+      task_id, prv_id, prv_name, 
+      resp_code, error_msg, channel_id, 
+      channel_user_id, task_state, task_state_description, 
+      msg_type, inspection_code, quote_valid_time, 
+      pay_valid_time)
+    values (#{respMsgId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{carInfoId,jdbcType=INTEGER}, 
+      #{taskId,jdbcType=VARCHAR}, #{prvId,jdbcType=VARCHAR}, #{prvName,jdbcType=VARCHAR}, 
+      #{respCode,jdbcType=VARCHAR}, #{errorMsg,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, 
+      #{channelUserId,jdbcType=VARCHAR}, #{taskState,jdbcType=VARCHAR}, #{taskStateDescription,jdbcType=VARCHAR}, 
+      #{msgType,jdbcType=VARCHAR}, #{inspectionCode,jdbcType=VARCHAR}, #{quoteValidTime,jdbcType=TIMESTAMP}, 
+      #{payValidTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cjkj.insurance.entity.RespMsg" >
+    <selectKey order="AFTER" keyProperty="respMsgId" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into resp_msg
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="respMsgId != null" >
+        resp_msg_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="carInfoId != null" >
+        car_info_id,
+      </if>
+      <if test="taskId != null" >
+        task_id,
+      </if>
+      <if test="prvId != null" >
+        prv_id,
+      </if>
+      <if test="prvName != null" >
+        prv_name,
+      </if>
+      <if test="respCode != null" >
+        resp_code,
+      </if>
+      <if test="errorMsg != null" >
+        error_msg,
+      </if>
+      <if test="channelId != null" >
+        channel_id,
+      </if>
+      <if test="channelUserId != null" >
+        channel_user_id,
+      </if>
+      <if test="taskState != null" >
+        task_state,
+      </if>
+      <if test="taskStateDescription != null" >
+        task_state_description,
+      </if>
+      <if test="msgType != null" >
+        msg_type,
+      </if>
+      <if test="inspectionCode != null" >
+        inspection_code,
+      </if>
+      <if test="quoteValidTime != null" >
+        quote_valid_time,
+      </if>
+      <if test="payValidTime != null" >
+        pay_valid_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="respMsgId != null" >
+        #{respMsgId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="carInfoId != null" >
+        #{carInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="prvId != null" >
+        #{prvId,jdbcType=VARCHAR},
+      </if>
+      <if test="prvName != null" >
+        #{prvName,jdbcType=VARCHAR},
+      </if>
+      <if test="respCode != null" >
+        #{respCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errorMsg != null" >
+        #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId != null" >
+        #{channelId,jdbcType=VARCHAR},
+      </if>
+      <if test="channelUserId != null" >
+        #{channelUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="taskState != null" >
+        #{taskState,jdbcType=VARCHAR},
+      </if>
+      <if test="taskStateDescription != null" >
+        #{taskStateDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="msgType != null" >
+        #{msgType,jdbcType=VARCHAR},
+      </if>
+      <if test="inspectionCode != null" >
+        #{inspectionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="quoteValidTime != null" >
+        #{quoteValidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payValidTime != null" >
+        #{payValidTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cjkj.insurance.entity.RespMsg" >
+    update resp_msg
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="carInfoId != null" >
+        car_info_id = #{carInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="prvId != null" >
+        prv_id = #{prvId,jdbcType=VARCHAR},
+      </if>
+      <if test="prvName != null" >
+        prv_name = #{prvName,jdbcType=VARCHAR},
+      </if>
+      <if test="respCode != null" >
+        resp_code = #{respCode,jdbcType=VARCHAR},
+      </if>
+      <if test="errorMsg != null" >
+        error_msg = #{errorMsg,jdbcType=VARCHAR},
+      </if>
+      <if test="channelId != null" >
+        channel_id = #{channelId,jdbcType=VARCHAR},
+      </if>
+      <if test="channelUserId != null" >
+        channel_user_id = #{channelUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="taskState != null" >
+        task_state = #{taskState,jdbcType=VARCHAR},
+      </if>
+      <if test="taskStateDescription != null" >
+        task_state_description = #{taskStateDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="msgType != null" >
+        msg_type = #{msgType,jdbcType=VARCHAR},
+      </if>
+      <if test="inspectionCode != null" >
+        inspection_code = #{inspectionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="quoteValidTime != null" >
+        quote_valid_time = #{quoteValidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payValidTime != null" >
+        pay_valid_time = #{payValidTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where resp_msg_id = #{respMsgId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cjkj.insurance.entity.RespMsg" >
+    update resp_msg
+    set user_id = #{userId,jdbcType=INTEGER},
+      car_info_id = #{carInfoId,jdbcType=INTEGER},
+      task_id = #{taskId,jdbcType=VARCHAR},
+      prv_id = #{prvId,jdbcType=VARCHAR},
+      prv_name = #{prvName,jdbcType=VARCHAR},
+      resp_code = #{respCode,jdbcType=VARCHAR},
+      error_msg = #{errorMsg,jdbcType=VARCHAR},
+      channel_id = #{channelId,jdbcType=VARCHAR},
+      channel_user_id = #{channelUserId,jdbcType=VARCHAR},
+      task_state = #{taskState,jdbcType=VARCHAR},
+      task_state_description = #{taskStateDescription,jdbcType=VARCHAR},
+      msg_type = #{msgType,jdbcType=VARCHAR},
+      inspection_code = #{inspectionCode,jdbcType=VARCHAR},
+      quote_valid_time = #{quoteValidTime,jdbcType=TIMESTAMP},
+      pay_valid_time = #{payValidTime,jdbcType=TIMESTAMP}
+    where resp_msg_id = #{respMsgId,jdbcType=INTEGER}
+  </update>
+
+  <!--根据任务号查询respMsg信息-->
+  <select id="findRespMsgByTaskId" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT * FROM
+    resp_msg rm
+    WHERE
+    rm.task_id = #{taskId}
+    AND
+    rm.prv_id = #{prvId}
+
+  </select>
+</mapper>

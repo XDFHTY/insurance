@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjkj.insurance.mapper.UserImgMapper" >
+  <resultMap id="BaseResultMap" type="com.cjkj.insurance.entity.UserImg" >
+    <id column="user_img_id" property="userImgId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="car_info_id" property="carInfoId" jdbcType="INTEGER" />
+    <result column="task_id" property="taskId" jdbcType="VARCHAR" />
+    <result column="prv_id" property="prvId" jdbcType="VARCHAR" />
+    <result column="user_type" property="userType" jdbcType="CHAR" />
+    <result column="img_type" property="imgType" jdbcType="VARCHAR" />
+    <result column="img_name" property="imgName" jdbcType="VARCHAR" />
+    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    user_img_id, user_id, car_info_id, task_id, prv_id, user_type, img_type, img_name, 
+    img_url, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from user_img
+    where user_img_id = #{userImgId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from user_img
+    where user_img_id = #{userImgId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cjkj.insurance.entity.UserImg" >
+    insert into user_img (user_img_id, user_id, car_info_id, 
+      task_id, prv_id, user_type, 
+      img_type, img_name, img_url, 
+      create_time)
+    values (#{userImgId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{carInfoId,jdbcType=INTEGER}, 
+      #{taskId,jdbcType=VARCHAR}, #{prvId,jdbcType=VARCHAR}, #{userType,jdbcType=CHAR}, 
+      #{imgType,jdbcType=VARCHAR}, #{imgName,jdbcType=VARCHAR}, #{imgUrl,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cjkj.insurance.entity.UserImg" >
+    insert into user_img
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="userImgId != null" >
+        user_img_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="carInfoId != null" >
+        car_info_id,
+      </if>
+      <if test="taskId != null" >
+        task_id,
+      </if>
+      <if test="prvId != null" >
+        prv_id,
+      </if>
+      <if test="userType != null" >
+        user_type,
+      </if>
+      <if test="imgType != null" >
+        img_type,
+      </if>
+      <if test="imgName != null" >
+        img_name,
+      </if>
+      <if test="imgUrl != null" >
+        img_url,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="userImgId != null" >
+        #{userImgId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="carInfoId != null" >
+        #{carInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="prvId != null" >
+        #{prvId,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        #{userType,jdbcType=CHAR},
+      </if>
+      <if test="imgType != null" >
+        #{imgType,jdbcType=VARCHAR},
+      </if>
+      <if test="imgName != null" >
+        #{imgName,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null" >
+        #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cjkj.insurance.entity.UserImg" >
+    update user_img
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="carInfoId != null" >
+        car_info_id = #{carInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="prvId != null" >
+        prv_id = #{prvId,jdbcType=VARCHAR},
+      </if>
+      <if test="userType != null" >
+        user_type = #{userType,jdbcType=CHAR},
+      </if>
+      <if test="imgType != null" >
+        img_type = #{imgType,jdbcType=VARCHAR},
+      </if>
+      <if test="imgName != null" >
+        img_name = #{imgName,jdbcType=VARCHAR},
+      </if>
+      <if test="imgUrl != null" >
+        img_url = #{imgUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where user_img_id = #{userImgId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cjkj.insurance.entity.UserImg" >
+    update user_img
+    set user_id = #{userId,jdbcType=INTEGER},
+      car_info_id = #{carInfoId,jdbcType=INTEGER},
+      task_id = #{taskId,jdbcType=VARCHAR},
+      prv_id = #{prvId,jdbcType=VARCHAR},
+      user_type = #{userType,jdbcType=CHAR},
+      img_type = #{imgType,jdbcType=VARCHAR},
+      img_name = #{imgName,jdbcType=VARCHAR},
+      img_url = #{imgUrl,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where user_img_id = #{userImgId,jdbcType=INTEGER}
+  </update>
+
+  <insert id="addUserImgs" parameterType="java.util.List">
+    <foreach collection ="list" item="userImg" separator =",">
+      insert into user_img
+      <trim prefix="(" suffix=")" suffixOverrides="," >
+        <if test="userImg.userImgId != null" >
+          user_img_id,
+        </if>
+        <if test="userImg.userId != null" >
+          user_id,
+        </if>
+        <if test="userImg.carInfoId != null" >
+          car_info_id,
+        </if>
+        <if test="userImg.taskId != null" >
+          task_id,
+        </if>
+        <if test="userImg.prvId != null" >
+          prv_id,
+        </if>
+        <if test="userImg.userType != null" >
+          user_type,
+        </if>
+        <if test="userImg.imgType != null" >
+          img_type,
+        </if>
+        <if test="userImg.imgName != null" >
+          img_name,
+        </if>
+        <if test="userImg.imgUrl != null" >
+          img_url,
+        </if>
+        <if test="userImg.createTime != null" >
+          create_time,
+        </if>
+      </trim>
+      <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="userImg.userImgId != null" >
+          #{userImg.userImgId,jdbcType=INTEGER},
+        </if>
+        <if test="userImg.userId != null" >
+          #{userImg.userId,jdbcType=INTEGER},
+        </if>
+        <if test="userImg.carInfoId != null" >
+          #{userImg.carInfoId,jdbcType=INTEGER},
+        </if>
+        <if test="userImg.taskId != null" >
+          #{userImg.taskId,jdbcType=VARCHAR},
+        </if>
+        <if test="userImg.prvId != null" >
+          #{userImg.prvId,jdbcType=VARCHAR},
+        </if>
+        <if test="userImg.userType != null" >
+          #{userImg.userType,jdbcType=CHAR},
+        </if>
+        <if test="userImg.imgType != null" >
+          #{userImg.imgType,jdbcType=VARCHAR},
+        </if>
+        <if test="userImg.imgName != null" >
+          #{userImg.imgName,jdbcType=VARCHAR},
+        </if>
+        <if test="userImg.imgUrl != null" >
+          #{userImg.imgUrl,jdbcType=VARCHAR},
+        </if>
+        <if test="userImg.createTime != null" >
+          #{userImg.createTime,jdbcType=TIMESTAMP},
+        </if>
+      </trim>
+    </foreach>
+  </insert>
+
+  <!--根据任务号查询所有影像信息-->
+  <select id="findAllUserImg" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT * FROM
+    user_img ui
+    WHERE
+    ui.task_id = #{taskId}
+
+  </select>
+</mapper>

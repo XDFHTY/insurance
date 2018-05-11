@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjkj.insurance.mapper.CarOwnerMapper" >
+  <resultMap id="BaseResultMap" type="com.cjkj.insurance.entity.CarOwner" >
+    <id column="car_owner_id" property="carOwnerId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="car_info_id" property="carInfoId" jdbcType="INTEGER" />
+    <result column="msg_type" property="msgType" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="idcard_type" property="idcardType" jdbcType="VARCHAR" />
+    <result column="idcard_no" property="idcardNo" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="resp_msg_id" property="respMsgId" jdbcType="INTEGER" />
+    <result column="task_id" property="taskId" jdbcType="VARCHAR" />
+    <result column="prv_id" property="prvId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    car_owner_id, user_id, car_info_id, msg_type, name, idcard_type, idcard_no, phone, 
+    email, resp_msg_id, task_id, prv_id
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from car_owner
+    where car_owner_id = #{carOwnerId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from car_owner
+    where car_owner_id = #{carOwnerId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cjkj.insurance.entity.CarOwner" >
+    insert into car_owner (car_owner_id, user_id, car_info_id, 
+      msg_type, name, idcard_type, 
+      idcard_no, phone, email, 
+      resp_msg_id, task_id, prv_id
+      )
+    values (#{carOwnerId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{carInfoId,jdbcType=INTEGER}, 
+      #{msgType,jdbcType=CHAR}, #{name,jdbcType=VARCHAR}, #{idcardType,jdbcType=VARCHAR}, 
+      #{idcardNo,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{respMsgId,jdbcType=INTEGER}, #{taskId,jdbcType=VARCHAR}, #{prvId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cjkj.insurance.entity.CarOwner" >
+    insert into car_owner
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="carOwnerId != null" >
+        car_owner_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="carInfoId != null" >
+        car_info_id,
+      </if>
+      <if test="msgType != null" >
+        msg_type,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="idcardType != null" >
+        idcard_type,
+      </if>
+      <if test="idcardNo != null" >
+        idcard_no,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="respMsgId != null" >
+        resp_msg_id,
+      </if>
+      <if test="taskId != null" >
+        task_id,
+      </if>
+      <if test="prvId != null" >
+        prv_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="carOwnerId != null" >
+        #{carOwnerId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="carInfoId != null" >
+        #{carInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="msgType != null" >
+        #{msgType,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardType != null" >
+        #{idcardType,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardNo != null" >
+        #{idcardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="respMsgId != null" >
+        #{respMsgId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="prvId != null" >
+        #{prvId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cjkj.insurance.entity.CarOwner" >
+    update car_owner
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="carInfoId != null" >
+        car_info_id = #{carInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="msgType != null" >
+        msg_type = #{msgType,jdbcType=CHAR},
+      </if>
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardType != null" >
+        idcard_type = #{idcardType,jdbcType=VARCHAR},
+      </if>
+      <if test="idcardNo != null" >
+        idcard_no = #{idcardNo,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="respMsgId != null" >
+        resp_msg_id = #{respMsgId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="prvId != null" >
+        prv_id = #{prvId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where car_owner_id = #{carOwnerId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cjkj.insurance.entity.CarOwner" >
+    update car_owner
+    set user_id = #{userId,jdbcType=INTEGER},
+      car_info_id = #{carInfoId,jdbcType=INTEGER},
+      msg_type = #{msgType,jdbcType=CHAR},
+      name = #{name,jdbcType=VARCHAR},
+      idcard_type = #{idcardType,jdbcType=VARCHAR},
+      idcard_no = #{idcardNo,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      resp_msg_id = #{respMsgId,jdbcType=INTEGER},
+      task_id = #{taskId,jdbcType=VARCHAR},
+      prv_id = #{prvId,jdbcType=VARCHAR}
+    where car_owner_id = #{carOwnerId,jdbcType=INTEGER}
+  </update>
+  <!--批量添加carOwner信息-->
+  <insert id="addCarOwner" parameterType="java.util.List">
+    <foreach collection ="list" item="carOwner" separator =",">
+    INSERT INTO car_owner
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="carOwner.carOwnerId != null" >
+        car_owner_id,
+      </if>
+      <if test="carOwner.userId != null" >
+        user_id,
+      </if>
+      <if test="carOwner.carInfoId != null" >
+        car_info_id,
+      </if>
+      <if test="carOwner.msgType != null" >
+        msg_type,
+      </if>
+      <if test="carOwner.name != null" >
+        name,
+      </if>
+      <if test="carOwner.idcardType != null" >
+        idcard_type,
+      </if>
+      <if test="carOwner.idcardNo != null" >
+        idcard_no,
+      </if>
+      <if test="carOwner.phone != null" >
+        phone,
+      </if>
+      <if test="carOwner.email != null" >
+        email,
+      </if>
+      <if test="carOwner.respMsgId != null" >
+        resp_msg_id,
+      </if>
+      <if test="carOwner.taskId != null" >
+        task_id,
+      </if>
+      <if test="carOwner.prvId != null" >
+        prv_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+        <if test="carOwner.carOwnerId != null" >
+          #{carOwner.carOwnerId,jdbcType=INTEGER},
+        </if>
+        <if test="carOwner.userId != null" >
+          #{carOwner.userId,jdbcType=INTEGER},
+        </if>
+        <if test="carOwner.carInfoId != null" >
+          #{carOwner.carInfoId,jdbcType=INTEGER},
+        </if>
+        <if test="carOwner.msgType != null" >
+          #{carOwner.msgType,jdbcType=CHAR},
+        </if>
+        <if test="carOwner.name != null" >
+          #{carOwner.name,jdbcType=VARCHAR},
+        </if>
+        <if test="carOwner.idcardType != null" >
+          #{carOwner.idcardType,jdbcType=VARCHAR},
+        </if>
+        <if test="carOwner.idcardNo != null" >
+          #{carOwner.idcardNo,jdbcType=VARCHAR},
+        </if>
+        <if test="carOwner.phone != null" >
+          #{carOwner.phone,jdbcType=VARCHAR},
+        </if>
+        <if test="carOwner.email != null" >
+          #{carOwner.email,jdbcType=VARCHAR},
+        </if>
+        <if test="carOwner.respMsgId != null" >
+          #{carOwner.respMsgId,jdbcType=INTEGER},
+        </if>
+        <if test="carOwner.taskId != null" >
+          #{carOwner.taskId,jdbcType=VARCHAR},
+        </if>
+        <if test="carOwner.prvId != null" >
+          #{carOwner.prvId,jdbcType=VARCHAR},
+        </if>
+
+    </trim>
+
+  </foreach >
+
+  </insert>
+
+  <select id="findCarOwner" parameterType="java.util.Map" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"></include>
+    FROM
+    car_owner co
+    WHERE
+    co.task_id = #{taskId}
+    AND
+    co.car_info_id = #{carInfoId}
+    AND
+    co.msg_type = '1'
+  </select>
+
+
+  <select id="updateCarOwner" parameterType="com.cjkj.insurance.entity.CarOwner">
+    update
+    car_owner
+    set
+    task_id = #{taskId,jdbcType=VARCHAR}
+    where
+    car_info_id = #{carInfoId,jdbcType=INTEGER}
+    AND
+    user_id = #{userId}
+  </select>
+
+</mapper>

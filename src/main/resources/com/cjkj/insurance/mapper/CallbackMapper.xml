@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjkj.insurance.mapper.CallbackMapper" >
+
+
+  <resultMap id="respMsg" type="java.util.LinkedHashMap">
+    <result column="task_id" property="taskId"></result>
+    <result column="prv_id" property="prvId"></result>
+    <result column="prv_name" property="prvName"></result>
+    <result column="resp_code" property="respCode"></result>
+    <result column="error_msg" property="errorMsg"></result>
+    <result column="channel_id" property="channelId"></result>
+    <result column="channel_user_id" property="channelUserId"></result>
+    <result column="task_state" property="taskState"></result>
+    <result column="task_state_description" property="taskStateDescription"></result>
+    <result column="msg_type" property="msgType"></result>
+    <result column="inspection_code" property="inspectionCode"></result>
+    <result column="quote_valid_time" property="quoteValidTime"></result>
+    <result column="pay_valid_time" property="payValidTime"></result>
+    <collection property="carInfo" select="findCarInfos" column="{taskId=task_id}"></collection>
+    <collection property="carOwner" select="findCarOwners" column="{taskId=task_id}"></collection>
+    <collection property="insureInfo" select="findInsureInfo" column="{taskId=task_id,prvId=prv_id}"></collection>
+    <collection property="imageInfos" select="findImageInfos" column="{taskId=task_id}"></collection>
+    <collection property="delivery" select="findDelivery" column="{taskId=task_id}"></collection>
+    <collection property="insureSupplys" select="findInsureSupplys" column="{taskId=task_id}"></collection>
+    <collection property="scoreRate" select="findScoreRate" column="{taskId=task_id}"></collection>
+  </resultMap>
+
+  <resultMap id="carInfo" type="com.cjkj.insurance.entity.CarInfo">
+    <id column="car_info_id" property="carInfoId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="is_new" property="isNew" jdbcType="CHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="car_license_no" property="carLicenseNo" jdbcType="VARCHAR" />
+    <result column="vin_code" property="vinCode" jdbcType="VARCHAR" />
+    <result column="engine_no" property="engineNo" jdbcType="VARCHAR" />
+    <result column="car_property" property="carProperty" jdbcType="VARCHAR" />
+    <result column="property" property="property" jdbcType="VARCHAR" />
+    <result column="regist_date" property="registDate" jdbcType="VARCHAR" />
+    <result column="is_transfer_car" property="isTransferCar" jdbcType="CHAR" />
+    <result column="transfer_date" property="transferDate" jdbcType="VARCHAR" />
+    <result column="vehicle_name" property="vehicleName" jdbcType="VARCHAR" />
+    <result column="vehicle_id" property="vehicleId" jdbcType="VARCHAR" />
+    <result column="model_loads" property="modelLoads" jdbcType="VARCHAR" />
+    <result column="purpose" property="purpose" jdbcType="VARCHAR" />
+    <result column="seat" property="seat" jdbcType="INTEGER" />
+    <result column="full_weight" property="fullWeight" jdbcType="REAL" />
+    <result column="displacement" property="displacement" jdbcType="REAL" />
+    <result column="driving_area" property="drivingArea" jdbcType="VARCHAR" />
+    <result column="resp_msg_id" property="respMsgId" jdbcType="INTEGER" />
+    <result column="task_id" property="taskId" jdbcType="VARCHAR" />
+    <result column="prv_id" property="prvId" jdbcType="VARCHAR" />
+    <result column="inspection_code" property="inspectionCode" jdbcType="VARCHAR" />
+    <result column="quote_valid_time" property="quoteValidTime" jdbcType="TIMESTAMP" />
+    <result column="pay_valid_time" property="payValidTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <resultMap id="carOwner" type="com.cjkj.insurance.entity.CarOwner">
+    <id column="car_owner_id" property="carOwnerId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="car_info_id" property="carInfoId" jdbcType="INTEGER" />
+    <result column="msg_type" property="msgType" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="idcard_type" property="idcardType" jdbcType="VARCHAR" />
+    <result column="idcard_no" property="idcardNo" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="resp_msg_id" property="respMsgId" jdbcType="INTEGER" />
+    <result column="task_id" property="taskId" jdbcType="VARCHAR" />
+    <result column="prv_id" property="prvId" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="insureInfo" type="com.cjkj.insurance.entity.InsureInfo">
+    <id column="insure_info_id" property="insureInfoId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="car_info_id" property="carInfoId" jdbcType="INTEGER" />
+    <result column="msg_type" property="msgType" jdbcType="CHAR" />
+    <result column="start_date" property="startDate" jdbcType="DATE" />
+    <result column="end_date" property="endDate" jdbcType="DATE" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="premium" property="premium" jdbcType="DECIMAL" />
+    <result column="policy_no" property="policyNo" jdbcType="VARCHAR" />
+    <result column="discount_rate" property="discountRate" jdbcType="DECIMAL" />
+    <result column="is_payment_tax" property="isPaymentTax" jdbcType="CHAR" />
+    <result column="tax_fee" property="taxFee" jdbcType="DECIMAL" />
+    <result column="late_fee" property="lateFee" jdbcType="DECIMAL" />
+    <result column="nfc_premium" property="nfcPremium" jdbcType="DECIMAL" />
+    <result column="total_premium" property="totalPremium" jdbcType="DECIMAL" />
+    <result column="resp_msg_id" property="respMsgId" jdbcType="INTEGER" />
+    <result column="task_id" property="taskId" jdbcType="VARCHAR" />
+    <result column="prv_id" property="prvId" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="imageInfos" type="com.cjkj.insurance.entity.UserImg">
+    <id column="user_img_id" property="userImgId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="car_info_id" property="carInfoId" jdbcType="INTEGER" />
+    <result column="task_id" property="taskId" jdbcType="VARCHAR" />
+    <result column="prv_id" property="prvId" jdbcType="VARCHAR" />
+    <result column="user_type" property="userType" jdbcType="CHAR" />
+    <result column="img_type" property="imgType" jdbcType="VARCHAR" />
+    <result column="img_name" property="imgName" jdbcType="VARCHAR" />
+    <result column="img_url" property="imgUrl" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+
+  </resultMap>
+
+  <resultMap id="delivery" type="com.cjkj.insurance.entity.Delivery">
+    <id column="delivery_id" property="deliveryId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="car_info_id" property="carInfoId" jdbcType="INTEGER" />
+    <result column="delivery_type" property="deliveryType" jdbcType="CHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="province" property="province" jdbcType="VARCHAR" />
+    <result column="city" property="city" jdbcType="VARCHAR" />
+    <result column="area" property="area" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="task_id" property="taskId" jdbcType="VARCHAR" />
+    <result column="prv_id" property="prvId" jdbcType="VARCHAR" />
+    <result column="zip" property="zip" jdbcType="CHAR" />
+    <result column="express_company_name" property="expressCompanyName" jdbcType="VARCHAR" />
+    <result column="express_number" property="expressNumber" jdbcType="VARCHAR" />
+    <result column="sy_elec_policy_filePath" property="syElecPolicyFilepath" jdbcType="VARCHAR" />
+    <result column="jp_elec_policy_file_path" property="jpElecPolicyFilePath" jdbcType="VARCHAR" />
+    <result column="out_dept" property="outDept" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="insureSupplys" type="com.cjkj.insurance.entity.InsureSupplys">
+    <id column="insure_supplys_id" property="insureSupplysId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="car_info_id" property="carInfoId" jdbcType="INTEGER" />
+    <result column="item_code" property="itemCode" jdbcType="VARCHAR" />
+    <result column="item_value" property="itemValue" jdbcType="VARCHAR" />
+    <result column="task_id" property="taskId" jdbcType="VARCHAR" />
+    <result column="prv_id" property="prvId" jdbcType="VARCHAR" />
+    <result column="item_input_type" property="itemInputType" jdbcType="VARCHAR" />
+    <result column="item_options" property="itemOptions" jdbcType="VARCHAR" />
+  </resultMap>
+
+  <resultMap id="scoreRate" type="com.cjkj.insurance.entity.ScoreRate">
+    <id column="score_rate_id" property="scoreRateId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="car_info_id" property="carInfoId" jdbcType="INTEGER" />
+    <result column="task_id" property="taskId" jdbcType="VARCHAR" />
+    <result column="prv_id" property="prvId" jdbcType="VARCHAR" />
+    <result column="biz_score" property="bizScore" jdbcType="VARCHAR" />
+    <result column="traffic_score" property="trafficScore" jdbcType="VARCHAR" />
+    <result column="biz_rate" property="bizRate" jdbcType="VARCHAR" />
+    <result column="traffic_rate" property="trafficRate" jdbcType="VARCHAR" />
+  </resultMap>
+
+
+  <!--查询回调信息-->
+  <select id="findAllCallback" parameterType="java.util.Map" resultMap="respMsg">
+    SELECT
+    *
+    FROM
+    resp_msg rm
+    WHERE
+    rm.task_id = #{taskId}
+  </select>
+
+  <!--查询 车辆信息-->
+  <select id="findCarInfos" parameterType="java.util.Map" resultMap="carInfo">
+    SELECT * FROM
+    car_info
+    WHERE
+    task_id = #{taskId}
+  </select>
+  <select id="findCarOwners" parameterType="java.util.Map" resultMap="carOwner">
+    SELECT * FROM
+    car_owner
+    WHERE
+    task_id = #{taskId}
+  </select>
+  <select id="findInsureInfo" parameterType="java.util.Map" resultMap="insureInfo">
+    SELECT * FROM
+    insure_info
+    insure_info
+    WHERE
+    task_id = #{taskId}
+    AND
+    prv_id = #{prvId}
+  </select>
+  <select id="findImageInfos" parameterType="java.util.Map" resultMap="imageInfos">
+    SELECT
+    *
+    FROM
+    user_img ui
+    WHERE
+    ui.task_id = #{taskId}
+  </select>
+  <select id="findDelivery" parameterType="java.util.Map" resultMap="delivery">
+    SELECT * FROM
+    delivery
+    WHERE
+    task_id = #{taskId}
+  </select>
+  <select id="findInsureSupplys" parameterType="java.util.Map" resultMap="insureSupplys">
+    SELECT * FROM
+    insure_supplys
+    WHERE
+    task_id = #{taskId}
+  </select>
+  <select id="findScoreRate" parameterType="java.util.Map" resultMap="scoreRate">
+    SELECT * FROM
+    score_rate
+    WHERE
+    task_id = #{taskId}
+  </select>
+
+</mapper>

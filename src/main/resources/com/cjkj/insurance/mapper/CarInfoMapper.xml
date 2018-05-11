@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjkj.insurance.mapper.CarInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.cjkj.insurance.entity.CarInfo" >
+    <id column="car_info_id" property="carInfoId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="is_new" property="isNew" jdbcType="CHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="car_license_no" property="carLicenseNo" jdbcType="VARCHAR" />
+    <result column="vin_code" property="vinCode" jdbcType="VARCHAR" />
+    <result column="engine_no" property="engineNo" jdbcType="VARCHAR" />
+    <result column="car_property" property="carProperty" jdbcType="VARCHAR" />
+    <result column="property" property="property" jdbcType="VARCHAR" />
+    <result column="regist_date" property="registDate" jdbcType="VARCHAR" />
+    <result column="is_transfer_car" property="isTransferCar" jdbcType="CHAR" />
+    <result column="transfer_date" property="transferDate" jdbcType="VARCHAR" />
+    <result column="vehicle_name" property="vehicleName" jdbcType="VARCHAR" />
+    <result column="vehicle_id" property="vehicleId" jdbcType="VARCHAR" />
+    <result column="model_loads" property="modelLoads" jdbcType="VARCHAR" />
+    <result column="purpose" property="purpose" jdbcType="VARCHAR" />
+    <result column="seat" property="seat" jdbcType="INTEGER" />
+    <result column="full_weight" property="fullWeight" jdbcType="REAL" />
+    <result column="displacement" property="displacement" jdbcType="REAL" />
+    <result column="driving_area" property="drivingArea" jdbcType="VARCHAR" />
+    <result column="resp_msg_id" property="respMsgId" jdbcType="INTEGER" />
+    <result column="task_id" property="taskId" jdbcType="VARCHAR" />
+    <result column="prv_id" property="prvId" jdbcType="VARCHAR" />
+    <result column="inspection_code" property="inspectionCode" jdbcType="VARCHAR" />
+    <result column="quote_valid_time" property="quoteValidTime" jdbcType="TIMESTAMP" />
+    <result column="pay_valid_time" property="payValidTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    car_info_id, user_id, is_new, price, car_license_no, vin_code, engine_no, car_property,
+    property, regist_date, is_transfer_car, transfer_date, vehicle_name, vehicle_id,
+    model_loads, purpose, seat, full_weight, displacement, driving_area, resp_msg_id,
+    task_id, prv_id, inspection_code, quote_valid_time, pay_valid_time, create_time,
+    update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select
+    <include refid="Base_Column_List" />
+    from car_info
+    where car_info_id = #{carInfoId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from car_info
+    where car_info_id = #{carInfoId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cjkj.insurance.entity.CarInfo" >
+    insert into car_info (car_info_id, user_id, is_new,
+      price, car_license_no, vin_code,
+      engine_no, car_property, property,
+      regist_date, is_transfer_car, transfer_date,
+      vehicle_name, vehicle_id, model_loads,
+      purpose, seat, full_weight,
+      displacement, driving_area, resp_msg_id,
+      task_id, prv_id, inspection_code,
+      quote_valid_time, pay_valid_time, create_time,
+      update_time)
+    values (#{carInfoId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{isNew,jdbcType=CHAR},
+      #{price,jdbcType=DECIMAL}, #{carLicenseNo,jdbcType=VARCHAR}, #{vinCode,jdbcType=VARCHAR},
+      #{engineNo,jdbcType=VARCHAR}, #{carProperty,jdbcType=VARCHAR}, #{property,jdbcType=VARCHAR},
+      #{registDate,jdbcType=VARCHAR}, #{isTransferCar,jdbcType=CHAR}, #{transferDate,jdbcType=VARCHAR},
+      #{vehicleName,jdbcType=VARCHAR}, #{vehicleId,jdbcType=VARCHAR}, #{modelLoads,jdbcType=VARCHAR}, 
+      #{purpose,jdbcType=VARCHAR}, #{seat,jdbcType=INTEGER}, #{fullWeight,jdbcType=REAL}, 
+      #{displacement,jdbcType=REAL}, #{drivingArea,jdbcType=VARCHAR}, #{respMsgId,jdbcType=INTEGER}, 
+      #{taskId,jdbcType=VARCHAR}, #{prvId,jdbcType=VARCHAR}, #{inspectionCode,jdbcType=VARCHAR}, 
+      #{quoteValidTime,jdbcType=TIMESTAMP}, #{payValidTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.cjkj.insurance.entity.CarInfo" >
+    <selectKey order="AFTER" keyProperty="carInfoId" resultType="java.lang.Integer">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
+    insert into car_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="carInfoId != null" >
+        car_info_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="isNew != null" >
+        is_new,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="carLicenseNo != null" >
+        car_license_no,
+      </if>
+      <if test="vinCode != null" >
+        vin_code,
+      </if>
+      <if test="engineNo != null" >
+        engine_no,
+      </if>
+      <if test="carProperty != null" >
+        car_property,
+      </if>
+      <if test="property != null" >
+        property,
+      </if>
+      <if test="registDate != null" >
+        regist_date,
+      </if>
+      <if test="isTransferCar != null" >
+        is_transfer_car,
+      </if>
+      <if test="transferDate != null" >
+        transfer_date,
+      </if>
+      <if test="vehicleName != null" >
+        vehicle_name,
+      </if>
+      <if test="vehicleId != null" >
+        vehicle_id,
+      </if>
+      <if test="modelLoads != null" >
+        model_loads,
+      </if>
+      <if test="purpose != null" >
+        purpose,
+      </if>
+      <if test="seat != null" >
+        seat,
+      </if>
+      <if test="fullWeight != null" >
+        full_weight,
+      </if>
+      <if test="displacement != null" >
+        displacement,
+      </if>
+      <if test="drivingArea != null" >
+        driving_area,
+      </if>
+      <if test="respMsgId != null" >
+        resp_msg_id,
+      </if>
+      <if test="taskId != null" >
+        task_id,
+      </if>
+      <if test="prvId != null" >
+        prv_id,
+      </if>
+      <if test="inspectionCode != null" >
+        inspection_code,
+      </if>
+      <if test="quoteValidTime != null" >
+        quote_valid_time,
+      </if>
+      <if test="payValidTime != null" >
+        pay_valid_time,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="carInfoId != null" >
+        #{carInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="isNew != null" >
+        #{isNew,jdbcType=CHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="carLicenseNo != null" >
+        #{carLicenseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="vinCode != null" >
+        #{vinCode,jdbcType=VARCHAR},
+      </if>
+      <if test="engineNo != null" >
+        #{engineNo,jdbcType=VARCHAR},
+      </if>
+      <if test="carProperty != null" >
+        #{carProperty,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null" >
+        #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="registDate != null" >
+        #{registDate,jdbcType=VARCHAR},
+      </if>
+      <if test="isTransferCar != null" >
+        #{isTransferCar,jdbcType=CHAR},
+      </if>
+      <if test="transferDate != null" >
+        #{transferDate,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleName != null" >
+        #{vehicleName,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleId != null" >
+        #{vehicleId,jdbcType=VARCHAR},
+      </if>
+      <if test="modelLoads != null" >
+        #{modelLoads,jdbcType=VARCHAR},
+      </if>
+      <if test="purpose != null" >
+        #{purpose,jdbcType=VARCHAR},
+      </if>
+      <if test="seat != null" >
+        #{seat,jdbcType=INTEGER},
+      </if>
+      <if test="fullWeight != null" >
+        #{fullWeight,jdbcType=REAL},
+      </if>
+      <if test="displacement != null" >
+        #{displacement,jdbcType=REAL},
+      </if>
+      <if test="drivingArea != null" >
+        #{drivingArea,jdbcType=VARCHAR},
+      </if>
+      <if test="respMsgId != null" >
+        #{respMsgId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="prvId != null" >
+        #{prvId,jdbcType=VARCHAR},
+      </if>
+      <if test="inspectionCode != null" >
+        #{inspectionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="quoteValidTime != null" >
+        #{quoteValidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payValidTime != null" >
+        #{payValidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cjkj.insurance.entity.CarInfo" >
+    update car_info
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="isNew != null" >
+        is_new = #{isNew,jdbcType=CHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="carLicenseNo != null" >
+        car_license_no = #{carLicenseNo,jdbcType=VARCHAR},
+      </if>
+      <if test="vinCode != null" >
+        vin_code = #{vinCode,jdbcType=VARCHAR},
+      </if>
+      <if test="engineNo != null" >
+        engine_no = #{engineNo,jdbcType=VARCHAR},
+      </if>
+      <if test="carProperty != null" >
+        car_property = #{carProperty,jdbcType=VARCHAR},
+      </if>
+      <if test="property != null" >
+        property = #{property,jdbcType=VARCHAR},
+      </if>
+      <if test="registDate != null" >
+        regist_date = #{registDate,jdbcType=VARCHAR},
+      </if>
+      <if test="isTransferCar != null" >
+        is_transfer_car = #{isTransferCar,jdbcType=CHAR},
+      </if>
+      <if test="transferDate != null" >
+        transfer_date = #{transferDate,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleName != null" >
+        vehicle_name = #{vehicleName,jdbcType=VARCHAR},
+      </if>
+      <if test="vehicleId != null" >
+        vehicle_id = #{vehicleId,jdbcType=VARCHAR},
+      </if>
+      <if test="modelLoads != null" >
+        model_loads = #{modelLoads,jdbcType=VARCHAR},
+      </if>
+      <if test="purpose != null" >
+        purpose = #{purpose,jdbcType=VARCHAR},
+      </if>
+      <if test="seat != null" >
+        seat = #{seat,jdbcType=INTEGER},
+      </if>
+      <if test="fullWeight != null" >
+        full_weight = #{fullWeight,jdbcType=REAL},
+      </if>
+      <if test="displacement != null" >
+        displacement = #{displacement,jdbcType=REAL},
+      </if>
+      <if test="drivingArea != null" >
+        driving_area = #{drivingArea,jdbcType=VARCHAR},
+      </if>
+      <if test="respMsgId != null" >
+        resp_msg_id = #{respMsgId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="prvId != null" >
+        prv_id = #{prvId,jdbcType=VARCHAR},
+      </if>
+      <if test="inspectionCode != null" >
+        inspection_code = #{inspectionCode,jdbcType=VARCHAR},
+      </if>
+      <if test="quoteValidTime != null" >
+        quote_valid_time = #{quoteValidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="payValidTime != null" >
+        pay_valid_time = #{payValidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where car_info_id = #{carInfoId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cjkj.insurance.entity.CarInfo" >
+    update car_info
+    set user_id = #{userId,jdbcType=INTEGER},
+      is_new = #{isNew,jdbcType=CHAR},
+      price = #{price,jdbcType=DECIMAL},
+      car_license_no = #{carLicenseNo,jdbcType=VARCHAR},
+      vin_code = #{vinCode,jdbcType=VARCHAR},
+      engine_no = #{engineNo,jdbcType=VARCHAR},
+      car_property = #{carProperty,jdbcType=VARCHAR},
+      property = #{property,jdbcType=VARCHAR},
+      regist_date = #{registDate,jdbcType=VARCHAR},
+      is_transfer_car = #{isTransferCar,jdbcType=CHAR},
+      transfer_date = #{transferDate,jdbcType=VARCHAR},
+      vehicle_name = #{vehicleName,jdbcType=VARCHAR},
+      vehicle_id = #{vehicleId,jdbcType=VARCHAR},
+      model_loads = #{modelLoads,jdbcType=VARCHAR},
+      purpose = #{purpose,jdbcType=VARCHAR},
+      seat = #{seat,jdbcType=INTEGER},
+      full_weight = #{fullWeight,jdbcType=REAL},
+      displacement = #{displacement,jdbcType=REAL},
+      driving_area = #{drivingArea,jdbcType=VARCHAR},
+      resp_msg_id = #{respMsgId,jdbcType=INTEGER},
+      task_id = #{taskId,jdbcType=VARCHAR},
+      prv_id = #{prvId,jdbcType=VARCHAR},
+      inspection_code = #{inspectionCode,jdbcType=VARCHAR},
+      quote_valid_time = #{quoteValidTime,jdbcType=TIMESTAMP},
+      pay_valid_time = #{payValidTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where car_info_id = #{carInfoId,jdbcType=INTEGER}
+  </update>
+
+  <!--更新任务号-->
+  <update id="updateCarinfo" parameterType="com.cjkj.insurance.entity.CarInfo">
+    update
+    car_info
+    set
+    task_id = #{taskId,jdbcType=VARCHAR}
+    where
+    car_info_id = #{carInfoId,jdbcType=INTEGER}
+    AND
+    user_id = #{userId}
+  </update>
+
+  <!--根据任务号查询 CarInfo 信息-->
+  <select id="findCarInfo" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT
+    <include refid="Base_Column_List"></include>
+    FROM
+    car_info ci
+    WHERE
+    ci.task_id = #{taskId}
+  </select>
+</mapper>

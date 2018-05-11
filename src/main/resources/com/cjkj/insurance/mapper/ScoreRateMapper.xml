@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.cjkj.insurance.mapper.ScoreRateMapper" >
+  <resultMap id="BaseResultMap" type="com.cjkj.insurance.entity.ScoreRate" >
+    <id column="score_rate_id" property="scoreRateId" jdbcType="INTEGER" />
+    <result column="user_id" property="userId" jdbcType="INTEGER" />
+    <result column="car_info_id" property="carInfoId" jdbcType="INTEGER" />
+    <result column="task_id" property="taskId" jdbcType="VARCHAR" />
+    <result column="prv_id" property="prvId" jdbcType="VARCHAR" />
+    <result column="biz_score" property="bizScore" jdbcType="VARCHAR" />
+    <result column="traffic_score" property="trafficScore" jdbcType="VARCHAR" />
+    <result column="biz_rate" property="bizRate" jdbcType="VARCHAR" />
+    <result column="traffic_rate" property="trafficRate" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    score_rate_id, user_id, car_info_id, task_id, prv_id, biz_score, traffic_score, biz_rate, 
+    traffic_rate
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    from score_rate
+    where score_rate_id = #{scoreRateId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from score_rate
+    where score_rate_id = #{scoreRateId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.cjkj.insurance.entity.ScoreRate" >
+    insert into score_rate (score_rate_id, user_id, car_info_id, 
+      task_id, prv_id, biz_score, 
+      traffic_score, biz_rate, traffic_rate
+      )
+    values (#{scoreRateId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{carInfoId,jdbcType=INTEGER}, 
+      #{taskId,jdbcType=VARCHAR}, #{prvId,jdbcType=VARCHAR}, #{bizScore,jdbcType=VARCHAR}, 
+      #{trafficScore,jdbcType=VARCHAR}, #{bizRate,jdbcType=VARCHAR}, #{trafficRate,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.cjkj.insurance.entity.ScoreRate" >
+    insert into score_rate
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="scoreRateId != null" >
+        score_rate_id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="carInfoId != null" >
+        car_info_id,
+      </if>
+      <if test="taskId != null" >
+        task_id,
+      </if>
+      <if test="prvId != null" >
+        prv_id,
+      </if>
+      <if test="bizScore != null" >
+        biz_score,
+      </if>
+      <if test="trafficScore != null" >
+        traffic_score,
+      </if>
+      <if test="bizRate != null" >
+        biz_rate,
+      </if>
+      <if test="trafficRate != null" >
+        traffic_rate,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="scoreRateId != null" >
+        #{scoreRateId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="carInfoId != null" >
+        #{carInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="prvId != null" >
+        #{prvId,jdbcType=VARCHAR},
+      </if>
+      <if test="bizScore != null" >
+        #{bizScore,jdbcType=VARCHAR},
+      </if>
+      <if test="trafficScore != null" >
+        #{trafficScore,jdbcType=VARCHAR},
+      </if>
+      <if test="bizRate != null" >
+        #{bizRate,jdbcType=VARCHAR},
+      </if>
+      <if test="trafficRate != null" >
+        #{trafficRate,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.cjkj.insurance.entity.ScoreRate" >
+    update score_rate
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="carInfoId != null" >
+        car_info_id = #{carInfoId,jdbcType=INTEGER},
+      </if>
+      <if test="taskId != null" >
+        task_id = #{taskId,jdbcType=VARCHAR},
+      </if>
+      <if test="prvId != null" >
+        prv_id = #{prvId,jdbcType=VARCHAR},
+      </if>
+      <if test="bizScore != null" >
+        biz_score = #{bizScore,jdbcType=VARCHAR},
+      </if>
+      <if test="trafficScore != null" >
+        traffic_score = #{trafficScore,jdbcType=VARCHAR},
+      </if>
+      <if test="bizRate != null" >
+        biz_rate = #{bizRate,jdbcType=VARCHAR},
+      </if>
+      <if test="trafficRate != null" >
+        traffic_rate = #{trafficRate,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where score_rate_id = #{scoreRateId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.cjkj.insurance.entity.ScoreRate" >
+    update score_rate
+    set user_id = #{userId,jdbcType=INTEGER},
+      car_info_id = #{carInfoId,jdbcType=INTEGER},
+      task_id = #{taskId,jdbcType=VARCHAR},
+      prv_id = #{prvId,jdbcType=VARCHAR},
+      biz_score = #{bizScore,jdbcType=VARCHAR},
+      traffic_score = #{trafficScore,jdbcType=VARCHAR},
+      biz_rate = #{bizRate,jdbcType=VARCHAR},
+      traffic_rate = #{trafficRate,jdbcType=VARCHAR}
+    where score_rate_id = #{scoreRateId,jdbcType=INTEGER}
+  </update>
+
+  <select id="findScoreRateByTaskId" parameterType="java.lang.String" resultMap="BaseResultMap">
+    SELECT * FROM
+    score_rate sr
+    WHERE
+    sr.task_id = #{taskId}
+
+
+  </select>
+</mapper>
