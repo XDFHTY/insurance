@@ -68,4 +68,14 @@
       licence_location = #{licenceLocation,jdbcType=VARCHAR}
     where id = #{id,jdbcType=INTEGER}
   </update>
+
+  <!--查询车牌前缀-->
+  <select id="findLicensePlateByCityId" parameterType="java.lang.String" resultType="java.lang.String">
+    SELECT
+    dll.licence_location
+    FROM
+    dq_licence_location dll
+    WHERE
+    dll.city_id = #{cityId}
+  </select>
 </mapper>

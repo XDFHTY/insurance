@@ -4,6 +4,7 @@ import com.cjkj.insurance.entity.RespMsg;
 import com.cjkj.insurance.entity.UserImg;
 import com.cjkj.insurance.entity.other.*;
 import com.cjkj.insurance.mapper.CarInfoMapper;
+import com.cjkj.insurance.mapper.DqLicenceLocationMapper;
 import com.cjkj.insurance.mapper.UserImgMapper;
 import com.cjkj.insurance.service.InsuranceService;
 import com.cjkj.insurance.service.MsgHandleService;
@@ -40,6 +41,9 @@ public class InsuranceServiceImpl implements InsuranceService {
 
     @Autowired
     private CarInfoMapper carInfoMapper;
+
+    @Autowired
+    private DqLicenceLocationMapper dqLicenceLocationMapper;
 
 
     //获取accessToken
@@ -342,6 +346,12 @@ public class InsuranceServiceImpl implements InsuranceService {
         RespFinalState respFinalState = JSONUtil.parseObject(jsonStr, RespFinalState.class);
         System.out.println("respFinalState===============>>"+respFinalState);
         boolean b = msgHandleService.addFinalState(respFinalState);
+    }
+
+    //查询车牌前缀
+    @Override
+    public String findLicensePlateByCityId(String cityId) {
+        return dqLicenceLocationMapper.findLicensePlateByCityId(cityId) ;
     }
 
 

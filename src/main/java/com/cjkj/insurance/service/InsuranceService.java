@@ -41,5 +41,7 @@ public interface InsuranceService {
 
     public void finalState(String jsonStr);
 
+    public String findLicensePlateByCityId(String cityId);
+
 
 }

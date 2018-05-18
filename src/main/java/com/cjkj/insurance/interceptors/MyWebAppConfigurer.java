@@ -7,14 +7,13 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.HttpPutFormContentFilter;
-import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.servlet.config.annotation.*;
 
 import java.nio.charset.Charset;
 import java.util.List;
@@ -51,6 +50,14 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
         this.applicationContext = applicationContext;
     }
 
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        // 多个拦截器组成一个拦截器链
+        // addPathPatterns 用于添加拦截规则
+        // excludePathPatterns 用户排除拦截（传入字符串数组）
+        registry.addInterceptor(new UserInterceptors()).addPathPatterns("/**");
+        super.addInterceptors(registry);
+    }
 
 
     @Bean
@@ -85,10 +92,15 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
             registry.addMapping("/**")
                     .allowedOrigins("*")
                     .allowedMethods("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH")
-                    .allowCredentials(true).maxAge(3600);
+                    .allowCredentials(true)
+                    .maxAge(3600);
         }
 
+
     }
+
+
+
 
     /**
      * 解决PUT传参问题
@@ -99,6 +111,14 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
         return new HttpPutFormContentFilter();
     }
 
+    //自定义系统主页
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+//        registry.addViewController("/").setViewName("redirect:/static/main.html");
+        registry.addViewController("/").setViewName("redirect:/static/bx-chzluru.html");
+        registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
+        super.addViewControllers(registry);
+    }
 
 
 }

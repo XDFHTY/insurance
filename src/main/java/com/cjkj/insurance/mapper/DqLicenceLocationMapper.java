@@ -38,4 +38,7 @@ public interface DqLicenceLocationMapper {
      * @mbggenerated
      */
     int updateByPrimaryKey(DqLicenceLocation record);
+
+    //查询车牌前缀
+    public String findLicensePlateByCityId(String cityId);
 }

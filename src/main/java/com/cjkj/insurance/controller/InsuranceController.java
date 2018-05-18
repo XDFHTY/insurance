@@ -33,6 +33,14 @@ public class InsuranceController {
 
 
 
+
+
+    /**
+     * 3.获取token
+     * @param id
+     * @param request
+     * @return
+     */
     @GetMapping("/getToken")
     @ApiOperation("3添加接口访问规则中所需的header信息")
     @ResponseBody
@@ -63,6 +71,20 @@ public class InsuranceController {
         return a;
     }
 
+    /**
+     * 4+.获取地区车牌
+     */
+    @ApiOperation("4+.获取地区车牌")
+    @GetMapping("/getLicensePlateByCityId")
+    @ApiImplicitParam(name = "cityId",value = "城市编号",required = true)
+    public ApiResult getLicensePlateByCityId(String cityId){
+        ApiResult apiResult = new ApiResult();
+        apiResult.setCode(ApiCode.SUCCESS);
+        apiResult.setMsg(ApiCode.SUCCESS_MSG);
+        apiResult.setData(insuranceService.findLicensePlateByCityId(cityId));
+        return apiResult;
+
+    }
 
     /*5.获取供应商列表
      * 例如，东莞市 : 441900
