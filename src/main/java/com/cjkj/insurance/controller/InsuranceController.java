@@ -19,10 +19,11 @@ import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-@Controller
-@Slf4j
+
+
+@RestController
 @RequestMapping(value = "/api/v1/insurance")
-@Api(tags = {"车保管理业务"})
+@Api(tags = "车保管理业务")
 public class InsuranceController {
 
     @Autowired
@@ -43,7 +44,7 @@ public class InsuranceController {
      */
     @GetMapping("/getToken")
     @ApiOperation("3添加接口访问规则中所需的header信息")
-    @ResponseBody
+    
     @ApiImplicitParam(name = "id",value = "用户ID",required = true)
     public ApiResult getToken( int id,
                                HttpServletRequest request) {
@@ -61,7 +62,7 @@ public class InsuranceController {
      */
     @PostMapping("/getAgreementAreas")
     @ApiOperation("4获取投保地区")
-    @ResponseBody
+    
     @ApiImplicitParam(name = "agreementProvCode",value = "省编码或null",required = true)
     public ApiResult getAgreementAreas(HttpServletRequest request,
                                        String agreementProvCode) {
@@ -90,7 +91,7 @@ public class InsuranceController {
      * 例如，东莞市 : 441900
      **/
     @PostMapping("/getProviders")
-    @ResponseBody
+    
     @ApiOperation("5获取供应商列表")
     @ApiImplicitParam(name = "insureAreaCode",value = "国标地区编码(市级)",required = true)
     public ApiResult getProviders(HttpServletRequest request,
@@ -107,7 +108,7 @@ public class InsuranceController {
     {"insureAreaCode":"441900","carLicenseNo":"粤STTT33","name":"汪莹"}
         **/
     @PostMapping("/createTaskA")
-    @ResponseBody
+    
     @ApiOperation("6创建报价任务A")
     public ApiResult createTaskA(HttpServletRequest request,
                                  @ApiParam(name = "params",value = "insureAreaCode:地区编码(市级), carInfo(carLicenseNo:车牌号)，carOwner(name：车主姓名)",required = true)
@@ -125,7 +126,7 @@ public class InsuranceController {
      *7	创建报价任务（标准接口）
      **/
     @PostMapping("/createTaskB")
-    @ResponseBody
+    
     @ApiOperation("7创建报价任务B（标准接口）")
     public ApiResult createTaskB(HttpServletRequest request,
                                  @ApiParam(name = "params",value = "很多信息",required = true)
@@ -140,7 +141,7 @@ public class InsuranceController {
      *8查询车型信息
      **/
     @PostMapping("/queryCarModelInfos")
-    @ResponseBody
+    
     @ApiOperation("8查询车型信息")
     public ApiResult queryCarModelInfos(HttpServletRequest request,
                                         @ApiParam(name = "params",value = "pageSize:每页记录数(限制50),pageNum:第几页，vehicleName:车型名称/VIN码,carLicenseNo:车牌号,registDate:初登日期,",required = true)
@@ -155,7 +156,7 @@ public class InsuranceController {
     /*  9修改报价/投保数据
      **/
     @PostMapping("/updateTask")
-    @ResponseBody
+    
     @ApiOperation("9修改报价/投保数据")
 
     public ApiResult updateTask(HttpServletRequest request,
@@ -173,7 +174,7 @@ public class InsuranceController {
     /*  10提交报价,等待报价信息结果    taskId:2629432
      **/
     @PostMapping("/submitQuote")
-    @ResponseBody
+    
     @ApiOperation("10提交报价,等待报价信息结果")
 
     public ApiResult submitQuote(HttpServletRequest request,
@@ -191,7 +192,7 @@ public class InsuranceController {
     /*  11	提交核保任务
      **/
     @PostMapping("/submitInsure")
-    @ResponseBody
+    
     @ApiOperation("11提交核保任务")
     public ApiResult submitInsure(
             HttpServletRequest request,
@@ -207,7 +208,7 @@ public class InsuranceController {
      * 12回调接口
      **/
     @PostMapping("/finalState")
-    @ResponseBody
+    
     @ApiOperation("12回调接口")
     public void finalState(@RequestBody String jsonStr) {
         System.out.println("================================泛华回调=================================================");
@@ -224,7 +225,7 @@ public class InsuranceController {
     /*  13	影像识别
      **/
     @PostMapping("/recognizeImage")
-    @ResponseBody
+    
     @ApiOperation("13影像识别")
     public ApiResult recognizeImage(
             @ApiParam(name = "params",value = "imageType: 影像类型," +
@@ -244,7 +245,7 @@ public class InsuranceController {
      14影像上传
      **/
     @PostMapping("/uploadImage")
-    @ResponseBody
+    
     @ApiOperation("14影像上传")
     public ApiResult uploadImage(HttpServletRequest request,
                                  @ApiParam(name = "params",value = "taskId=任务号，imageInfos=影像信息集合" +
@@ -261,7 +262,7 @@ public class InsuranceController {
      15支付
       **/
     @PostMapping("/pay")
-    @ResponseBody
+    
     @ApiOperation("15支付")
 
     public ApiResult pay(HttpServletRequest request,
@@ -280,7 +281,7 @@ public class InsuranceController {
      * @return
      */
     @ApiOperation("查询所有的回调结果")
-    @ResponseBody
+    
     @GetMapping("/findAllCallback")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "taskId",value = "任务号",required = true)
