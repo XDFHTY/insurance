@@ -15,5 +15,7 @@ public class AdminController {
     @GetMapping("tset")
     public void test(){
 
+        System.out.println("aaaa");
+
     }
 }
