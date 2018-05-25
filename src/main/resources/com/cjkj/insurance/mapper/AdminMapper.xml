@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cjkj.insurance.mapper.AdminMapper">
+
+    <resultMap id="loginResultMap" type="com.cjkj.insurance.entity.Admin">
+        <result column="admin_name" property="username"/>
+        <result column="admin_pass" property="password"/>
+    </resultMap>
+
+    <resultMap id="findCarInfoByIdResultMap" type="com.cjkj.insurance.entity.CarInfo">
+        <result column="task_id" property="taskId"/>
+        <result column="car_license_no" property="carLicenseNo"/>
+        <result column="vehicle_name" property="vehicleName"/>
+        <result column="car_property" property="carProperty"/>
+        <result column="inspection_code" property="inspectionCode"/>
+        <result column="quote_valid_time" property="quoteValidTime"/>
+        <result column="pay_valid_time" property="payValidTime"/>
+    </resultMap>
+
+    <resultMap id="findRespMsgResultMap" type="com.cjkj.insurance.entity.RespMsg">
+        <id column="prv_id" property="prvId"/>
+        <result column="prv_name" property="prvName"/>
+        <result column="resp_code" property="respCode"/>
+        <result column="error_msg" property="errorMsg"/>
+        <result column="channel_id" property="channelId"/>
+        <result column="channel_user_id" property="channelUserId"/>
+        <result column="task_state" property="taskState"/>
+        <result column="task_state_description" property="taskStateDescription"/>
+        <result column="quote_valid_time" property="quoteValidTime"/>
+        <result column="pay_valid_time" property="payValidTime"/>
+    </resultMap>
+
+    <resultMap id="findCarOwnerByIdResultMap" type="com.cjkj.insurance.entity.CarOwner">
+        <result column="name" property="name"/>
+        <result column="mobile" property="mobile"/>
+        <result column="msg_type" property="msgType"/>
+    </resultMap>
+
+    <resultMap id="findInsureInfoResultMap" type="com.cjkj.insurance.entity.InsureInfo">
+        <result column="msg_type" property="msgType"/>
+        <result column="start_date" property="startDate"/>
+        <result column="end_date" property="endDate"/>
+        <result column="amount" property="amount"/>
+        <result column="premium" property="premium"/>
+        <result column="policy_no" property="policyNo"/>
+        <result column="discount_rate" property="discountRate"/>
+        <result column="is_payment_tax" property="isPaymentTax"/>
+        <result column="tax_fee" property="taxFee"/>
+        <result column="late_fee" property="lateFee"/>
+        <result column="nfc_premium" property="nfcPremium"/>
+        <result column="total_premium" property="totalPremium"/>
+    </resultMap>
+
+    <resultMap id="findRiskKindsResultMap" type="com.cjkj.insurance.entity.RiskKinds">
+        <result column="risk_code" property="riskCode"/>
+        <result column="risk_name" property="riskName"/>
+        <result column="amount" property="amount"/>
+        <result column="not_deductible" property="notDeductible"/>
+        <result column="premium" property="premium"/>
+        <result column="ncf_premium" property="ncfPremium"/>
+    </resultMap>
+
+    <resultMap id="findUserImgByIdResultMap" type="com.cjkj.insurance.entity.UserImg">
+        <result column="img_type" property="imgType"/>
+        <result column="img_name" property="imgName"/>
+    </resultMap>
+
+    <resultMap id="findDeliveryResultMap" type="com.cjkj.insurance.entity.Delivery">
+        <result column="delivery_type" property="deliveryType"/>
+        <result column="name" property="name"/>
+        <result column="phone" property="phone"/>
+        <result column="province" property="province"/>
+        <result column="city" property="city"/>
+        <result column="area" property="area"/>
+        <result column="address" property="address"/>
+        <result column="zip" property="zip"/>
+        <result column="express_company_name" property="expressCompanyName"/>
+        <result column="express_number" property="expressNumber"/>
+        <result column="sy_elec_policy_file_path" property="syElecPolicyFilePath"/>
+        <result column="jp_elec_policy_file_path" property="jpElecPolicyFilePath"/>
+        <result column="out_dept" property="outDept"/>
+    </resultMap>
+
+    <resultMap id="findInsureSupplysResultMap" type="com.cjkj.insurance.entity.InsureSupplys">
+        <result column="item_code" property="itemCode"/>
+        <result column="item_value" property="itemValue"/>
+        <result column="item_input_type" property="itemInputType"/>
+        <result column="item_options" property="itemOptions"/>
+    </resultMap>
+
+    <resultMap id="findScoreRateResultMap" type="com.cjkj.insurance.entity.ScoreRate">
+        <result column="biz_score" property="bizScore"/>
+        <result column="traffic_score" property="trafficScore"/>
+        <result column="biz_rate" property="bizRate"/>
+        <result column="traffic_rate" property="trafficRate"/>
+    </resultMap>
+
+
+    <delete id="delete" parameterType="java.lang.Integer">
+        DELETE FROM product WHERE p_id = #{pId}
+    </delete>
+
+    <select id="login" parameterType="com.cjkj.insurance.entity.Admin" resultMap="loginResultMap">
+        SELECT * FROM admin WHERE admin_name = #{username} AND admin_pass = #{password}
+    </select>
+
+    <update id="change" parameterType="com.cjkj.insurance.entity.Admin">
+        UPDATE admin SET admin_pass = #{password} WHERE admin_name = #{username}
+    </update>
+
+    <select id="findCarInfoById" parameterType="java.lang.Integer" resultMap="findCarInfoByIdResultMap">
+        SELECT * FROM car_info WHERE user_id = #{userId}
+    </select>
+
+    <select id="findRespMsg" parameterType="java.lang.String" resultMap="findRespMsgResultMap">
+        SELECT * FROM resp_msg WHERE task_id = #{taskId}
+    </select>
+
+    <select id="findCarOwnerById" parameterType="java.lang.Integer" resultMap="findCarOwnerByIdResultMap">
+        SELECT * FROM car_owner WHERE user_id = #{userId}
+    </select>
+
+    <select id="findInsureInfoByTaskId" parameterType="java.lang.String" resultMap="findInsureInfoResultMap">
+        SELECT * FROM insure_info WHERE task_id = #{taskId}
+    </select>
+
+    <select id="findRiskKinds" resultMap="findRiskKindsResultMap">
+        SELECT * FROM risk_kinds WHERE task_id = #{taskId} AND prv_id = #{prvId}
+    </select>
+
+    <select id="findUserImgById"  parameterType="java.lang.Integer" resultMap="findUserImgByIdResultMap">
+        SELECT * from user_img WHERE user_id = #{userId}
+    </select>
+
+    <select id="findDelivery" resultMap="findDeliveryResultMap">
+        SELECT * FROM delivery WHERE task_id = #{taskId} AND prv_id = #{prvId}
+    </select>
+
+    <select id="findInsureSupplys" resultMap="findInsureSupplysResultMap">
+        SELECT * FROM insure_supplys WHERE task_id = #{taskId} AND prv_id = #{prvId}
+    </select>
+
+    <select id="findScoreRate" resultMap="findScoreRateResultMap">
+        SELECT * FROM score_rate WHERE task_id = #{taskId} AND prv_id = #{prvId}
+    </select>
+</mapper>
