@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @SpringBootApplication
 //开启事务，使用时将@Transactional 注解加到service实现类上
 @EnableTransactionManagement
+
 @MapperScan("com.cjkj.insurance.mapper")
 public class InsuranceApplication {
 

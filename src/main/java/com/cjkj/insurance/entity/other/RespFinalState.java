@@ -75,4 +75,7 @@ public class RespFinalState {
 
     //业务评级
     private ScoreRate scoreRate;
+
+    //回调的json字符串
+    private String respJson;
 }

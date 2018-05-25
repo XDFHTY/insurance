@@ -1,6 +1,5 @@
 package com.cjkj.insurance.service.serviceImpl;
 
-import com.cjkj.insurance.entity.RespMsg;
 import com.cjkj.insurance.entity.UserImg;
 import com.cjkj.insurance.entity.other.*;
 import com.cjkj.insurance.mapper.CarInfoMapper;
@@ -11,6 +10,7 @@ import com.cjkj.insurance.service.MsgHandleService;
 import com.cjkj.insurance.utils.*;
 import com.cjkj.insurance.utils.file.FileUtil;
 import com.cjkj.insurance.utils.json.JSONUtil;
+import com.google.gson.Gson;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
@@ -343,7 +342,12 @@ public class InsuranceServiceImpl implements InsuranceService {
     //回调信息保存到数据库
     @Override
     public void finalState(String jsonStr) {
-        RespFinalState respFinalState = JSONUtil.parseObject(jsonStr, RespFinalState.class);
+        Gson gson = new Gson();
+
+
+        RespFinalState respFinalState = gson.fromJson(jsonStr,RespFinalState.class);
+        respFinalState.setRespJson(jsonStr);
+
         System.out.println("respFinalState===============>>"+respFinalState);
         boolean b = msgHandleService.addFinalState(respFinalState);
     }

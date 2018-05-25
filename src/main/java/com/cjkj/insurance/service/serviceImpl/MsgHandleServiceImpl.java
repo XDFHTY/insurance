@@ -253,6 +253,7 @@ public class MsgHandleServiceImpl implements MsgHandleService {
             respMsg.setTaskStateDescription(respFinalState.getTaskStateDescription());
             respMsg.setMsgType(respFinalState.getMsgType());
             respMsg.setInspectionCode(respFinalState.getInspectionCode());
+            respMsg.setRespJson(respFinalState.getRespJson());
             if(respFinalState.getQuoteValidTime() != null && respFinalState.getQuoteValidTime() !=""){
                 respMsg.setQuoteValidTime(TimeToString.StrToDate(respFinalState.getQuoteValidTime()));
 

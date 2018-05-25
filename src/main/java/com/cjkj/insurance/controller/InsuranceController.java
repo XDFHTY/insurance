@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 
@@ -280,18 +281,13 @@ public class InsuranceController {
      *
      * @return
      */
-    @ApiOperation("查询所有的回调结果")
+    @ApiOperation("20---查询所有的回调结果")
     
-    @GetMapping("/findAllCallback")
-    @ApiImplicitParams({
-            @ApiImplicitParam(name = "taskId",value = "任务号",required = true)
-    })
-    public ApiResult findAllCallback(HttpServletRequest request,String taskId){
+    @PostMapping("/findAllCallback")
+    public ApiResult findAllCallback(HttpServletRequest request,
+                                     @ApiParam(name = "map",value = "taskId=任务号,taskStates=任务状态码集合【{\"taskId\":\"2637743\",\"taskStates\":[13,14]}】",required = true)
+                                     @RequestBody Map map){
         HttpSession session = request.getSession();
-        Map map = new HashMap();
-//        int userId = (Integer) session.getAttribute("userId");
-//        String taskId = (String)session.getAttribute("taskId");
-        map.put("taskId",taskId);
 
         ApiResult apiResult = new ApiResult();
         apiResult.setCode(ApiCode.SUCCESS);

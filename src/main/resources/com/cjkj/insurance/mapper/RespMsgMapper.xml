@@ -18,11 +18,12 @@
     <result column="inspection_code" property="inspectionCode" jdbcType="VARCHAR" />
     <result column="quote_valid_time" property="quoteValidTime" jdbcType="TIMESTAMP" />
     <result column="pay_valid_time" property="payValidTime" jdbcType="TIMESTAMP" />
+    <result column="resp_json" property="respJson" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     resp_msg_id, user_id, car_info_id, task_id, prv_id, prv_name, resp_code, error_msg, 
     channel_id, channel_user_id, task_state, task_state_description, msg_type, inspection_code, 
-    quote_valid_time, pay_valid_time
+    quote_valid_time, pay_valid_time,resp_json
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -102,6 +103,9 @@
       <if test="payValidTime != null" >
         pay_valid_time,
       </if>
+      <if test="respJson != null" >
+        resp_json,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="respMsgId != null" >
@@ -151,6 +155,9 @@
       </if>
       <if test="payValidTime != null" >
         #{payValidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="respJson != null" >
+        #{respJson},
       </if>
     </trim>
   </insert>

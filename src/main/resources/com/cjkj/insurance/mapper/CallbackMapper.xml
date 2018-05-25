@@ -17,6 +17,7 @@
     <result column="inspection_code" property="inspectionCode"></result>
     <result column="quote_valid_time" property="quoteValidTime"></result>
     <result column="pay_valid_time" property="payValidTime"></result>
+    <result column="resp_json" property="respJson"></result>
     <collection property="carInfo" select="findCarInfos" column="{taskId=task_id}"></collection>
     <collection property="carOwner" select="findCarOwners" column="{taskId=task_id}"></collection>
     <collection property="insureInfo" select="findInsureInfo" column="{taskId=task_id,prvId=prv_id}"></collection>
@@ -161,6 +162,13 @@
     resp_msg rm
     WHERE
     rm.task_id = #{taskId}
+    <if test="taskStates != null">
+      AND
+      rm.task_state IN
+      <foreach collection="taskStates" item="item" open="(" close=")" separator=",">
+        #{item}
+      </foreach>
+    </if>
   </select>
 
   <!--查询 车辆信息-->
