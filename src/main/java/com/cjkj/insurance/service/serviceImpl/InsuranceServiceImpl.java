@@ -19,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -311,6 +312,7 @@ public class InsuranceServiceImpl implements InsuranceService {
                             userImg1.setUserId(userId);
                             userImg1.setUserType("1");
                             userImg1.setImgUrl(imgUrl1);
+                            userImg1.setCreateTime(new Date());
                             userImgMapper.updateByPrimaryKeySelective(userImg1);
 
                         }
