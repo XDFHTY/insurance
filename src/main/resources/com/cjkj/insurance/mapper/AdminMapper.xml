@@ -7,98 +7,6 @@
         <result column="admin_pass" property="password"/>
     </resultMap>
 
-    <resultMap id="findCarInfoByIdResultMap" type="com.cjkj.insurance.entity.CarInfo">
-        <result column="task_id" property="taskId"/>
-        <result column="car_license_no" property="carLicenseNo"/>
-        <result column="vehicle_name" property="vehicleName"/>
-        <result column="car_property" property="carProperty"/>
-        <result column="inspection_code" property="inspectionCode"/>
-        <result column="quote_valid_time" property="quoteValidTime"/>
-        <result column="pay_valid_time" property="payValidTime"/>
-    </resultMap>
-
-    <resultMap id="findRespMsgResultMap" type="com.cjkj.insurance.entity.RespMsg">
-        <id column="prv_id" property="prvId"/>
-        <result column="prv_name" property="prvName"/>
-        <result column="resp_code" property="respCode"/>
-        <result column="error_msg" property="errorMsg"/>
-        <result column="channel_id" property="channelId"/>
-        <result column="channel_user_id" property="channelUserId"/>
-        <result column="task_state" property="taskState"/>
-        <result column="task_state_description" property="taskStateDescription"/>
-        <result column="quote_valid_time" property="quoteValidTime"/>
-        <result column="pay_valid_time" property="payValidTime"/>
-    </resultMap>
-
-    <resultMap id="findCarOwnerByIdResultMap" type="com.cjkj.insurance.entity.CarOwner">
-        <result column="name" property="name"/>
-        <result column="mobile" property="mobile"/>
-        <result column="msg_type" property="msgType"/>
-    </resultMap>
-
-    <resultMap id="findInsureInfoResultMap" type="com.cjkj.insurance.entity.InsureInfo">
-        <result column="msg_type" property="msgType"/>
-        <result column="start_date" property="startDate"/>
-        <result column="end_date" property="endDate"/>
-        <result column="amount" property="amount"/>
-        <result column="premium" property="premium"/>
-        <result column="policy_no" property="policyNo"/>
-        <result column="discount_rate" property="discountRate"/>
-        <result column="is_payment_tax" property="isPaymentTax"/>
-        <result column="tax_fee" property="taxFee"/>
-        <result column="late_fee" property="lateFee"/>
-        <result column="nfc_premium" property="nfcPremium"/>
-        <result column="total_premium" property="totalPremium"/>
-    </resultMap>
-
-    <resultMap id="findRiskKindsResultMap" type="com.cjkj.insurance.entity.RiskKinds">
-        <result column="risk_code" property="riskCode"/>
-        <result column="risk_name" property="riskName"/>
-        <result column="amount" property="amount"/>
-        <result column="not_deductible" property="notDeductible"/>
-        <result column="premium" property="premium"/>
-        <result column="ncf_premium" property="ncfPremium"/>
-    </resultMap>
-
-    <resultMap id="findUserImgByIdResultMap" type="com.cjkj.insurance.entity.UserImg">
-        <result column="img_type" property="imgType"/>
-        <result column="img_name" property="imgName"/>
-    </resultMap>
-
-    <resultMap id="findDeliveryResultMap" type="com.cjkj.insurance.entity.Delivery">
-        <result column="delivery_type" property="deliveryType"/>
-        <result column="name" property="name"/>
-        <result column="phone" property="phone"/>
-        <result column="province" property="province"/>
-        <result column="city" property="city"/>
-        <result column="area" property="area"/>
-        <result column="address" property="address"/>
-        <result column="zip" property="zip"/>
-        <result column="express_company_name" property="expressCompanyName"/>
-        <result column="express_number" property="expressNumber"/>
-        <result column="sy_elec_policy_file_path" property="syElecPolicyFilePath"/>
-        <result column="jp_elec_policy_file_path" property="jpElecPolicyFilePath"/>
-        <result column="out_dept" property="outDept"/>
-    </resultMap>
-
-    <resultMap id="findInsureSupplysResultMap" type="com.cjkj.insurance.entity.InsureSupplys">
-        <result column="item_code" property="itemCode"/>
-        <result column="item_value" property="itemValue"/>
-        <result column="item_input_type" property="itemInputType"/>
-        <result column="item_options" property="itemOptions"/>
-    </resultMap>
-
-    <resultMap id="findScoreRateResultMap" type="com.cjkj.insurance.entity.ScoreRate">
-        <result column="biz_score" property="bizScore"/>
-        <result column="traffic_score" property="trafficScore"/>
-        <result column="biz_rate" property="bizRate"/>
-        <result column="traffic_rate" property="trafficRate"/>
-    </resultMap>
-
-
-    <delete id="delete" parameterType="java.lang.Integer">
-        DELETE FROM product WHERE p_id = #{pId}
-    </delete>
 
     <select id="login" parameterType="com.cjkj.insurance.entity.Admin" resultMap="loginResultMap">
         SELECT * FROM admin WHERE admin_name = #{username} AND admin_pass = #{password}
@@ -108,39 +16,303 @@
         UPDATE admin SET admin_pass = #{password} WHERE admin_name = #{username}
     </update>
 
-    <select id="findCarInfoById" parameterType="java.lang.Integer" resultMap="findCarInfoByIdResultMap">
-        SELECT * FROM car_info WHERE user_id = #{userId}
+
+
+
+    <!--订单列表映射-->
+    <resultMap id="findOrderListResultMap" type="com.cjkj.insurance.entity.other.RespOrder">
+        <result column="user_id" property="userId"/>
+        <collection property="respFinalStateList" javaType="ArrayList" ofType="RespFinalStateExtents">
+            <result column="task_id" property="taskId"/>
+            <collection property="priOrderList" javaType="ArrayList" ofType="PriOrder">
+                <result column="prv_id" property="prvId"/>
+                <result column="prv_name" property="prvName"/>
+                <result column="task_state" property="taskState"/>
+                <result column="task_state_description" property="taskStateDescription"/>
+                <result column="create_time" property="createTime"/>
+                <result column="name" property="name"/>
+                <result column="msg_type" property="msgType"/>
+                <result property="carLicenseNo" column="car_license_no"/>
+            </collection>
+        </collection>
+    </resultMap>
+    <!--查询订单列表-->
+    <select id="findOrderList" resultMap="findOrderListResultMap">
+        SELECT
+          a.*
+        FROM
+          (SELECT
+            ci.`user_id`,
+            co.`name`,
+            co.`msg_type`,
+            ci.`car_license_no`,
+            rm.`task_id`,
+            rm.`prv_id`,
+            rm.`prv_name`,
+            rm.task_state,
+            rm.`task_state_description`,
+            rm.`create_time`
+          FROM
+            car_info ci
+            LEFT JOIN resp_msg rm
+              ON ci.`task_id` = rm.`task_id`
+            LEFT JOIN car_owner co
+              ON  ci.`car_info_id` = co.`car_info_id`
+              WHERE co.`msg_type` = 1
+              ) AS a
+        WHERE task_id IS NOT NULL
     </select>
 
-    <select id="findRespMsg" parameterType="java.lang.String" resultMap="findRespMsgResultMap">
-        SELECT * FROM resp_msg WHERE task_id = #{taskId}
+    <!--订单详情映射-->
+    <resultMap id="findOrderItmesByIdResultMap" type="com.cjkj.insurance.entity.other.RespOrderItme">
+        <result column="task_id" property="taskId"/>
+        <result column="prv_id" property="prvId"/>
+        <result column="prv_name" property="prvName"/>
+        <result column="resp_code" property="respCode"/>
+        <result column="error_msg" property="errorMsg"/>
+        <result column="channel_id" property="channelId"/>
+        <result column="channel_user_id" property="channelUserId"/>
+        <result column="task_state" property="taskState"/>
+        <result column="task_state_description" property="taskStateDescription"/>
+        <result column="inspection_code" property="inspectionCode"/>
+        <result column="quote_valid_time" property="quoteValidTime"/>
+        <result column="pay_valid_time" property="payValidTime"/>
+        <result column="car_license_no" property="carInfo.carLicenseNo"/>
+        <result column="vehicle_name" property="carInfo.vehicleName"/>
+        <result column="car_property" property="carInfo.carProperty"/>
+        <result column="engine_no" property="carInfo.engineNo"/>
+        <result column="regist_date" property="carInfo.registDate"/>
+        <result column="is_transfer_car" property="carInfo.isTransferCar"/>
+        <result column="vin_code" property="carInfo.vinCode"/>
+        <result column="vehicle_name" property="carInfo.vehicleName"/>
+        <result column="name" property="carOwner.name"/>
+        <result column="msg_type" property="carOwner.msgType"/>
+        <result column="phone" property="carOwner.phone"/>
+        <result column="property" property="carInfo.property"/>
+        <result column="car_property" property="carInfo.carProperty"/>
+        <result column="vehicle_name" property="carModelinfos.vehicleName"/>
+        <result column="seat" property="carInfo.seat"/>
+        <result column="full_weight" property="carInfo.fullWeight"/>
+        <result column="model_loads" property="carInfo.modelLoads"/>
+        <result column="displacement" property="carInfo.displacement"/>
+        <result column="price" property="carModelinfos.price"/>
+        <result column="gearbox" property="carModelinfos.gearbox"/>
+        <result column="yearStyle" property="carModelinfos.yearstyle"/>
+        <result column="price_tbcj" property="carInfo.price"/>
+
+        <result column="msg_type_rm" property="msgType"/>
+
+        <result column="delivery_type" property="delivery.deliveryType"/>
+        <result column="name_d" property="delivery.name"/>
+        <result column="phone_d" property="delivery.phone"/>
+        <result column="province" property="delivery.province"/>
+
+         <result column="city" property="delivery.city"/>
+        <result column="area" property="delivery.area"/>
+        <result column="address" property="delivery.address"/>
+        <result column="zip" property="delivery.zip"/>
+        <result column="express_company_name" property="delivery.expressCompanyName"/>
+        <result column="express_number" property="delivery.expressNumber"/>
+        <result column="sy_elec_policy_file_path" property="delivery.syElecPolicyFilePath"/>
+        <result column="jp_elec_policy_file_path" property="delivery.jpElecPolicyFilePath"/>
+        <result column="out_dept" property="delivery.outDept"/>
+
+        <result column="biz_score" property="scoreRate.bizScore"/>
+        <result column="traffic_score" property="scoreRate.trafficScore"/>
+        <result column="biz_rate" property="scoreRate.bizRate"/>
+        <result column="traffic_rate" property="scoreRate.trafficRate"/>
+        <collection property="participantList" javaType="ArrayList" ofType="Participant">
+            <result column="msg_type_gxr" property="msgTypeGxr"/>
+            <result column="name_gxr" property="nameGxr"/>
+            <result column="idcard_no_gxr" property="idcardNoGxr"/>
+        </collection>
+        <collection property="insureSupplys" ofType="InsureSupplys" javaType="ArrayList">
+            <result column="item_code" property="itemCode"/>
+            <result column="item_value" property="itemValue"/>
+            <result column="item_input_type" property="itemInputType"/>
+            <result column="item_options" property="itemOptions"/>
+        </collection>
+
+        <collection property="imageInfos" ofType="ImageInfo" javaType="ArrayList">
+            <result column="img_type" property="imageType"/>
+            <result column="img_name" property="imageName"/>
+        </collection>
+    </resultMap>
+    <!--查询订单详情-->
+    <select id="findOrderItmesById" resultMap="findOrderItmesByIdResultMap">
+      select
+          rm.`task_id`,
+          rm.`prv_id`,
+          rm.`prv_name`,
+          rm.`resp_code`,
+          rm.`error_msg`,
+          rm.`channel_id`,
+          rm.`channel_user_id`,
+          rm.`task_state`,
+          rm.`task_state_description`,
+          rm.`inspection_code`,
+          rm.`quote_valid_time`,
+          rm.`pay_valid_time`,
+
+           ci.`car_license_no`,
+          ci.`vehicle_name`,
+          ci.`car_property`,
+          ci.`engine_no`,
+          ci.`regist_date`,
+          ci.`is_transfer_car`,
+          ci.`vin_code`,
+          ci.`vehicle_name`,
+
+           co.`name`,
+          co.`msg_type`,
+          co.`phone`,
+
+           ci.`property`,
+          ci.`car_property`,
+          cm.`vehicle_name`,
+          ci.seat,
+          ci.`full_weight`,
+          ci.`model_loads`,
+          ci.`displacement`,
+          cm.`price`,
+          cm.`gearbox`,
+          cm.`yearStyle`,
+          ci.`price` as price_tbcj,
+
+           co2.`msg_type` as msg_type_gxr,
+          co2.`name` as name_gxr,
+          co2.`idcard_no` as idcard_no_gxr,
+
+
+
+           rm.`msg_type` as msg_type_rm,
+          ui.`img_type`,
+          ui.`img_name`,
+
+           d.`delivery_type`,
+          d.`name` as name_d,
+          d.`phone` as phone_d,
+          d.`province`,
+          d.`city`,
+          d.`area`,
+          d.`address`,
+          d.`zip`,
+          d.`express_company_name`,
+          d.`express_number`,
+          d.`sy_elec_policy_file_path`,
+          d.`jp_elec_policy_file_path`,
+          d.`out_dept`,
+
+           iss.`item_code`,
+          iss.`item_value`,
+          iss.`item_input_type`,
+          iss.`item_options`,
+
+           sr.`biz_score`,
+          sr.`traffic_rate`,
+          sr.`biz_rate`,
+          sr.`traffic_rate`
+        from
+          car_info ci
+          left join resp_msg rm
+            on ci.`task_id` = rm.`task_id`
+          left join car_owner co
+            on ci.`car_info_id` = co.`car_info_id`
+            and co.msg_type = 1
+          left join car_modelinfos cm
+            on ci.`vehicle_id` = cm.`vehicle_id`
+          left join car_owner co2
+            on ci.`car_info_id` = co2.`car_info_id`
+
+          left join user_img ui
+            on rm.`task_id` = ui.`task_id`
+            and rm.`prv_id` = ui.`prv_id`
+            and ui.`img_url` is null
+          left join delivery d
+            on rm.`task_id` = d.`task_id`
+            and rm.`prv_id` = d.`prv_id`
+          left join insure_supplys iss
+            on rm.`task_id` = iss.`task_id`
+            and rm.`prv_id` = iss.`prv_id`
+          left join score_rate sr
+            on rm.`task_id` = sr.`task_id`
+            AND rm.`prv_id` = sr.`prv_id`
+        WHERE ci.user_id = #{userId}
+          AND rm.`task_id` = #{taskId}
+          AND rm.`prv_id` = #{prvId}
+          AND rm.task_state = #{taskState}
     </select>
 
-    <select id="findCarOwnerById" parameterType="java.lang.Integer" resultMap="findCarOwnerByIdResultMap">
-        SELECT * FROM car_owner WHERE user_id = #{userId}
+    <!--保险配置信息映射-->
+    <resultMap id="findInsureInfoByIdResultMap" type="com.cjkj.insurance.entity.InsureInfo">
+        <result column="msg_type" property="msgType"/>
+        <result column="start_date" property="startDate" jdbcType="DATE" />
+        <result column="end_date" property="endDate" jdbcType="DATE" />
+        <result column="amount" property="amount"/>
+        <result column="premium" property="premium"/>
+        <result column="policy_no" property="policyNo"/>
+        <result column="discount_rate" property="discountRate"/>
+        <result column="tax_fee" property="taxFee"/>
+        <result column="late_fee" property="lateFee"/>
+        <result column="nfc_premium" property="nfcPremium"/>
+    </resultMap>
+
+    <!--查询保险配置信息-->
+    <select id="findInsureInfoById" resultMap="findInsureInfoByIdResultMap">
+        SELECT
+          ii.`msg_type`,
+          ii.`start_date`,
+          ii.`end_date`,
+          ii.`amount`,
+          ii.`premium`,
+          ii.`policy_no`,
+          ii.`discount_rate`,
+          ii.`tax_fee`,
+          ii.`late_fee`,
+          ii.`nfc_premium`
+        FROM
+          resp_msg rm
+          LEFT JOIN insure_info ii
+            ON rm.`resp_msg_id` = ii.`resp_msg_id`
+               AND rm.`task_id` = ii.`task_id`
+               AND rm.`prv_id` = ii.`prv_id`
+        WHERE rm.`task_id` = #{taskId}
+          AND rm.`prv_id` = #{prvId}
+          AND rm.`task_state` = #{taskState}
     </select>
 
-    <select id="findInsureInfoByTaskId" parameterType="java.lang.String" resultMap="findInsureInfoResultMap">
-        SELECT * FROM insure_info WHERE task_id = #{taskId}
-    </select>
 
-    <select id="findRiskKinds" resultMap="findRiskKindsResultMap">
-        SELECT * FROM risk_kinds WHERE task_id = #{taskId} AND prv_id = #{prvId}
-    </select>
+    <!--险种信息映射-->
+    <resultMap id="findRiskKindsByIdResultMap" type="com.cjkj.insurance.entity.RiskKinds">
+            <result column="risk_code" property="riskCode"/>
+            <result column="risk_name" property="riskName"/>
+            <result column="amount" property="amount"/>
+            <result column="not_deductible" property="notDeductible"/>
+            <result column="premium" property="premium"/>
+            <result column="ncf_premium" property="ncfPremium"/>
+            <result column="task_id" property="taskId"/>
+            <result column="prv_id" property="prvId"/>
+    </resultMap>
 
-    <select id="findUserImgById"  parameterType="java.lang.Integer" resultMap="findUserImgByIdResultMap">
-        SELECT * from user_img WHERE user_id = #{userId}
-    </select>
-
-    <select id="findDelivery" resultMap="findDeliveryResultMap">
-        SELECT * FROM delivery WHERE task_id = #{taskId} AND prv_id = #{prvId}
-    </select>
-
-    <select id="findInsureSupplys" resultMap="findInsureSupplysResultMap">
-        SELECT * FROM insure_supplys WHERE task_id = #{taskId} AND prv_id = #{prvId}
-    </select>
-
-    <select id="findScoreRate" resultMap="findScoreRateResultMap">
-        SELECT * FROM score_rate WHERE task_id = #{taskId} AND prv_id = #{prvId}
+    <!--查询险种信息-->
+    <select id="findRiskKindsById" resultMap="findRiskKindsByIdResultMap">
+        SELECT
+              rk.`risk_code`,
+              rk.`risk_name`,
+              rk.`amount`,
+              rk.`not_deductible`,
+              rk.`premium`,
+              rk.`ncf_premium`,
+              rk.task_id,
+              rk.prv_id
+        FROM
+          resp_msg rm
+          LEFT JOIN risk_kinds rk
+            ON rm.`resp_msg_id` = rk.`resp_msg_id`
+            and rm.`task_id` = rk.`task_id`
+            and rm.`prv_id` = rm.`prv_id`
+        WHERE rm.`task_id` = #{taskId}
+          AND rm.`prv_id` = #{prvId}
+          AND rm.`task_state` = #{taskState}
     </select>
 </mapper>

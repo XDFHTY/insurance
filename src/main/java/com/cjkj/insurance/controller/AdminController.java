@@ -42,7 +42,7 @@ public class AdminController {
     })
     public ApiResult update(String username, String password, HttpServletRequest request){
         ApiResult a = new ApiResult();
-        adminService.login(username,password,request,a);
+        a = adminService.login(username,password,request,a);
         return a;
     }
 
@@ -64,7 +64,7 @@ public class AdminController {
     })
     public ApiResult update(String uid,String oldpassword, String newpassword, HttpServletRequest request){
         ApiResult a = new ApiResult();
-        adminService.change(uid,oldpassword,newpassword,request,a);
+        a = adminService.change(uid,oldpassword,newpassword,request,a);
         return a;
     }
 
@@ -78,11 +78,29 @@ public class AdminController {
     @ResponseBody
     @ApiOperation("3查询订单详情")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "userID",value = "查询订单",required = true,dataType = "int")
+            @ApiImplicitParam(name = "userID",value = "用户id",required = true,dataType = "int"),
+            @ApiImplicitParam(name = "taskId",value = "任务号",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "prvId",value = "供应商id",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "taskState",value = "任务状态代码",required = true,dataType = "String"),
     })
-    public ApiResult findOrderById(Integer userID, HttpServletRequest request){
+    public ApiResult findOrderById(Integer userID,String taskId, String prvId,
+                                   String taskState, HttpServletRequest request){
         ApiResult a = new ApiResult();
-        adminService.findOrderById(userID,request,a);
+        a = adminService.findOrderById(userID,taskId,prvId,taskState,request,a);
+        return a;
+    }
+
+    /**
+     * 3查询订单列表
+     * @param request
+     * @return
+     */
+    @PostMapping("/findOrderList")
+    @ResponseBody
+    @ApiOperation("3查询订单列表")
+    public ApiResult findOrderList(HttpServletRequest request){
+        ApiResult a = new ApiResult();
+        a = adminService.findOrderList(request,a);
         return a;
     }
 }

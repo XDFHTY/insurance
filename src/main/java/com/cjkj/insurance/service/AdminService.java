@@ -17,5 +17,9 @@ public interface AdminService {
     public ApiResult change(String uid, String oldpassword, String newpassword, HttpServletRequest request, ApiResult a);
 
     //查询订单详情
-    public ApiResult findOrderById(Integer userID, HttpServletRequest request, ApiResult a);
+    public ApiResult findOrderById(Integer userID,String taskId, String prvId,
+                                   String taskState, HttpServletRequest request,ApiResult a);
+
+    //查询订单列表
+    ApiResult findOrderList(HttpServletRequest request, ApiResult a);
 }

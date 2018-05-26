@@ -1,6 +1,8 @@
 package com.cjkj.insurance.mapper;
 
 import com.cjkj.insurance.entity.*;
+import com.cjkj.insurance.entity.other.RespOrder;
+import com.cjkj.insurance.entity.other.RespOrderItme;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -22,70 +24,46 @@ public interface AdminMapper {
     int change(Admin admin1);
 
     /**
-     * 查询车辆信息表
+     * 查询订单列表
+     * @return
+     */
+    List<RespOrder> findOrderList();
+
+
+    /**
+     * 查询订单详情
      * @param userID
-     * @return
-     */
-    List<CarInfo> findCarInfoById(Integer userID);
-
-    /**
-     * 根据任务号查询回掉信息
-     * @param taskId
-     * @return
-     */
-    List<RespMsg> findRespMsg(String taskId);
-
-    /**
-     * 根据用户id查询车主信息
-     * @param userID
-     * @return
-     */
-    List<CarOwner> findCarOwnerById(Integer userID);
-
-    /**
-     * 根据任务号查询险种信息
-     * @param taskId
-     * @return
-     */
-    List<InsureInfo> findInsureInfoByTaskId(@Param("taskId") String taskId,@Param("prvId") String prvId);
-
-    /**
-     * 根据任务号和供应商id查询险种信息
      * @param taskId
      * @param prvId
+     * @param taskState
      * @return
      */
-    List<RiskKinds> findRiskKinds(@Param("taskId") String taskId,@Param("prvId") String prvId);
+    List<RespOrderItme> findOrderItmesById(@Param("userId") Integer userID,
+                                           @Param("taskId") String taskId,
+                                           @Param("prvId") String prvId,
+                                           @Param("taskState") String taskState);
 
     /**
-     * 根据用户id查询影像信息
-     * @param userID
-     * @return
-     */
-    List<UserImg> findUserImgById(Integer userID);
-
-    /**
-     * 根据任务号和供应商id查询配送信息
+     * 查询保险配置信息
      * @param taskId
      * @param prvId
+     * @param taskState
      * @return
      */
-    List<Delivery> findDelivery(@Param("taskId") String taskId,@Param("prvId") String prvId);
+    List<InsureInfo> findInsureInfoById(@Param("taskId") String taskId,
+                                        @Param("prvId") String prvId,
+                                        @Param("taskState") String taskState);
 
     /**
-     * 根据任务号和供应商id查询核保补充数据项
+     * 查询险种信息
      * @param taskId
      * @param prvId
+     * @param taskState
      * @return
      */
-    List<InsureSupplys> findInsureSupplys(@Param("taskId") String taskId,@Param("prvId") String prvId);
+    List<RiskKinds> findRiskKindsById(@Param("taskId") String taskId,
+                                      @Param("prvId") String prvId,
+                                      @Param("taskState") String taskState);
 
-    /**
-     * 根据任务号和供应商id查询业务评级信息
-     * @param taskId
-     * @param prvId
-     * @return
-     */
-    List<ScoreRate> findScoreRate(@Param("taskId") String taskId,@Param("prvId") String prvId);
 }
 
