@@ -6,10 +6,12 @@ import com.cjkj.insurance.mapper.AdminMapper;
 import com.cjkj.insurance.service.AdminService;
 import com.cjkj.insurance.utils.ApiCode;
 import com.cjkj.insurance.utils.ApiResult;
+import com.cjkj.insurance.utils.Md5Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -28,18 +30,24 @@ public class AdminServiceImpl implements AdminService {
      * @return
      */
     @Override
-    public ApiResult login(String username, String password, HttpServletRequest request, ApiResult a) {
-        Admin user = new Admin();
-        user.setUsername(username);
-        user.setPassword(password);
-        Admin user1 = adminMapper.login(user);
-        if (user1 == null) {
-            a.setCode(ApiCode.FAIL);
-            a.setMsg(ApiCode.FAIL_MSG);
-        } else {
-            request.getSession().setAttribute("admin", user1);
-            a.setCode(ApiCode.SUCCESS);
-            a.setMsg(ApiCode.SUCCESS_MSG);
+    public ApiResult login(String adminName, String adminPass, HttpServletRequest request, ApiResult a) {
+        Admin admin = new Admin();
+        admin.setAdminName(adminName);
+        String str = Md5Utils.MD5Encode(adminPass, "UTF-8", false);
+        admin.setAdminPass(str);
+        try {
+            Admin user1 = adminMapper.login(admin);
+            if (user1 == null) {
+                a.setCode(ApiCode.userpwd_not_exist);
+                a.setMsg(ApiCode.userpwd_not_exist_MSG);
+            } else {
+                request.getSession().setAttribute("admin", user1);
+                a.setCode(ApiCode.SUCCESS);
+                a.setMsg(ApiCode.SUCCESS_MSG);
+            }
+        }catch (Exception e){
+            a.setCode(ApiCode.userpwd_not_exist);
+            a.setMsg(ApiCode.userpwd_not_exist_MSG);
         }
         return a;
     }
@@ -62,21 +70,26 @@ public class AdminServiceImpl implements AdminService {
             a.setMsg(ApiCode.no_login_MSG);
         } else {
             Admin user = new Admin();
-            user.setUsername(uid);
-            user.setPassword(oldpassword);
+            user.setAdminName(uid);
+            String str =  Md5Utils.MD5Encode(oldpassword, "UTF-8", false);
+            user.setAdminPass(str);
             Admin user1 = adminMapper.login(user);
             if (user1 != null) {
-                user1.setPassword(newpassword);
+                String newStr = Md5Utils.MD5Encode(newpassword, "UTF-8", false);
+                user1.setAdminPass(newStr);
                 int i = adminMapper.change(user1);
                 if (i != 0) {
                     a.setCode(ApiCode.SUCCESS);
                     a.setMsg(ApiCode.SUCCESS_MSG);
                     //注销用户
-                    request.getSession().invalidate();
+                    request.getSession().removeAttribute("admin");
+                }else {
+                    a.setCode(ApiCode.FAIL);
+                    a.setMsg(ApiCode.FAIL_MSG);
                 }
             } else {
-                a.setCode(ApiCode.FAIL);
-                a.setMsg(ApiCode.FAIL_MSG);
+                a.setCode(ApiCode.pass_exist);
+                a.setMsg(ApiCode.pass_exist_MSG);
             }
         }
         return a;
@@ -187,5 +200,103 @@ public class AdminServiceImpl implements AdminService {
         }
         return a;
     }
+
+    /**
+     * 添加管理员账号
+     *
+     * @param adminName
+     * @param adminPass
+     * @param request
+     * @param a
+     * @return
+     */
+    @Override
+    public ApiResult insertAdmin(String adminName, String adminPass, HttpServletRequest request, ApiResult a) {
+        //登陆校验
+        Object obj = request.getSession().getAttribute("admin");
+        if (obj == null) {
+            a.setCode(ApiCode.no_login);
+            a.setMsg(ApiCode.no_login_MSG);
+        } else {
+            //封装admin
+            Admin admin = new Admin();
+            admin.setAdminName(adminName);
+            String str = Md5Utils.MD5Encode(adminPass, "UTF-8", false);
+            admin.setAdminPass(str);
+            admin.setAdminType("1");
+            admin.setAdminState("1");
+            admin.setRoleId((long) 1);
+            admin.setCreateTime(new Date());
+            try {
+                int i = adminMapper.insertAdmin(admin);
+                if (i != 0) {
+                    a.setCode(ApiCode.SUCCESS);
+                    a.setMsg(ApiCode.SUCCESS_MSG);
+                } else {
+                    a.setCode(ApiCode.FAIL);
+                    a.setMsg(ApiCode.FAIL_MSG);
+                }
+            } catch (Exception e) {
+                a.setCode(ApiCode.FAIL);
+                a.setMsg(ApiCode.FAIL_MSG);
+            }
+
+        }
+        return a;
+    }
+
+    /**
+     * 删除用户  非物理删除
+     *
+     * @param adminName
+     * @param request
+     * @param a
+     * @return
+     */
+    @Override
+    public ApiResult deleteAdmin(String adminName, HttpServletRequest request, ApiResult a) {
+        //登陆校验
+        Object obj = request.getSession().getAttribute("admin");
+        if (obj == null) {
+            a.setCode(ApiCode.no_login);
+            a.setMsg(ApiCode.no_login_MSG);
+        } else {
+            //查询该用户
+            Admin admin = adminMapper.findAdmin(adminName);
+            if (admin != null) {
+                if ("0".equals(admin.getAdminState())) {
+                    //已经删除
+                    a.setCode(ApiCode.delete_error);
+                    a.setMsg(ApiCode.delete_error_MSG);
+                } else {
+                    //修改状态
+                    admin.setAdminState("0");
+                    //更新
+                    try {
+                        int i = adminMapper.updateAdmin(admin);
+                        if (i != 0) {
+                            //成功
+                            a.setCode(ApiCode.SUCCESS);
+                            a.setMsg(ApiCode.SUCCESS_MSG);
+                        } else {
+                            //失败
+                            a.setCode(ApiCode.FAIL);
+                            a.setMsg(ApiCode.FAIL_MSG);
+                        }
+                    } catch (Exception e) {
+                        a.setCode(ApiCode.FAIL);
+                        a.setMsg(ApiCode.FAIL_MSG);
+                    }
+                }
+            } else {
+                //无此用户
+                a.setCode(ApiCode.no_admin_error);
+                a.setMsg(ApiCode.no_admin_error_MSG);
+            }
+
+        }
+        return a;
+    }
+
 
 }

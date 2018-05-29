@@ -3,17 +3,18 @@
 <mapper namespace="com.cjkj.insurance.mapper.AdminMapper">
 
     <resultMap id="loginResultMap" type="com.cjkj.insurance.entity.Admin">
-        <result column="admin_name" property="username"/>
-        <result column="admin_pass" property="password"/>
+        <result column="admin_name" property="adminName"/>
+        <result column="admin_pass" property="adminPass"/>
     </resultMap>
 
-
+    <!--登录-->
     <select id="login" parameterType="com.cjkj.insurance.entity.Admin" resultMap="loginResultMap">
-        SELECT * FROM admin WHERE admin_name = #{username} AND admin_pass = #{password}
+        SELECT * FROM admin WHERE admin_name = #{adminName} AND admin_pass = #{adminPass} AND admin_state = '1'
     </select>
 
+    <!--修改密码-->
     <update id="change" parameterType="com.cjkj.insurance.entity.Admin">
-        UPDATE admin SET admin_pass = #{password} WHERE admin_name = #{username}
+        UPDATE admin SET admin_pass = #{adminPass} WHERE admin_name = #{adminName}
     </update>
 
 
@@ -315,4 +316,41 @@
           AND rm.`prv_id` = #{prvId}
           AND rm.`task_state` = #{taskState}
     </select>
+
+
+    <!--添加管理员-->
+    <insert id="insertAdmin" parameterType="com.cjkj.insurance.entity.Admin">
+    insert into admin (
+      role_id,
+      admin_name,
+      admin_pass,
+      admin_type,
+      admin_state,
+      create_time
+    )
+    values
+      (#{roleId},#{adminName},#{adminPass},#{adminType},#{adminState},#{createTime})
+    </insert>
+
+    <!--查询映射-->
+    <resultMap id="findAdminResultMap" type="com.cjkj.insurance.entity.Admin">
+        <result column="role_id" property="roleId"/>
+        <result column="admin_name" property="adminName"/>
+        <result column="admin_pass" property="adminPass"/>
+        <result column="salt_val" property="saltVal"/>
+        <result column="admin_type" property="adminType"/>
+        <result column="admin_state" property="adminState"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <!--查询-->
+    <select id="findAdmin" parameterType="com.cjkj.insurance.entity.Admin" resultMap="findAdminResultMap">
+        SELECT * FROM admin WHERE admin_name = #{adminName}
+    </select>
+
+    <!--删除用户  非物理删除-->
+    <update id="updateAdmin" parameterType="com.cjkj.insurance.entity.Admin">
+        UPDATE admin SET admin_state = '0' WHERE admin_name = #{adminName}
+    </update>
 </mapper>

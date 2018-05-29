@@ -11,7 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 
 public interface AdminService {
     //管理员登陆
-    public ApiResult login(String username, String password, HttpServletRequest request, ApiResult a);
+    public ApiResult login(String adminName, String adminPass, HttpServletRequest request, ApiResult a);
 
     //修改管理员密码
     public ApiResult change(String uid, String oldpassword, String newpassword, HttpServletRequest request, ApiResult a);
@@ -22,4 +22,10 @@ public interface AdminService {
 
     //查询订单列表
     ApiResult findOrderList(HttpServletRequest request, ApiResult a);
+
+    //添加管理员账号
+    ApiResult insertAdmin(String adminName, String adminPass,HttpServletRequest request, ApiResult a);
+
+    //删除用户
+    ApiResult deleteAdmin(String adminName, HttpServletRequest request, ApiResult a);
 }

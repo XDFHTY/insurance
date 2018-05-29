@@ -65,5 +65,25 @@ public interface AdminMapper {
                                       @Param("prvId") String prvId,
                                       @Param("taskState") String taskState);
 
+    /**
+     * 添加管理员
+     * @param admin
+     * @return
+     */
+    int insertAdmin(Admin admin);
+
+    /**
+     * 查询管理员
+     * @param adminName
+     * @return
+     */
+    Admin findAdmin(String adminName);
+
+    /**
+     * 删除管理员  非物理删除
+     * @param admin
+     * @return
+     */
+    int updateAdmin(Admin admin);
 }
 

@@ -122,6 +122,10 @@ public class ApiCode {
     public static final String account_exist_MSG =  "用户名或密码错误";
     public static final int config_error = 1008;
     public static final String config_error_MSG =  "参数配置表错误";
+    public static final int delete_error = 1009;
+    public static final String delete_error_MSG =  "用户已经被删除";
+    public static final int no_admin_error = 1010;
+    public static final String no_admin_error_MSG =  "没有此用户";
 
     public static final int import_success = 1100;
     public static final String import_success_MSG =  "导入成功";

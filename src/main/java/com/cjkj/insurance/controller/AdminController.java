@@ -1,7 +1,9 @@
 package com.cjkj.insurance.controller;
 
+import com.cjkj.insurance.entity.Admin;
 import com.cjkj.insurance.service.AdminService;
 import com.cjkj.insurance.service.InsuranceService;
+import com.cjkj.insurance.utils.ApiCode;
 import com.cjkj.insurance.utils.ApiResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -28,8 +30,6 @@ public class AdminController {
 
     /**
      * 1管理员登陆
-     * @param username
-     * @param password
      * @param request
      * @return
      */
@@ -37,20 +37,17 @@ public class AdminController {
     @ResponseBody
     @ApiOperation("1管理员登陆")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "username",value = "用户名",required = true,dataType = "String"),
-            @ApiImplicitParam(name = "password",value = "密码",required = true,dataType = "String")
+            @ApiImplicitParam(name = "adminName",value = "用户名",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "adminPass",value = "密码",required = true,dataType = "String")
     })
-    public ApiResult update(String username, String password, HttpServletRequest request){
+    public ApiResult update(String adminName, String adminPass, HttpServletRequest request){
         ApiResult a = new ApiResult();
-        a = adminService.login(username,password,request,a);
+        a = adminService.login(adminName,adminPass,request,a);
         return a;
     }
 
     /**
      * 2修改密码
-     * @param uid
-     * @param oldpassword
-     * @param newpassword
      * @param request
      * @return
      */
@@ -58,13 +55,13 @@ public class AdminController {
     @ResponseBody
     @ApiOperation("2修改密码")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "uid",value = "用户名",required = true,dataType = "String"),
-            @ApiImplicitParam(name = "oldpassword",value = "旧密码",required = true,dataType = "String"),
-            @ApiImplicitParam(name = "newpassword",value = "新密码",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "adminName",value = "用户名",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "oldPass",value = "旧密码",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "newPass",value = "新密码",required = true,dataType = "String"),
     })
-    public ApiResult update(String uid,String oldpassword, String newpassword, HttpServletRequest request){
+    public ApiResult update(String adminName,String oldPass, String newPass, HttpServletRequest request){
         ApiResult a = new ApiResult();
-        a = adminService.change(uid,oldpassword,newpassword,request,a);
+        a = adminService.change(adminName,oldPass,newPass,request,a);
         return a;
     }
 
@@ -76,7 +73,7 @@ public class AdminController {
      */
     @PostMapping("/findOrderById")
     @ResponseBody
-    @ApiOperation("3查询订单详情")
+    @ApiOperation("4查询订单详情")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "userID",value = "用户id",required = true,dataType = "int"),
             @ApiImplicitParam(name = "taskId",value = "任务号",required = true,dataType = "String"),
@@ -103,4 +100,59 @@ public class AdminController {
         a = adminService.findOrderList(request,a);
         return a;
     }
+
+    /**
+     * 添加管理员
+     * @param adminName
+     * @param adminPass
+     * @return
+     */
+    @PostMapping("/insertAdmin")
+    @ResponseBody
+    @ApiOperation("5添加管理员")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "adminName",value = "用户名",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "adminPass",value = "密码",required = true,dataType = "String"),
+})
+    public ApiResult insertAdmin(String adminName,String adminPass,
+                                 HttpServletRequest request){
+        ApiResult a = new ApiResult();
+        a = adminService.insertAdmin(adminName,adminPass,request,a);
+        return a;
+    }
+
+    /**
+     * 注销登录
+     * @param request
+     * @return
+     */
+    @PostMapping("/logOut")
+    @ResponseBody
+    @ApiOperation("6注销登录")
+    public ApiResult logOut(HttpServletRequest request){
+        ApiResult a = new ApiResult();
+        request.getSession().removeAttribute("admin");
+        a.setCode(ApiCode.SUCCESS);
+        a.setMsg(ApiCode.SUCCESS_MSG);
+        return a;
+    }
+
+    /**
+     * 删除用户   非物理删除
+     * @param adminName
+     * @param request
+     * @return
+     */
+    @DeleteMapping("/deleteAdmin")
+    @ResponseBody
+    @ApiOperation("6删除用户")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "adminName",value = "用户名",required = true,dataType = "String"),
+    })
+    public ApiResult deleteAdmin(String adminName, HttpServletRequest request){
+        ApiResult a = new ApiResult();
+        a = adminService.deleteAdmin(adminName,request,a);
+        return a;
+    }
+
 }
