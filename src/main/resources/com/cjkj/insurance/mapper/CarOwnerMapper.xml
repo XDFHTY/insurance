@@ -285,4 +285,22 @@
     user_id = #{userId}
   </select>
 
+  <select id="findOldCarOwner" parameterType="com.cjkj.insurance.entity.CarOwner" resultMap="BaseResultMap">
+    SELECT
+    *
+    FROM
+    car_owner co
+    WHERE
+    co.user_id = #{userId}
+    AND
+    co.car_info_id = #{carInfoId}
+    AND
+    co.idcard_no = #{idcardNo}
+    AND
+    co.task_id = #{taskId}
+    AND
+    co.msg_type = #{msgType}
+
+  </select>
+
 </mapper>

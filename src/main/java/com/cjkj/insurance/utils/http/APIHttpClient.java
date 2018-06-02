@@ -1,4 +1,4 @@
-package com.cjkj.insurance.utils;
+package com.cjkj.insurance.utils.http;
 
 import net.sf.json.JSONObject;
 import org.apache.commons.logging.Log;
@@ -15,8 +15,6 @@ import org.apache.http.util.EntityUtils;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.List;
 
 public class APIHttpClient {
 

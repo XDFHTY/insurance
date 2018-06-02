@@ -174,4 +174,20 @@
       prv_id = #{prvId,jdbcType=VARCHAR}
     where invoiceInfo_id = #{invoiceinfoId,jdbcType=INTEGER}
   </update>
+
+
+  <select id="findInvoiceinfo" parameterType="com.cjkj.insurance.entity.Invoiceinfo" resultMap="BaseResultMap">
+    SELECT
+    *
+    FROM
+    invoiceinfo i
+    WHERE
+    i.user_id = #{userId}
+    AND
+    i.car_info_id = #{carInfoId}
+    AND
+    i.task_id = #{taskId}
+
+
+  </select>
 </mapper>

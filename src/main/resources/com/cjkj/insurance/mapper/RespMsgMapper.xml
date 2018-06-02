@@ -18,12 +18,13 @@
     <result column="inspection_code" property="inspectionCode" jdbcType="VARCHAR" />
     <result column="quote_valid_time" property="quoteValidTime" jdbcType="TIMESTAMP" />
     <result column="pay_valid_time" property="payValidTime" jdbcType="TIMESTAMP" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
     <result column="resp_json" property="respJson" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     resp_msg_id, user_id, car_info_id, task_id, prv_id, prv_name, resp_code, error_msg, 
     channel_id, channel_user_id, task_state, task_state_description, msg_type, inspection_code, 
-    quote_valid_time, pay_valid_time,resp_json
+    quote_valid_time, pay_valid_time,create_time,resp_json
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
     select 
@@ -41,13 +42,13 @@
       resp_code, error_msg, channel_id, 
       channel_user_id, task_state, task_state_description, 
       msg_type, inspection_code, quote_valid_time, 
-      pay_valid_time)
+      pay_valid_time,create_time)
     values (#{respMsgId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{carInfoId,jdbcType=INTEGER}, 
       #{taskId,jdbcType=VARCHAR}, #{prvId,jdbcType=VARCHAR}, #{prvName,jdbcType=VARCHAR}, 
       #{respCode,jdbcType=VARCHAR}, #{errorMsg,jdbcType=VARCHAR}, #{channelId,jdbcType=VARCHAR}, 
       #{channelUserId,jdbcType=VARCHAR}, #{taskState,jdbcType=VARCHAR}, #{taskStateDescription,jdbcType=VARCHAR}, 
       #{msgType,jdbcType=VARCHAR}, #{inspectionCode,jdbcType=VARCHAR}, #{quoteValidTime,jdbcType=TIMESTAMP}, 
-      #{payValidTime,jdbcType=TIMESTAMP})
+      #{payValidTime,jdbcType=TIMESTAMP},#{createTime})
   </insert>
   <insert id="insertSelective" parameterType="com.cjkj.insurance.entity.RespMsg" >
     <selectKey order="AFTER" keyProperty="respMsgId" resultType="java.lang.Integer">
@@ -103,6 +104,9 @@
       <if test="payValidTime != null" >
         pay_valid_time,
       </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
       <if test="respJson != null" >
         resp_json,
       </if>
@@ -155,6 +159,9 @@
       </if>
       <if test="payValidTime != null" >
         #{payValidTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
       </if>
       <if test="respJson != null" >
         #{respJson},
@@ -209,6 +216,9 @@
       <if test="payValidTime != null" >
         pay_valid_time = #{payValidTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
     </set>
     where resp_msg_id = #{respMsgId,jdbcType=INTEGER}
   </update>
@@ -228,13 +238,15 @@
       msg_type = #{msgType,jdbcType=VARCHAR},
       inspection_code = #{inspectionCode,jdbcType=VARCHAR},
       quote_valid_time = #{quoteValidTime,jdbcType=TIMESTAMP},
-      pay_valid_time = #{payValidTime,jdbcType=TIMESTAMP}
+      pay_valid_time = #{payValidTime,jdbcType=TIMESTAMP},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
     where resp_msg_id = #{respMsgId,jdbcType=INTEGER}
   </update>
 
   <!--根据任务号查询respMsg信息-->
   <select id="findRespMsgByTaskId" parameterType="java.util.Map" resultMap="BaseResultMap">
-    SELECT * FROM
+    SELECT *
+    FROM
     resp_msg rm
     WHERE
     rm.task_id = #{taskId}

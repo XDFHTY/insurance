@@ -44,4 +44,7 @@ public interface DeliveryMapper {
      *
      */
     public Delivery findDeliveryByTaskId(String taskId);
+
+    //检查配送信息是否存在
+    public Delivery findDelivery(Delivery delivery);
 }

@@ -7,6 +7,7 @@ import com.cjkj.insurance.utils.ApiCode;
 import com.cjkj.insurance.utils.ApiResult;
 import com.cjkj.insurance.utils.TimeToString;
 import com.cjkj.insurance.utils.json.JSONUtil;
+import com.google.gson.Gson;
 import io.swagger.annotations.*;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.json.JSONObject;
@@ -36,6 +37,7 @@ public class InsuranceController {
 
 
 
+    Gson gson = new Gson();
 
     /**
      * 3.获取token
@@ -162,8 +164,11 @@ public class InsuranceController {
 
     public ApiResult updateTask(HttpServletRequest request,
                                 @ApiParam(name = "params",value = "提交需要修改的数据，JSON格式",required = true)
-                                @RequestBody ReqUpdateTask reqUpdateTask) {
+                                @RequestBody String json) {
         ApiResult a =new ApiResult();
+
+
+        ReqUpdateTask reqUpdateTask = gson.fromJson(json,ReqUpdateTask.class);
         a=insuranceService.updateTask(request,reqUpdateTask,a);
 
 
@@ -211,7 +216,7 @@ public class InsuranceController {
     @PostMapping("/finalState")
     
     @ApiOperation("12回调接口")
-    public void finalState(@RequestBody String jsonStr) {
+    public ApiResult finalState(@RequestBody String jsonStr) {
         System.out.println("================================泛华回调=================================================");
         System.out.println("jsonStr===>"+jsonStr);
         System.out.println("================================泛华回调=================================================");
@@ -220,7 +225,11 @@ public class InsuranceController {
         insuranceService.finalState(jsonStr);
 
 
+        ApiResult apiResult = new ApiResult();
+        apiResult.setCode(ApiCode.SUCCESS);
+        apiResult.setMsg(ApiCode.SUCCESS_MSG);
 
+        return apiResult;
     }
 
     /*  13	影像识别

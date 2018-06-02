@@ -90,6 +90,11 @@ public class RespMsg {
      */
     private Date payValidTime;
 
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+
     //回调的json串
     private String respJson;
 

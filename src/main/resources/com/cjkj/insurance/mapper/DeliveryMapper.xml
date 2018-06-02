@@ -254,4 +254,19 @@
   WHERE
   d.task_id = #{taskId}
   </select>
+
+
+  <select id="findDelivery" parameterType="com.cjkj.insurance.entity.Delivery" resultMap="BaseResultMap">
+    SELECT
+    *
+    FROM
+    delivery d
+    WHERE
+    d.user_id = #{userId}
+    AND
+    d.car_info_id = #{carInfoId}
+    AND
+    d.task_id = #{taskId}
+
+  </select>
 </mapper>

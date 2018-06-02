@@ -9,6 +9,7 @@ import com.cjkj.insurance.service.InsuranceService;
 import com.cjkj.insurance.service.MsgHandleService;
 import com.cjkj.insurance.utils.*;
 import com.cjkj.insurance.utils.file.FileUtil;
+import com.cjkj.insurance.utils.http.APIHttpClient;
 import com.cjkj.insurance.utils.json.JSONUtil;
 import com.google.gson.Gson;
 import net.sf.json.JSONObject;
@@ -44,6 +45,8 @@ public class InsuranceServiceImpl implements InsuranceService {
 
     @Autowired
     private DqLicenceLocationMapper dqLicenceLocationMapper;
+
+    Gson gson = new Gson();
 
 
     //获取accessToken
@@ -115,11 +118,11 @@ public class InsuranceServiceImpl implements InsuranceService {
                 .post("/createTaskA", request,JSONUtil.toJSONString(reqCreateTaskA) , 2);
 
         //将返回的json字符串转换为实体类
-        Map map = JSONUtil.parseObject(response, Map.class);
+        Map map = gson.fromJson(response, Map.class);
 
         HttpSession session = request.getSession();
         if(map.get("respCode").equals("00")){  //创建报价任务成功
-            String taskId = (String) map.get("“taskId”");
+            String taskId = (String) map.get("taskId");
             session.setAttribute("taskId",taskId);  //将报价任务号保存到session
         }
         getResult(response,a);
@@ -141,7 +144,8 @@ public class InsuranceServiceImpl implements InsuranceService {
         reqCreateTaskB.setChannelUserId(channelUserId);
         String response = new APIHttpClient()
                 .post("/createTaskB", request, JSONUtil.toJSONString(reqCreateTaskB), 2);
-        Map map = JSONUtil.parseObject(response, Map.class);
+        Map map = gson.fromJson(response,Map.class);
+
 
 
         if(map.get("respCode").equals("00")){  //创建报价任务成功
@@ -178,13 +182,21 @@ public class InsuranceServiceImpl implements InsuranceService {
 
 
         String taskId = (String) session.getAttribute("taskId");
-        reqUpdateTask.setTaskId(taskId);
+        if(reqUpdateTask.getTaskId() == null){
 
+            reqUpdateTask.setTaskId(taskId);
+
+        }
+
+        String json = gson.toJson(reqUpdateTask);
         String response = new APIHttpClient()
-                .post("/updateTask", request, JSONUtil.toJSONString(reqUpdateTask),2);
+                .post("/updateTask", request, json,2);
+        
+        
         getResult(response,a);
 
-        Map map = JSONUtil.parseObject(response, Map.class);
+        
+        Map map = gson.fromJson(response, Map.class);
 
 
         if(map.get("respCode").equals("00")){  //创建报价任务成功
@@ -227,7 +239,7 @@ public class InsuranceServiceImpl implements InsuranceService {
 
 
         //将json对象转换为实体类
-        ImageInfo imageInfo = JSONUtil.parseObject(params.toString(), ImageInfo.class);
+        ImageInfo imageInfo = gson.fromJson(params.toString(), ImageInfo.class);
         String imgUrl1 = FileUtil.uploadImgBase64(imageInfo.getImageContent(),path,request);
 
         imgUrl1 = imgUrl1.replace(this.path,basePath+"img/");
@@ -259,7 +271,7 @@ public class InsuranceServiceImpl implements InsuranceService {
                 .post("/recognizeImage", request, JSONUtil.toJSONString(reqImgDistinguish),2);
 
         //将返回的json字符串转换为实体类
-        RespImgDistinguish respImgDistinguish = JSONUtil.parseObject(response, RespImgDistinguish.class);
+        RespImgDistinguish respImgDistinguish = gson.fromJson(response, RespImgDistinguish.class);
 
         a = getResult(response,a);
         a.setData(respImgDistinguish);
@@ -350,7 +362,6 @@ public class InsuranceServiceImpl implements InsuranceService {
         RespFinalState respFinalState = gson.fromJson(jsonStr,RespFinalState.class);
         respFinalState.setRespJson(jsonStr);
 
-        System.out.println("respFinalState===============>>"+respFinalState);
         boolean b = msgHandleService.addFinalState(respFinalState);
     }
 

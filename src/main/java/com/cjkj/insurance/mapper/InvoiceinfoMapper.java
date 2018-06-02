@@ -44,4 +44,8 @@ public interface InvoiceinfoMapper {
     int updateByPrimaryKey(Invoiceinfo record);
 
 
+    //检查发票信息是否已存在
+    public Invoiceinfo findInvoiceinfo(Invoiceinfo invoiceinfo);
+
+
 }

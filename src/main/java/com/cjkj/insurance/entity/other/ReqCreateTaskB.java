@@ -54,6 +54,11 @@ public class ReqCreateTaskB {
     private CarOwner insured;
 
     /**
+     * 索赔权益人
+     */
+    private CarOwner beneficiary;
+
+    /**
      * 险种信息
      */
     private InsureInfo insureInfo;

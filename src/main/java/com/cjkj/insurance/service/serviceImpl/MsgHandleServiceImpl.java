@@ -83,6 +83,9 @@ public class MsgHandleServiceImpl implements MsgHandleService {
 
         //投保人信息
         CarOwner applicant = reqCreateTaskB.getApplicant();
+        if(applicant == null){
+            applicant = carOwner;
+        }
         applicant.setMsgType("2");
         applicant.setUserId(userId);
         applicant.setCarInfoId(carInfo.getCarInfoId());
@@ -91,16 +94,31 @@ public class MsgHandleServiceImpl implements MsgHandleService {
 
         //被保人信息
         CarOwner insured =  reqCreateTaskB.getInsured();
+        if(insured == null){
+            insured = carOwner;
+        }
         insured.setMsgType("3");
         insured.setUserId(userId);
         insured.setCarInfoId(carInfo.getCarInfoId());
         insured.setTaskId(taskId);
         i += carOwnerMapper.insertSelective(insured);
 
+        //索赔权益人信息
+        CarOwner beneficiary = reqCreateTaskB.getBeneficiary();
+        if(beneficiary == null){
+            beneficiary = carOwner;
+        }
+        beneficiary.setMsgType("4");
+        beneficiary.setUserId(userId);
+        beneficiary.setCarInfoId(carInfo.getCarInfoId());
+        beneficiary.setTaskId(taskId);  //任务号
+
+        i += carOwnerMapper.insertSelective(beneficiary);
 
 
 
-        if(i == 3){
+
+        if(i > 0){
             return true;
         }else {
             return false;
@@ -113,10 +131,22 @@ public class MsgHandleServiceImpl implements MsgHandleService {
 
         //车辆信息
         CarInfo carInfo = reqUpdateTask.getCarInfo();
-        carInfo.setUserId(userId);
-        carInfo.setTaskId(reqUpdateTask.getTaskId());  //任务号
-        carInfo.setUpdateTime(new Date());
-        carInfoMapper.insertSelective(carInfo);
+        if(carInfo != null){
+            carInfo.setUserId(userId);
+            carInfo.setTaskId(reqUpdateTask.getTaskId());  //任务号
+            //检查 用户-车牌-任务号 是否已存在
+            List<CarInfo> carInfos = carInfoMapper.findCarInfos(carInfo);
+            if(carInfos.size()>0){ //数据已存在
+                carInfo.setCarInfoId(carInfos.get(0).getCarInfoId());
+                //修改信息
+                carInfoMapper.updateByPrimaryKeySelective(carInfo);
+
+            }else {
+
+                carInfo.setUpdateTime(new Date());
+                carInfoMapper.insertSelective(carInfo);
+            }
+        }
 
 
         int i = 0;
@@ -127,57 +157,123 @@ public class MsgHandleServiceImpl implements MsgHandleService {
         carOwner.setCarInfoId(carInfo.getCarInfoId());
         carOwner.setTaskId(reqUpdateTask.getTaskId());  //任务号
 
-        i += carOwnerMapper.insertSelective(carOwner);
+        //检查 用户ID-carInfoId-身份证-任务号 车主信息是否存在
+        CarOwner oldCarOwner = carOwnerMapper.findOldCarOwner(carOwner);
+        if(oldCarOwner == null){
+            i += carOwnerMapper.insertSelective(carOwner);
+
+        }else {
+            carOwner.setCarOwnerId(oldCarOwner.getCarOwnerId());
+            i += carOwnerMapper.updateByPrimaryKeySelective(carOwner);
+        }
 
         //投保人信息
         CarOwner applicant = reqUpdateTask.getApplicant();
+        if(applicant == null){
+            applicant = reqUpdateTask.getCarOwner();
+        }
         applicant.setMsgType("2");
         applicant.setUserId(userId);
         applicant.setCarInfoId(carInfo.getCarInfoId());
         applicant.setTaskId(reqUpdateTask.getTaskId());  //任务号
+        //检查 用户ID-carInfoId-身份证-任务号 车主信息是否存在
+        CarOwner oldApplicant = carOwnerMapper.findOldCarOwner(applicant);
+        if(oldApplicant == null){
+            i += carOwnerMapper.insertSelective(applicant);
 
-        i += carOwnerMapper.insertSelective(applicant);
+        }else {
+
+            applicant.setCarOwnerId(oldApplicant.getCarOwnerId());
+            i += carOwnerMapper.updateByPrimaryKeySelective(applicant);
+        }
 
         //被保人信息
         CarOwner insured =  reqUpdateTask.getInsured();
+        if(insured == null){
+            insured = reqUpdateTask.getCarOwner();
+        }
         insured.setMsgType("3");
         insured.setUserId(userId);
         insured.setCarInfoId(carInfo.getCarInfoId());
         insured.setTaskId(reqUpdateTask.getTaskId());  //任务号
+        //检查 用户ID-carInfoId-身份证-任务号 车主信息是否存在
+        CarOwner oldInsured = carOwnerMapper.findOldCarOwner(insured);
+        if(oldInsured == null){
+            i += carOwnerMapper.insertSelective(insured);
 
-        i += carOwnerMapper.insertSelective(insured);
+        }else {
+
+            insured.setCarOwnerId(oldInsured.getCarOwnerId());
+            i += carOwnerMapper.updateByPrimaryKeySelective(insured);
+        }
+
 
         //索赔权益人信息
         CarOwner beneficiary = reqUpdateTask.getBeneficiary();
+        if(beneficiary == null){
+            beneficiary = reqUpdateTask.getCarOwner();
+        }
         beneficiary.setMsgType("4");
         beneficiary.setUserId(userId);
         beneficiary.setCarInfoId(carInfo.getCarInfoId());
         beneficiary.setTaskId(reqUpdateTask.getTaskId());  //任务号
+        //检查 用户ID-carInfoId-身份证-任务号 车主信息是否存在
+        CarOwner oldBeneficiary = carOwnerMapper.findOldCarOwner(beneficiary);
+        if(oldBeneficiary == null){
 
-        i += carOwnerMapper.insertSelective(beneficiary);
+            i += carOwnerMapper.insertSelective(beneficiary);
+        }else {
+
+            beneficiary.setCarOwnerId(oldBeneficiary.getCarOwnerId());
+            i += carOwnerMapper.updateByPrimaryKeySelective(beneficiary);
+        }
+
 
         //配送信息
         Delivery delivery = reqUpdateTask.getDelivery();
-        delivery.setUserId(userId);
-        delivery.setCarInfoId(carInfo.getCarInfoId());
-        delivery.setTaskId(reqUpdateTask.getTaskId());  //任务号
+        if(delivery != null){
 
-        i -= deliveryMapper.insertSelective(delivery);
+            delivery.setUserId(userId);
+            delivery.setCarInfoId(carInfo.getCarInfoId());
+            delivery.setTaskId(reqUpdateTask.getTaskId());  //任务号
+
+            //检查配送信息是否存在
+            Delivery oldDelivery = deliveryMapper.findDelivery(delivery);
+            if(oldDelivery == null){
+                i += deliveryMapper.insertSelective(delivery);
+
+            }else {
+                delivery.setDeliveryId(oldDelivery.getDeliveryId());
+                i += deliveryMapper.updateByPrimaryKeySelective(delivery);
+            }
+        }
 
 
         //发票信息
         Invoiceinfo invoiceinfo = reqUpdateTask.getInvoiceInfo();
-        invoiceinfo.setUserId(userId);
-        invoiceinfo.setCarInfoId(carInfo.getCarInfoId());
-        invoiceinfo.setTaskId(reqUpdateTask.getTaskId());  //任务号
+        if(invoiceinfo != null){
+            invoiceinfo.setUserId(userId);
+            invoiceinfo.setCarInfoId(carInfo.getCarInfoId());
+            invoiceinfo.setTaskId(reqUpdateTask.getTaskId());  //任务号
+
+            System.out.println();
+
+            //检查发票信息是否已存在
+            Invoiceinfo oldInvoiceinfo = invoiceinfoMapper.findInvoiceinfo(invoiceinfo);
+            if(oldInvoiceinfo == null){
+                i += invoiceinfoMapper.insertSelective(invoiceinfo);
+
+            }else {
+
+                invoiceinfo.setInvoiceinfoId(oldInvoiceinfo.getInvoiceinfoId());
+
+                i += invoiceinfoMapper.updateByPrimaryKeySelective(invoiceinfo);
+            }
+        }
 
 
 
-        i -= invoiceinfoMapper.insertSelective(invoiceinfo);
-
-
-
-        if( i == 2){
+        if( i > 0){
             return true;
         }else {
 
@@ -228,46 +324,59 @@ public class MsgHandleServiceImpl implements MsgHandleService {
     public boolean addFinalState( RespFinalState respFinalState) {
         String taskId = respFinalState.getTaskId();
         String prvId = respFinalState.getPrvId();
+        String taskState = respFinalState.getTaskState();
 
 
         /**
-         * 检查此任务号 及 供应商ID 信息 是否已存在信息，如果存在，则更新回调信息
+         * 检查 此任务号 、 供应商ID 、信息状态 信息 是否已存在信息，如果存在，则更新回调信息
          */
-        Map respMsgMap = new HashMap();
-        respMsgMap.put("taskId",taskId);
-        respMsgMap.put("prvId",prvId);
+        Map map = new HashMap();
+        map.put("taskId",taskId);
+        map.put("prvId",prvId);
+        map.put("taskState",taskState);
 
-//        RespMsg respMsg0  = respMsgMapper.findRespMsgByTaskId(respMsgMap);
+        RespMsg respMsg0  = respMsgMapper.findRespMsgByTaskId(map);
         RespMsg respMsg = new RespMsg();
 
-//        if(respMsg0 == null){
-            //处理返回的基础信息
-            respMsg.setTaskId(taskId);
-            respMsg.setPrvId(prvId);
-            respMsg.setPrvName(respFinalState.getPrvName());
-            respMsg.setRespCode(respFinalState.getRespCode());
-            respMsg.setErrorMsg(respFinalState.getErrorMsg());
-            respMsg.setChannelId(respFinalState.getChannelId());
-            respMsg.setChannelUserId(respFinalState.getChannelUserId());
-            respMsg.setTaskState(respFinalState.getTaskState());
-            respMsg.setTaskStateDescription(respFinalState.getTaskStateDescription());
-            respMsg.setMsgType(respFinalState.getMsgType());
-            respMsg.setInspectionCode(respFinalState.getInspectionCode());
-            respMsg.setRespJson(respFinalState.getRespJson());
-            if(respFinalState.getQuoteValidTime() != null && respFinalState.getQuoteValidTime() !=""){
-                respMsg.setQuoteValidTime(TimeToString.StrToDate(respFinalState.getQuoteValidTime()));
+        if(respMsg0 != null){  //存在
+            //回调信息已存在
+            //删除旧信息
+            respMsgMapper.deleteByPrimaryKey(respMsg0.getRespMsgId());
+        }
 
-            }
-            if(respFinalState.getPayValidTime() != null && respFinalState.getPayValidTime() != ""){
-                respMsg.setPayValidTime(TimeToString.StrToDate(respFinalState.getPayValidTime()));
-            }
-            //保存返回的基础信息
-            respMsgMapper.insertSelective(respMsg);
-//        }else {
+
+        //处理返回的基础信息
+        respMsg.setTaskId(taskId);
+        respMsg.setPrvId(prvId);
+        respMsg.setPrvName(respFinalState.getPrvName());
+        respMsg.setRespCode(respFinalState.getRespCode());
+        respMsg.setErrorMsg(respFinalState.getErrorMsg());
+        respMsg.setChannelId(respFinalState.getChannelId());
+        respMsg.setChannelUserId(respFinalState.getChannelUserId());
+        respMsg.setTaskState(respFinalState.getTaskState());
+        respMsg.setTaskStateDescription(respFinalState.getTaskStateDescription());
+        respMsg.setMsgType(respFinalState.getMsgType());
+        respMsg.setInspectionCode(respFinalState.getInspectionCode());
+        respMsg.setCreateTime(new Date());
+        respMsg.setRespJson(respFinalState.getRespJson());
+
+        if(respFinalState.getQuoteValidTime() != null && respFinalState.getQuoteValidTime() !=""){
+            respMsg.setQuoteValidTime(TimeToString.StrToDate(respFinalState.getQuoteValidTime()));
+
+        }
+        if(respFinalState.getPayValidTime() != null && respFinalState.getPayValidTime() != ""){
+            respMsg.setPayValidTime(TimeToString.StrToDate(respFinalState.getPayValidTime()));
+        }
+        //保存返回的基础信息
+        respMsgMapper.insertSelective(respMsg);
+
+
 //            //根据 respMsgId 更新报价回调信息内容和状态
 //            respMsg.setRespMsgId(respMsg0.getRespMsgId());
-//            respMsg.setTaskId(taskId);
-//            respMsg.setPrvId(prvId);
+//            respMsg.setTaskId(respMsg0.getTaskId());
+//            respMsg.setPrvId(respMsg0.getPrvId());
+//            respMsg.setTaskState(respMsg0.getTaskState());
+//
 //            respMsg.setPrvName(respFinalState.getPrvName());
 //            respMsg.setRespCode(respFinalState.getRespCode());
 //            respMsg.setErrorMsg(respFinalState.getErrorMsg());
@@ -277,6 +386,8 @@ public class MsgHandleServiceImpl implements MsgHandleService {
 //            respMsg.setTaskStateDescription(respFinalState.getTaskStateDescription());
 //            respMsg.setMsgType(respFinalState.getMsgType());
 //            respMsg.setInspectionCode(respFinalState.getInspectionCode());
+//            respMsg.setCreateTime(new Date());
+//            respMsg.setRespJson(respFinalState.getRespJson());
 //            if(respFinalState.getQuoteValidTime() != null && respFinalState.getQuoteValidTime() !=""){
 //                respMsg.setQuoteValidTime(TimeToString.StrToDate(respFinalState.getQuoteValidTime()));
 //
@@ -286,8 +397,7 @@ public class MsgHandleServiceImpl implements MsgHandleService {
 //            }
 //            //更新 回调信息
 //            respMsgMapper.updateByPrimaryKeySelective(respMsg);
-//
-//        }
+
 
 
 
@@ -340,12 +450,15 @@ public class MsgHandleServiceImpl implements MsgHandleService {
             efcInsureInfo.setPrvId(prvId);  //供应商ID
             efcInsureInfo.setRespMsgId(respMsg.getRespMsgId());  //响应信息ID
             efcInsureInfo.setTotalPremium(respFinalState.getInsureInfo().getTotalPremium());  //总保费
-            efcInsureInfo.setStartDate(efcInsureInfo1.getStartDate());
-            efcInsureInfo.setEndDate(efcInsureInfo1.getEndDate());
-            efcInsureInfo.setAmount(efcInsureInfo1.getAmount());
-            efcInsureInfo.setPremium(efcInsureInfo1.getPremium());
-            efcInsureInfo.setPolicyNo(efcInsureInfo1.getPolicyNo());
-            efcInsureInfo.setDiscountRate(efcInsureInfo1.getDiscountRate());
+            if(efcInsureInfo1 != null){  //存在
+                efcInsureInfo.setStartDate(efcInsureInfo1.getStartDate());
+                efcInsureInfo.setEndDate(efcInsureInfo1.getEndDate());
+                efcInsureInfo.setAmount(efcInsureInfo1.getAmount());
+                efcInsureInfo.setPremium(efcInsureInfo1.getPremium());
+                efcInsureInfo.setPolicyNo(efcInsureInfo1.getPolicyNo());
+                efcInsureInfo.setDiscountRate(efcInsureInfo1.getDiscountRate());
+
+            }
 
             taxInsureInfo.setMsgType("2");  //车船税
             taxInsureInfo.setCarInfoId(carInfo.getCarInfoId());  //carInfoId
@@ -353,9 +466,12 @@ public class MsgHandleServiceImpl implements MsgHandleService {
             taxInsureInfo.setPrvId(prvId);  //供应商ID
             taxInsureInfo.setRespMsgId(respMsg.getRespMsgId());  //响应信息ID
             taxInsureInfo.setTotalPremium(respFinalState.getInsureInfo().getTotalPremium());  //总保费
-            taxInsureInfo.setIsPaymentTax(taxInsureInfo1.getIsPaymentTax());
-            taxInsureInfo.setTaxFee(taxInsureInfo1.getTaxFee());
-            taxInsureInfo.setLateFee(taxInsureInfo1.getLateFee());
+            if(taxInsureInfo1 != null){
+                taxInsureInfo.setIsPaymentTax(taxInsureInfo1.getIsPaymentTax());
+                taxInsureInfo.setTaxFee(taxInsureInfo1.getTaxFee());
+                taxInsureInfo.setLateFee(taxInsureInfo1.getLateFee());
+
+            }
 
             bizInsureInfo.setMsgType("3");  //商业险
             bizInsureInfo.setCarInfoId(carInfo.getCarInfoId());  //carInfoId
@@ -363,12 +479,14 @@ public class MsgHandleServiceImpl implements MsgHandleService {
             bizInsureInfo.setPrvId(prvId);  //供应商ID
             bizInsureInfo.setRespMsgId(respMsg.getRespMsgId());  //响应信息ID
             bizInsureInfo.setTotalPremium(respFinalState.getInsureInfo().getTotalPremium());  //总保费
-            bizInsureInfo.setStartDate(bizInsureInfo1.getStartDate());
-            bizInsureInfo.setEndDate(bizInsureInfo1.getEndDate());
-            bizInsureInfo.setPremium(bizInsureInfo1.getPremium());
-            bizInsureInfo.setDiscountRate(bizInsureInfo1.getDiscountRate());
-            bizInsureInfo.setPolicyNo(bizInsureInfo1.getPolicyNo());
-            bizInsureInfo.setNfcPremium(bizInsureInfo1.getNfcPremium());
+            if(bizInsureInfo1 != null){
+                bizInsureInfo.setStartDate(bizInsureInfo1.getStartDate());
+                bizInsureInfo.setEndDate(bizInsureInfo1.getEndDate());
+                bizInsureInfo.setPremium(bizInsureInfo1.getPremium());
+                bizInsureInfo.setDiscountRate(bizInsureInfo1.getDiscountRate());
+                bizInsureInfo.setPolicyNo(bizInsureInfo1.getPolicyNo());
+                bizInsureInfo.setNfcPremium(bizInsureInfo1.getNfcPremium());
+            }
 
             insureInfoMapper.insertSelective(efcInsureInfo);
             insureInfoMapper.insertSelective(taxInsureInfo);
@@ -402,25 +520,33 @@ public class MsgHandleServiceImpl implements MsgHandleService {
 
 
             efcInsureInfo.setTotalPremium(respFinalState.getInsureInfo().getTotalPremium());  //总保费
-            efcInsureInfo.setStartDate(efcInsureInfo1.getStartDate());
-            efcInsureInfo.setEndDate(efcInsureInfo1.getEndDate());
-            efcInsureInfo.setAmount(efcInsureInfo1.getAmount());
-            efcInsureInfo.setPremium(efcInsureInfo1.getPremium());
-            efcInsureInfo.setPolicyNo(efcInsureInfo1.getPolicyNo());
-            efcInsureInfo.setDiscountRate(efcInsureInfo1.getDiscountRate());
+            if(efcInsureInfo1 != null){
+                efcInsureInfo.setStartDate(efcInsureInfo1.getStartDate());
+                efcInsureInfo.setEndDate(efcInsureInfo1.getEndDate());
+                efcInsureInfo.setAmount(efcInsureInfo1.getAmount());
+                efcInsureInfo.setPremium(efcInsureInfo1.getPremium());
+                efcInsureInfo.setPolicyNo(efcInsureInfo1.getPolicyNo());
+                efcInsureInfo.setDiscountRate(efcInsureInfo1.getDiscountRate());
+
+            }
 
             taxInsureInfo.setTotalPremium(respFinalState.getInsureInfo().getTotalPremium());  //总保费
-            taxInsureInfo.setIsPaymentTax(taxInsureInfo1.getIsPaymentTax());
-            taxInsureInfo.setTaxFee(taxInsureInfo1.getTaxFee());
-            taxInsureInfo.setLateFee(taxInsureInfo1.getLateFee());
+            if(taxInsureInfo1 != null){
+                taxInsureInfo.setIsPaymentTax(taxInsureInfo1.getIsPaymentTax());
+                taxInsureInfo.setTaxFee(taxInsureInfo1.getTaxFee());
+                taxInsureInfo.setLateFee(taxInsureInfo1.getLateFee());
+            }
 
             bizInsureInfo.setTotalPremium(respFinalState.getInsureInfo().getTotalPremium());  //总保费
-            bizInsureInfo.setStartDate(bizInsureInfo1.getStartDate());
-            bizInsureInfo.setEndDate(bizInsureInfo1.getEndDate());
-            bizInsureInfo.setPremium(bizInsureInfo1.getPremium());
-            bizInsureInfo.setDiscountRate(bizInsureInfo1.getDiscountRate());
-            bizInsureInfo.setPolicyNo(bizInsureInfo1.getPolicyNo());
-            bizInsureInfo.setNfcPremium(bizInsureInfo1.getNfcPremium());
+            if(bizInsureInfo1 != null){
+
+                bizInsureInfo.setStartDate(bizInsureInfo1.getStartDate());
+                bizInsureInfo.setEndDate(bizInsureInfo1.getEndDate());
+                bizInsureInfo.setPremium(bizInsureInfo1.getPremium());
+                bizInsureInfo.setDiscountRate(bizInsureInfo1.getDiscountRate());
+                bizInsureInfo.setPolicyNo(bizInsureInfo1.getPolicyNo());
+                bizInsureInfo.setNfcPremium(bizInsureInfo1.getNfcPremium());
+            }
 
 
             insureInfoMapper.updateByPrimaryKeySelective(efcInsureInfo);
