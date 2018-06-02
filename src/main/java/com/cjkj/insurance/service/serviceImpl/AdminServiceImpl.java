@@ -298,5 +298,19 @@ public class AdminServiceImpl implements AdminService {
         return a;
     }
 
+    /**
+     * 用户个人查询订单列表
+     * @return
+     */
+    @Override
+    public ApiResult findOrder(Integer userId) {
+        ApiResult a = new ApiResult();
+        List<Order> list = this.adminMapper.findOrder(userId);
+        a.setCode(ApiCode.SUCCESS);
+        a.setMsg(ApiCode.SUCCESS_MSG);
+        a.setData(list);
+        return a;
+    }
+
 
 }

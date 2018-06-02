@@ -28,4 +28,7 @@ public interface AdminService {
 
     //删除用户
     ApiResult deleteAdmin(String adminName, HttpServletRequest request, ApiResult a);
+
+    //用户个人查看订单列表
+    ApiResult findOrder(Integer userId);
 }

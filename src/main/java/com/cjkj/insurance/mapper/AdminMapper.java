@@ -85,5 +85,12 @@ public interface AdminMapper {
      * @return
      */
     int updateAdmin(Admin admin);
+
+    /**
+     * 用户个人查询订单列表
+     * @param userId
+     * @return
+     */
+    List<Order> findOrder(Integer userId);
 }
 

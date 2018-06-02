@@ -155,4 +155,21 @@ public class AdminController {
         return a;
     }
 
+
+
+    /**
+     * 用户个人查询订单列表
+     * @param request
+     * @return
+     */
+    @PostMapping("/findOrder")
+    @ResponseBody
+    @ApiOperation("用户个人查询订单列表")
+    public ApiResult findOrder(HttpServletRequest request){
+        ApiResult a = new ApiResult();
+        //获取用户id
+        Integer userId = (Integer) request.getSession().getAttribute("userId");
+        a = this.adminService.findOrder(userId);
+        return a;
+    }
 }

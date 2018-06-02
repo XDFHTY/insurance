@@ -353,4 +353,43 @@
     <update id="updateAdmin" parameterType="com.cjkj.insurance.entity.Admin">
         UPDATE admin SET admin_state = '0' WHERE admin_name = #{adminName}
     </update>
+
+
+    <!--映射-->
+    <resultMap id="findOrderResultMap" type="com.cjkj.insurance.entity.Order">
+        <result column="car_license_no" property="carLicenseNo"/>
+        <result column="task_id" property="taskId"/>
+        <result column="name" property="name"/>
+        <result column="quote_valid_time" property="quoteValidTime"/>
+        <collection property="list" javaType="ArrayList" ofType="com.cjkj.insurance.entity.RespMsg">
+            <result column="prv_id" property="prvId"/>
+            <result column="prv_name" property="prvName"/>
+            <result column="task_state" property="taskState"/>
+            <result column="task_state_description" property="taskStateDescription"/>
+        </collection>
+
+    </resultMap>
+    <!--用户个人查询订单列表-->
+    <select id="findOrder" parameterType="java.lang.Integer" resultMap="findOrderResultMap">
+        SELECT
+          ci.`user_id`,
+          ci.`car_license_no`,
+          ci.task_id,
+          rm.`prv_id`,
+          co.`name`,
+          rm.`quote_valid_time`,
+          rm.`prv_name`,
+          rm.`task_state`,
+          rm.`task_state_description`
+        FROM
+          car_info ci
+          LEFT JOIN car_owner co
+            ON ci.`user_id` = co.`user_id`
+            AND ci.`car_info_id` = co.`car_info_id`
+            AND ci.`task_id` = co.`task_id`
+            AND co.`msg_type` = '1'
+          LEFT JOIN resp_msg rm
+            ON ci.`task_id` = rm.`task_id`
+      WHERE ci.`user_id` = #{userId}
+    </select>
 </mapper>
