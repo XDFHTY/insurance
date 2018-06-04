@@ -78,7 +78,7 @@ public class AdminController {
             @ApiImplicitParam(name = "userID",value = "用户id",required = true,dataType = "int"),
             @ApiImplicitParam(name = "taskId",value = "任务号",required = true,dataType = "String"),
             @ApiImplicitParam(name = "prvId",value = "供应商id",required = true,dataType = "String"),
-            @ApiImplicitParam(name = "taskState",value = "任务状态代码",required = true,dataType = "String"),
+            @ApiImplicitParam(name = "taskState",value = "任务状态代码",dataType = "String"),
     })
     public ApiResult findOrderById(Integer userID,String taskId, String prvId,
                                    String taskState, HttpServletRequest request){

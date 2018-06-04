@@ -241,7 +241,9 @@
         WHERE ci.user_id = #{userId}
           AND rm.`task_id` = #{taskId}
           AND rm.`prv_id` = #{prvId}
-          AND rm.task_state = #{taskState}
+          <if test="taskState != null">
+              AND rm.task_state = #{taskState}
+          </if>
     </select>
 
     <!--保险配置信息映射-->
@@ -279,7 +281,10 @@
                AND rm.`prv_id` = ii.`prv_id`
         WHERE rm.`task_id` = #{taskId}
           AND rm.`prv_id` = #{prvId}
-          AND rm.`task_state` = #{taskState}
+          <if test="taskState!=null">
+              AND rm.`task_state` = #{taskState}
+          </if>
+
     </select>
 
 
@@ -314,7 +319,9 @@
             and rm.`prv_id` = rm.`prv_id`
         WHERE rm.`task_id` = #{taskId}
           AND rm.`prv_id` = #{prvId}
-          AND rm.`task_state` = #{taskState}
+          <if test="taskState!=null">
+              AND rm.`task_state` = #{taskState}
+          </if>
     </select>
 
 
