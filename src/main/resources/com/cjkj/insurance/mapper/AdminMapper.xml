@@ -373,6 +373,7 @@
             <result column="prv_name" property="prvName"/>
             <result column="task_state" property="taskState"/>
             <result column="task_state_description" property="taskStateDescription"/>
+            <result column="create_time" property="respJson"/>
         </collection>
 
     </resultMap>
@@ -387,7 +388,8 @@
           rm.`quote_valid_time`,
           rm.`prv_name`,
           rm.`task_state`,
-          rm.`task_state_description`
+          rm.`task_state_description`,
+          rm.create_time
         FROM
           car_info ci
           LEFT JOIN car_owner co
