@@ -169,7 +169,12 @@ public class AdminController {
         ApiResult a = new ApiResult();
         //获取用户id
         Integer userId = (Integer) request.getSession().getAttribute("userId");
-        a = this.adminService.findOrder(userId);
+        if(userId == null){
+            a.setCode(ApiCode.no_login);
+            a.setMsg(ApiCode.no_login_MSG);
+        }else {
+            a = this.adminService.findOrder(userId);
+        }
         return a;
     }
 }
