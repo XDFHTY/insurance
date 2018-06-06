@@ -108,11 +108,11 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public ApiResult findOrderById(Integer userID, String taskId, String prvId, String taskState, HttpServletRequest request, ApiResult a) {
         //登陆校验
-        Object obj = request.getSession().getAttribute("admin");
+        /*Object obj = request.getSession().getAttribute("admin");
         if (obj == null) {
             a.setCode(ApiCode.no_login);
             a.setMsg(ApiCode.no_login_MSG);
-        }else {
+        }else {*/
             //查询订单详情基础信息
             List<RespOrderItme> list = adminMapper.findOrderItmesById(userID, taskId, prvId, taskState);
             //查询保险配置信息
@@ -171,7 +171,7 @@ public class AdminServiceImpl implements AdminService {
             a.setCode(ApiCode.SUCCESS);
             a.setMsg(ApiCode.SUCCESS_MSG);
             a.setData(list);
-        }
+        //}
         return a;
     }
 
