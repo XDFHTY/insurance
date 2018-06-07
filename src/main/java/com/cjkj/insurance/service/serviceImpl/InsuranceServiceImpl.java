@@ -13,6 +13,7 @@ import com.cjkj.insurance.utils.http.APIHttpClient;
 import com.cjkj.insurance.utils.json.JSONUtil;
 import com.google.gson.Gson;
 import net.sf.json.JSONObject;
+import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -188,10 +189,24 @@ public class InsuranceServiceImpl implements InsuranceService {
 
         }
 
-        String json = gson.toJson(reqUpdateTask);
+        ReqUpdateTask reqUpdateTask1 = null;
+        try {
+            reqUpdateTask1 = (ReqUpdateTask) reqUpdateTask.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+        }
+        System.out.println(reqUpdateTask1);
+        reqUpdateTask1.getCarInfo().setVinCode(null);
+        reqUpdateTask1.getCarInfo().setEngineNo(null);
+        reqUpdateTask1.getCarInfo().setVehicleName(null);
+
+        /*String json = gson.toJson(reqUpdateTask);
+        String response = new APIHttpClient()
+                .post("/updateTask", request, json,2);*/
+
+        String json = gson.toJson(reqUpdateTask1);
         String response = new APIHttpClient()
                 .post("/updateTask", request, json,2);
-        
         
         getResult(response,a);
 

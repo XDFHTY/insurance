@@ -13,7 +13,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReqUpdateTask {
+public class ReqUpdateTask implements Cloneable{
 
     /**
      * 任务号
@@ -81,5 +81,8 @@ public class ReqUpdateTask {
     private List<InsureSupplys> insureSupplys;
 
 
-
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }
