@@ -55,6 +55,7 @@ public class InsuranceController {
 
         ApiResult a = new ApiResult();
         a = insuranceService.getToken(request,a);
+        a.setParams(request.getSession().getId().toString());
         System.out.println(TimeToString.DateToStr(new Date())+a.toString());
         return a;
     }
