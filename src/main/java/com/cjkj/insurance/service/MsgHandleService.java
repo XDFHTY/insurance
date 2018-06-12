@@ -1,12 +1,10 @@
 package com.cjkj.insurance.service;
 
 
-import com.cjkj.insurance.entity.ApiResult;
 import com.cjkj.insurance.entity.other.ReqCreateTaskB;
 import com.cjkj.insurance.entity.other.ReqUpdateTask;
 import com.cjkj.insurance.entity.other.RespFinalState;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
