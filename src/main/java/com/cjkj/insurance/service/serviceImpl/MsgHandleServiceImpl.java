@@ -134,7 +134,7 @@ public class MsgHandleServiceImpl implements MsgHandleService {
         if(carInfo != null){
             carInfo.setUserId(userId);
             carInfo.setTaskId(reqUpdateTask.getTaskId());  //任务号
-            //检查 用户-车牌-任务号 是否已存在
+            //检查 用户-任务号 是否已存在
             List<CarInfo> carInfos = carInfoMapper.findCarInfos(carInfo);
             if(carInfos.size()>0){ //数据已存在
                 carInfo.setCarInfoId(carInfos.get(0).getCarInfoId());

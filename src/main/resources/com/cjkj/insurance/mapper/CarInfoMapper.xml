@@ -389,7 +389,7 @@
     ci.task_id = #{taskId}
   </select>
 
-  <!--根据userId和车牌号和任务号检查信息-->
+  <!--根据userId和任务号检查信息-->
   <select id="findCarInfos" parameterType="com.cjkj.insurance.entity.CarInfo" resultMap="BaseResultMap">
     SELECT
     *
@@ -397,8 +397,7 @@
     car_info ci
     WHERE
     ci.user_id = #{userId}
-    AND
-    ci.car_license_no = #{carLicenseNo}
+
     AND
     ci.task_id = ${taskId}
   </select>

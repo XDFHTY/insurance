@@ -11,7 +11,9 @@ import org.springframework.core.Ordered;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.filter.HttpPutFormContentFilter;
 import org.springframework.web.servlet.config.annotation.*;
 
@@ -80,26 +82,41 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
         configurer.favorPathExtension(false);
     }
 
+//    /**
+//     * @author zhangcunli
+//     * <p>
+//     * 解决跨域问题
+//     */
+//    @Configuration
+//    public class Cors extends WebMvcConfigurerAdapter {
+//        @Override
+//        public void addCorsMappings(CorsRegistry registry) {
+//            registry.addMapping("/**")
+//                    .allowedOrigins("*")
+//                    .allowedMethods("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH")
+//                    .allowCredentials(true)
+//                    .maxAge(3600);
+//        }
+//
+//
+//    }
+
+
     /**
-     * @author zhangcunli
-     * <p>
-     * 解决跨域问题
+     * 解决JS跨域
+     * @return
      */
-    @Configuration
-    public class Cors extends WebMvcConfigurerAdapter {
-        @Override
-        public void addCorsMappings(CorsRegistry registry) {
-            registry.addMapping("/**")
-                    .allowedOrigins("*")
-                    .allowedMethods("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH")
-                    .allowCredentials(true)
-                    .maxAge(3600);
-        }
-
-
+    @Bean
+    public CorsFilter corsFilter() {
+        final UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
+        final CorsConfiguration corsConfiguration = new CorsConfiguration();
+        corsConfiguration.setAllowCredentials(true);
+        corsConfiguration.addAllowedOrigin("*");
+        corsConfiguration.addAllowedHeader("*");
+        corsConfiguration.addAllowedMethod("*");
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", corsConfiguration);
+        return new CorsFilter(urlBasedCorsConfigurationSource);
     }
-
-
 
 
     /**
