@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -21,37 +22,37 @@ import java.util.*;
 @Transactional
 public class MsgHandleServiceImpl implements MsgHandleService {
 
-    @Autowired
+    @Resource
     private CarInfoMapper carInfoMapper;
 
-    @Autowired
+    @Resource
     private CarOwnerMapper carOwnerMapper;
 
-    @Autowired
+    @Resource
     private RespMsgMapper respMsgMapper;
 
-    @Autowired
+    @Resource
     private InsureInfoMapper insureInfoMapper;
 
-    @Autowired
+    @Resource
     private RiskKindsMapper riskKindsMapper;
 
-    @Autowired
+    @Resource
     private UserImgMapper userImgMapper;
 
-    @Autowired
+    @Resource
     private DeliveryMapper deliveryMapper;
 
-    @Autowired
+    @Resource
     private InsureSupplysMapper insureSupplysMapper;
 
-    @Autowired
+    @Resource
     private InvoiceinfoMapper invoiceinfoMapper;
 
-    @Autowired
+    @Resource
     private ScoreRateMapper scoreRateMapper;
 
-    @Autowired
+    @Resource
     private CallbackMapper callbackMapper;
     /**
      * 创建报价任务B接口用户提交的数据
@@ -72,50 +73,62 @@ public class MsgHandleServiceImpl implements MsgHandleService {
 
         session.setAttribute("carInfoId",carInfo.getCarInfoId());
 
+        //供应商ID
+        List<Providers> providers = reqCreateTaskB.getProviders();
         int i = 0;
-        //车主信息
-        CarOwner carOwner = reqCreateTaskB.getCarOwner();
-        carOwner.setMsgType("1");
-        carOwner.setUserId(userId);
-        carOwner.setCarInfoId(carInfo.getCarInfoId());
-        carOwner.setTaskId(taskId);
-        i += carOwnerMapper.insertSelective(carOwner);
 
-        //投保人信息
-        CarOwner applicant = reqCreateTaskB.getApplicant();
-        if(applicant == null){
-            applicant = carOwner;
+        //循环添加每个供应商的报价用户信息
+        for (Providers providers1 : providers){
+
+
+
+            //车主信息
+            CarOwner carOwner = reqCreateTaskB.getCarOwner();
+            carOwner.setMsgType("1");
+            carOwner.setUserId(userId);
+            carOwner.setCarInfoId(carInfo.getCarInfoId());
+            carOwner.setTaskId(taskId);
+            carOwner.setPrvId(providers1.getPrvId());
+            i += carOwnerMapper.insertSelective(carOwner);
+
+            //投保人信息
+            CarOwner applicant = reqCreateTaskB.getApplicant();
+            if(applicant == null){
+                applicant = carOwner;
+            }
+            applicant.setMsgType("2");
+            applicant.setUserId(userId);
+            applicant.setCarInfoId(carInfo.getCarInfoId());
+            applicant.setTaskId(taskId);
+            applicant.setPrvId(providers1.getPrvId());
+            i += carOwnerMapper.insertSelective(applicant);
+
+            //被保人信息
+            CarOwner insured =  reqCreateTaskB.getInsured();
+            if(insured == null){
+                insured = carOwner;
+            }
+            insured.setMsgType("3");
+            insured.setUserId(userId);
+            insured.setCarInfoId(carInfo.getCarInfoId());
+            insured.setTaskId(taskId);
+            insured.setPrvId(providers1.getPrvId());
+            i += carOwnerMapper.insertSelective(insured);
+
+            //索赔权益人信息
+            CarOwner beneficiary = reqCreateTaskB.getBeneficiary();
+            if(beneficiary == null){
+                beneficiary = carOwner;
+            }
+            beneficiary.setMsgType("4");
+            beneficiary.setUserId(userId);
+            beneficiary.setCarInfoId(carInfo.getCarInfoId());
+            beneficiary.setTaskId(taskId);  //任务号
+            beneficiary.setPrvId(providers1.getPrvId());
+
+            i += carOwnerMapper.insertSelective(beneficiary);
+
         }
-        applicant.setMsgType("2");
-        applicant.setUserId(userId);
-        applicant.setCarInfoId(carInfo.getCarInfoId());
-        applicant.setTaskId(taskId);
-        i += carOwnerMapper.insertSelective(applicant);
-
-        //被保人信息
-        CarOwner insured =  reqCreateTaskB.getInsured();
-        if(insured == null){
-            insured = carOwner;
-        }
-        insured.setMsgType("3");
-        insured.setUserId(userId);
-        insured.setCarInfoId(carInfo.getCarInfoId());
-        insured.setTaskId(taskId);
-        i += carOwnerMapper.insertSelective(insured);
-
-        //索赔权益人信息
-        CarOwner beneficiary = reqCreateTaskB.getBeneficiary();
-        if(beneficiary == null){
-            beneficiary = carOwner;
-        }
-        beneficiary.setMsgType("4");
-        beneficiary.setUserId(userId);
-        beneficiary.setCarInfoId(carInfo.getCarInfoId());
-        beneficiary.setTaskId(taskId);  //任务号
-
-        i += carOwnerMapper.insertSelective(beneficiary);
-
-
 
 
         if(i > 0){
@@ -128,6 +141,11 @@ public class MsgHandleServiceImpl implements MsgHandleService {
     @Override
     public boolean updateUserMsg(HttpSession session, ReqUpdateTask reqUpdateTask) {
         int userId = (Integer)session.getAttribute("userId");
+        //供应商ID
+        List<Providers> providersList = reqUpdateTask.getProviders();
+
+
+
 
         //车辆信息
         CarInfo carInfo = reqUpdateTask.getCarInfo();
@@ -150,128 +168,143 @@ public class MsgHandleServiceImpl implements MsgHandleService {
 
 
         int i = 0;
-        //车主信息
-        CarOwner carOwner = reqUpdateTask.getCarOwner();
-        carOwner.setMsgType("1");
-        carOwner.setUserId(userId);
-        carOwner.setCarInfoId(carInfo.getCarInfoId());
-        carOwner.setTaskId(reqUpdateTask.getTaskId());  //任务号
-
-        //检查 用户ID-carInfoId-身份证-任务号 车主信息是否存在
-        CarOwner oldCarOwner = carOwnerMapper.findOldCarOwner(carOwner);
-        if(oldCarOwner == null){
-            i += carOwnerMapper.insertSelective(carOwner);
-
-        }else {
-            carOwner.setCarOwnerId(oldCarOwner.getCarOwnerId());
-            i += carOwnerMapper.updateByPrimaryKeySelective(carOwner);
-        }
-
-        //投保人信息
-        CarOwner applicant = reqUpdateTask.getApplicant();
-        if(applicant == null){
-            applicant = reqUpdateTask.getCarOwner();
-        }
-        applicant.setMsgType("2");
-        applicant.setUserId(userId);
-        applicant.setCarInfoId(carInfo.getCarInfoId());
-        applicant.setTaskId(reqUpdateTask.getTaskId());  //任务号
-        //检查 用户ID-carInfoId-身份证-任务号 车主信息是否存在
-        CarOwner oldApplicant = carOwnerMapper.findOldCarOwner(applicant);
-        if(oldApplicant == null){
-            i += carOwnerMapper.insertSelective(applicant);
-
-        }else {
-
-            applicant.setCarOwnerId(oldApplicant.getCarOwnerId());
-            i += carOwnerMapper.updateByPrimaryKeySelective(applicant);
-        }
-
-        //被保人信息
-        CarOwner insured =  reqUpdateTask.getInsured();
-        if(insured == null){
-            insured = reqUpdateTask.getCarOwner();
-        }
-        insured.setMsgType("3");
-        insured.setUserId(userId);
-        insured.setCarInfoId(carInfo.getCarInfoId());
-        insured.setTaskId(reqUpdateTask.getTaskId());  //任务号
-        //检查 用户ID-carInfoId-身份证-任务号 车主信息是否存在
-        CarOwner oldInsured = carOwnerMapper.findOldCarOwner(insured);
-        if(oldInsured == null){
-            i += carOwnerMapper.insertSelective(insured);
-
-        }else {
-
-            insured.setCarOwnerId(oldInsured.getCarOwnerId());
-            i += carOwnerMapper.updateByPrimaryKeySelective(insured);
-        }
+        //循环添加信息
+        for (Providers providers1 : providersList){
 
 
-        //索赔权益人信息
-        CarOwner beneficiary = reqUpdateTask.getBeneficiary();
-        if(beneficiary == null){
-            beneficiary = reqUpdateTask.getCarOwner();
-        }
-        beneficiary.setMsgType("4");
-        beneficiary.setUserId(userId);
-        beneficiary.setCarInfoId(carInfo.getCarInfoId());
-        beneficiary.setTaskId(reqUpdateTask.getTaskId());  //任务号
-        //检查 用户ID-carInfoId-身份证-任务号 车主信息是否存在
-        CarOwner oldBeneficiary = carOwnerMapper.findOldCarOwner(beneficiary);
-        if(oldBeneficiary == null){
 
-            i += carOwnerMapper.insertSelective(beneficiary);
-        }else {
+            //车主信息
+            CarOwner carOwner = reqUpdateTask.getCarOwner();
+            carOwner.setMsgType("1");
+            carOwner.setUserId(userId);
+            carOwner.setCarInfoId(carInfo.getCarInfoId());
+            carOwner.setTaskId(reqUpdateTask.getTaskId());  //任务号
+            carOwner.setPrvId(providers1.getPrvId());  //供应商Id
 
-            beneficiary.setCarOwnerId(oldBeneficiary.getCarOwnerId());
-            i += carOwnerMapper.updateByPrimaryKeySelective(beneficiary);
-        }
-
-
-        //配送信息
-        Delivery delivery = reqUpdateTask.getDelivery();
-        if(delivery != null){
-
-            delivery.setUserId(userId);
-            delivery.setCarInfoId(carInfo.getCarInfoId());
-            delivery.setTaskId(reqUpdateTask.getTaskId());  //任务号
-
-            //检查配送信息是否存在
-            Delivery oldDelivery = deliveryMapper.findDelivery(delivery);
-            if(oldDelivery == null){
-                i += deliveryMapper.insertSelective(delivery);
+            //检查 用户ID-carInfoId-任务号 车主信息是否存在
+            CarOwner oldCarOwner = carOwnerMapper.findOldCarOwner(carOwner);
+            if(oldCarOwner == null){
+                System.out.println("====================车主信息为null========================");
+                i += carOwnerMapper.insertSelective(carOwner);
 
             }else {
-                delivery.setDeliveryId(oldDelivery.getDeliveryId());
-                i += deliveryMapper.updateByPrimaryKeySelective(delivery);
+                carOwner.setCarOwnerId(oldCarOwner.getCarOwnerId());
+                i += carOwnerMapper.updateByPrimaryKeySelective(carOwner);
             }
-        }
 
+            //投保人信息
+            CarOwner applicant = reqUpdateTask.getApplicant();
+            if(applicant == null){
 
-        //发票信息
-        Invoiceinfo invoiceinfo = reqUpdateTask.getInvoiceInfo();
-        if(invoiceinfo != null){
-            invoiceinfo.setUserId(userId);
-            invoiceinfo.setCarInfoId(carInfo.getCarInfoId());
-            invoiceinfo.setTaskId(reqUpdateTask.getTaskId());  //任务号
-
-            System.out.println();
-
-            //检查发票信息是否已存在
-            Invoiceinfo oldInvoiceinfo = invoiceinfoMapper.findInvoiceinfo(invoiceinfo);
-            if(oldInvoiceinfo == null){
-                i += invoiceinfoMapper.insertSelective(invoiceinfo);
+                applicant = reqUpdateTask.getCarOwner();
+            }
+            applicant.setMsgType("2");
+            applicant.setUserId(userId);
+            applicant.setCarInfoId(carInfo.getCarInfoId());
+            applicant.setTaskId(reqUpdateTask.getTaskId());  //任务号
+            applicant.setPrvId(providers1.getPrvId());  //供应商Id
+            //检查 用户ID-carInfoId-身份证-任务号 车主信息是否存在
+            CarOwner oldApplicant = carOwnerMapper.findOldCarOwner(applicant);
+            if(oldApplicant == null){
+                System.out.println("====================投保人信息为null========================");
+                i += carOwnerMapper.insertSelective(applicant);
 
             }else {
 
-                invoiceinfo.setInvoiceinfoId(oldInvoiceinfo.getInvoiceinfoId());
-
-                i += invoiceinfoMapper.updateByPrimaryKeySelective(invoiceinfo);
+                applicant.setCarOwnerId(oldApplicant.getCarOwnerId());
+                i += carOwnerMapper.updateByPrimaryKeySelective(applicant);
             }
+
+            //被保人信息
+            CarOwner insured =  reqUpdateTask.getInsured();
+            if(insured == null){
+                insured = reqUpdateTask.getCarOwner();
+            }
+            insured.setMsgType("3");
+            insured.setUserId(userId);
+            insured.setCarInfoId(carInfo.getCarInfoId());
+            insured.setTaskId(reqUpdateTask.getTaskId());  //任务号
+            insured.setPrvId(providers1.getPrvId());  //供应商Id
+            //检查 用户ID-carInfoId-身份证-任务号 车主信息是否存在
+            CarOwner oldInsured = carOwnerMapper.findOldCarOwner(insured);
+            if(oldInsured == null){
+                System.out.println("====================被保人信息为null========================");
+                i += carOwnerMapper.insertSelective(insured);
+
+            }else {
+
+                insured.setCarOwnerId(oldInsured.getCarOwnerId());
+                i += carOwnerMapper.updateByPrimaryKeySelective(insured);
+            }
+
+
+            //索赔权益人信息
+            CarOwner beneficiary = reqUpdateTask.getBeneficiary();
+            if(beneficiary == null){
+                beneficiary = reqUpdateTask.getCarOwner();
+            }
+            beneficiary.setMsgType("4");
+            beneficiary.setUserId(userId);
+            beneficiary.setCarInfoId(carInfo.getCarInfoId());
+            beneficiary.setTaskId(reqUpdateTask.getTaskId());  //任务号
+            beneficiary.setPrvId(providers1.getPrvId());  //供应商Id
+            //检查 用户ID-carInfoId-身份证-任务号 车主信息是否存在
+            CarOwner oldBeneficiary = carOwnerMapper.findOldCarOwner(beneficiary);
+            if(oldBeneficiary == null){
+                System.out.println("====================索赔人信息为null========================");
+                i += carOwnerMapper.insertSelective(beneficiary);
+            }else {
+
+                beneficiary.setCarOwnerId(oldBeneficiary.getCarOwnerId());
+                i += carOwnerMapper.updateByPrimaryKeySelective(beneficiary);
+            }
+
+
+            //配送信息
+            Delivery delivery = reqUpdateTask.getDelivery();
+            if(delivery != null){
+
+                delivery.setUserId(userId);
+                delivery.setCarInfoId(carInfo.getCarInfoId());
+                delivery.setTaskId(reqUpdateTask.getTaskId());  //任务号
+                delivery.setPrvId(providers1.getPrvId());  //供应商Id
+
+                //检查配送信息是否存在
+                Delivery oldDelivery = deliveryMapper.findDelivery(delivery);
+                if(oldDelivery == null){
+                    i += deliveryMapper.insertSelective(delivery);
+
+                }else {
+                    delivery.setDeliveryId(oldDelivery.getDeliveryId());
+                    i += deliveryMapper.updateByPrimaryKeySelective(delivery);
+                }
+            }
+
+
+            //发票信息
+            Invoiceinfo invoiceinfo = reqUpdateTask.getInvoiceInfo();
+            if(invoiceinfo != null){
+                invoiceinfo.setUserId(userId);
+                invoiceinfo.setCarInfoId(carInfo.getCarInfoId());
+                invoiceinfo.setTaskId(reqUpdateTask.getTaskId());  //任务号
+                invoiceinfo.setPrvId(providers1.getPrvId());  //供应商Id
+
+                System.out.println();
+
+                //检查发票信息是否已存在
+                Invoiceinfo oldInvoiceinfo = invoiceinfoMapper.findInvoiceinfo(invoiceinfo);
+                if(oldInvoiceinfo == null){
+                    i += invoiceinfoMapper.insertSelective(invoiceinfo);
+
+                }else {
+
+                    invoiceinfo.setInvoiceinfoId(oldInvoiceinfo.getInvoiceinfoId());
+
+                    i += invoiceinfoMapper.updateByPrimaryKeySelective(invoiceinfo);
+                }
+            }
+
         }
-
-
 
         if( i > 0){
             return true;
@@ -412,6 +445,8 @@ public class MsgHandleServiceImpl implements MsgHandleService {
         Map respCarOwnerMap = new HashMap();
         respCarOwnerMap.put("taskId",taskId);
         respCarOwnerMap.put("carInfoId",carInfo.getCarInfoId());
+        respCarOwnerMap.put("prvId",prvId); //供应商ID
+        respCarOwnerMap.put("msgType","1");
 
         CarOwner carOwner = carOwnerMapper.findCarOwner(respCarOwnerMap);
         if(carOwner == null){  //车主信息不存在

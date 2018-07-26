@@ -1,5 +1,6 @@
 package com.cjkj.insurance.utils.http;
 
+import com.cjkj.insurance.utils.https.SSLClient;
 import net.sf.json.JSONObject;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -11,15 +12,25 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
+
 public class APIHttpClient {
 
+    public String active="dev";
+
+    public String apiURL;
+
+
+
+
     // 接口地址
-    private static String apiURL = "http://icm.uat.52zzb.com/cm/channelService";
+//    private static String apiURL_dev = "http://icm.uat.52zzb.com/cm/channelService";
+//    private static String apiURL = "http://icm.52zzb.com/cm/channelService";
     private Log logger = LogFactory.getLog(this.getClass());
     private static final String pattern = "yyyy-MM-dd HH:mm:ss:SSS";
     private long startTime = 0L;
@@ -39,8 +50,18 @@ public class APIHttpClient {
      * @return
      */
 
-    public String post(String taskUrl, HttpServletRequest request, String parameters, int flag) {
-        HttpClient httpClient = new DefaultHttpClient();
+    public String post(String taskUrl, HttpServletRequest request, String parameters, int flag) throws Exception {
+        HttpClient httpClient = null;
+
+        if(active.equals("dev")){
+            apiURL = "http://icm.uat.52zzb.com/cm/channelService";
+            httpClient = new DefaultHttpClient();
+
+        }else if (active.equals("pro")){
+            apiURL = "http://icm.52zzb.com/cm/channelService";
+            httpClient = new SSLClient();
+        }
+
         HttpPost httpPost = new HttpPost(apiURL+taskUrl);
         System.out.println("请求地址===>>"+httpPost);
         String body = null;

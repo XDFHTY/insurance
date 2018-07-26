@@ -15,29 +15,29 @@ import javax.servlet.http.HttpServletRequest;
  */
 public interface InsuranceService {
 
-    public ApiResult getToken(HttpServletRequest request, ApiResult a);
+    public ApiResult getToken(HttpServletRequest request, ApiResult a) throws Exception;
 
-    public ApiResult getAgreementAreas(HttpServletRequest request, String agreementProvCode, ApiResult a);
+    public ApiResult getAgreementAreas(HttpServletRequest request, String agreementProvCode, ApiResult a) throws Exception;
 
-    public ApiResult getProviders(HttpServletRequest request,String insureAreaCode,ApiResult a);
+    public ApiResult getProviders(HttpServletRequest request,String insureAreaCode,ApiResult a) throws Exception;
 
-    public ApiResult createTaskA(ReqCreateTaskA reqCreateTaskA, HttpServletRequest request, ApiResult a);
+    public ApiResult createTaskA(ReqCreateTaskA reqCreateTaskA, HttpServletRequest request, ApiResult a) throws Exception;
 
-    public ApiResult createTaskB(ReqCreateTaskB reqCreateTaskB, HttpServletRequest request, ApiResult a);
+    public ApiResult createTaskB(ReqCreateTaskB reqCreateTaskB, HttpServletRequest request, ApiResult a) throws Exception;
 
-    public ApiResult queryCarModelInfos(HttpServletRequest request, JSONObject params, ApiResult a);
+    public ApiResult queryCarModelInfos(HttpServletRequest request, JSONObject params, ApiResult a) throws Exception;
 
-    public ApiResult updateTask(HttpServletRequest request, ReqUpdateTask reqUpdateTask, ApiResult a);
+    public ApiResult updateTask(HttpServletRequest request, ReqUpdateTask reqUpdateTask, ApiResult a) throws Exception;
 
-    public ApiResult submitQuote(HttpServletRequest request, JSONObject params,ApiResult a);
+    public ApiResult submitQuote(HttpServletRequest request, JSONObject params,ApiResult a) throws Exception;
 
-    public ApiResult submitInsure(JSONObject params,HttpServletRequest request,ApiResult a);
+    public ApiResult submitInsure(JSONObject params,HttpServletRequest request,ApiResult a) throws Exception;
 
-    public ApiResult recognizeImage(JSONObject params,HttpServletRequest request,ApiResult a);
+    public ApiResult recognizeImage(JSONObject params,HttpServletRequest request,ApiResult a) throws Exception;
 
-    public ApiResult uploadImage(ReqImgUpload reqImgUpload, HttpServletRequest request, ApiResult a);
+    public ApiResult uploadImage(ReqImgUpload reqImgUpload, HttpServletRequest request, ApiResult a) throws Exception;
 
-    public ApiResult pay(JSONObject params,HttpServletRequest request,ApiResult a);
+    public ApiResult pay(JSONObject params,HttpServletRequest request,ApiResult a) throws Exception;
 
     public void finalState(String jsonStr);
 

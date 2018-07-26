@@ -57,6 +57,6 @@ public interface CarOwnerMapper {
      */
     public int updateCarOwner(CarOwner carOwner);
 
-    //检查 用户ID-carInfoId-身份证-任务号 车主信息是否存在
+    //检查 用户ID-carInfoId--任务号-供应商Id 车主信息是否存在
     public CarOwner findOldCarOwner(CarOwner carOwner);
 }

@@ -260,6 +260,7 @@
 
   </insert>
 
+  <!--查询车主信息-->
   <select id="findCarOwner" parameterType="java.util.Map" resultMap="BaseResultMap">
     SELECT
     <include refid="Base_Column_List"></include>
@@ -269,6 +270,8 @@
     co.task_id = #{taskId}
     AND
     co.car_info_id = #{carInfoId}
+    AND
+    co.prv_id = #{prvId}
     AND
     co.msg_type = '1'
   </select>
@@ -285,6 +288,7 @@
     user_id = #{userId}
   </select>
 
+  <!--根据userId、carInfoId、idcardNo、taskId、msgType 信息检索数据是否存在 -->
   <select id="findOldCarOwner" parameterType="com.cjkj.insurance.entity.CarOwner" resultMap="BaseResultMap">
     SELECT
     *
@@ -294,12 +298,16 @@
     co.user_id = #{userId}
     AND
     co.car_info_id = #{carInfoId}
+    <!--
     AND
     co.idcard_no = #{idcardNo}
+    -->
     AND
     co.task_id = #{taskId}
     AND
     co.msg_type = #{msgType}
+    AND
+    co.prv_id = #{prvId}
 
   </select>
 

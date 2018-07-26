@@ -1,0 +1,30 @@
+server:
+  port: 8088
+
+# 配置文件加密key
+jasypt:
+  encryptor:
+    password: root
+
+spring:
+  # 数据源
+  datasource:
+    url: jdbc:mysql://118.123.16.211:3306/insurance?characterEncoding=UTF-8&useSSL=true&allowMultiQueries=true
+    username: root
+    # Jasypt加密 可到common-utils中找到 JasyptUtil 加解密工具类生成加密结果 格式为ENC(加密结果)
+    password: ENC(B6M4HhIardKWsVvF2xyTyR8lReyEBFeU)
+    type: com.alibaba.druid.pool.DruidDataSource
+    driverClassName: com.mysql.jdbc.Driver
+    logSlowSql: true
+
+#=====================Swagger扫描路径
+swagger_url: com.cjkj.insurance.controller
+
+#=====================开发环境================
+api_url: http://icm.uat.52zzb.com/cm/channelService
+channelUserId: qd_chemuzhiCS
+channelSecret: TDGklkkkpk1646hfjfglmg4686op
+privateKey: MIICdwIBADANBgkqhkiG9w0BAQEFAASCAmEwggJdAgEAAoGBAN90tXnUT20Qtm+I3dbKS7QQrs2lo8QcPpspR6G9WZeGjxSTRnkX3hdLIjmaiehXffC8PeYGAUXn/rdblnCSQrm4FdpWEY//d0rQSgGd8cs2t8Kpl4DvbP/+qGBxrVD3Q7Smc0J35pTArNOgwy6Sl4k3h7V0hRIZjfxXOkAzO5zJAgMBAAECgYEAgu+eTy8LA3uhiyWF6BBN38tOwo3msklingTIRovvbYyZVpMd3mMP7lJGUb6uRIjP8To8gwbNxCq25LY0Ju5tTdGl2lKiUbRXE8zUi9vZwd6WfXYi3WWmTBYjcoVqeWsI8tlx5o/swzN6lFYvs2eCHfs0Drs2R+Ta56gbIxIGkCECQQD0VIZBSoKuXbO6x+2zSzkPzbSa9qi2OlCatv+b0WJjCZHmDwABP4lOtkpKOxtSnXsMqQ0Is7lX4NTLedRAyuMNAkEA6iDzSG/vLj5Eb4OzJUpIxFEn56sMFX7GuDi66xP6D8qiupmrjXFHrjAifCSF6nbkaga1puojVqL6b1I4NWmhrQJBAIK2OYDykMkh3gZd8T/LTYKz5RxGO2oJ9pdesY61zPH467Htcm44hIe0pDfkOTDQiUTzp8JxDAYEhTM6QSBMqn0CQAsFZA5b3olxuuz46RzvQz+ihltcbOQyJI6VdQ8N0K6fnktkYnP1CifD8kufuIIR+KyZBkIGMYWphFprJ2Q0Rb0CQCm4ONB07E/e8/bneyvck3mzyT11dWEIt5a2YSAvqXxXwLvcfbdEvSjMG0Z9UHN4bK9FEtv+KmYBTg8w1My9Swo=
+
+
+

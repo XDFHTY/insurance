@@ -7,13 +7,15 @@ import com.cjkj.insurance.mapper.DqLicenceLocationMapper;
 import com.cjkj.insurance.mapper.UserImgMapper;
 import com.cjkj.insurance.service.InsuranceService;
 import com.cjkj.insurance.service.MsgHandleService;
-import com.cjkj.insurance.utils.*;
+import com.cjkj.insurance.utils.ApiCode;
+import com.cjkj.insurance.utils.ApiResult;
+import com.cjkj.insurance.utils.RSACoderUtil;
+import com.cjkj.insurance.utils.RandomStringUtils;
 import com.cjkj.insurance.utils.file.FileUtil;
 import com.cjkj.insurance.utils.http.APIHttpClient;
 import com.cjkj.insurance.utils.json.JSONUtil;
 import com.google.gson.Gson;
 import net.sf.json.JSONObject;
-import org.apache.ibatis.jdbc.Null;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -25,15 +27,20 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
+
 @Service
 @Transactional
 public class InsuranceServiceImpl implements InsuranceService {
 
     @Value("${web.upload-path}")
     String path;
-
     @Value("${channelUserId}")
-    String channelUserId;
+    public  String channelUserId;
+    @Value("${channelSecret}")
+    public  String channelSecret;
+    @Value("${privateKey}")
+    public  String privateKey;
+
 
     @Autowired
     private UserImgMapper userImgMapper;
@@ -52,11 +59,11 @@ public class InsuranceServiceImpl implements InsuranceService {
 
     //获取accessToken
     @Override
-    public ApiResult getToken(HttpServletRequest request, ApiResult a) {
+    public ApiResult getToken(HttpServletRequest request, ApiResult a) throws Exception {
         JSONObject jsonObject=new JSONObject();
         HttpSession session = request.getSession();
-        session.setAttribute("channelId","qd_chemuzhiCS");
-        session.setAttribute("channelSecret","TDGklkkkpk1646hfjfglmg4686op");
+        session.setAttribute("channelId", channelUserId);
+        session.setAttribute("channelSecret",channelSecret);
         String response = new APIHttpClient()
                 .post("/getToken", request,"~", 1);
         String accessToken="";
@@ -72,7 +79,7 @@ public class InsuranceServiceImpl implements InsuranceService {
         sb.append(accessToken).append(nonceStr);
         String signStr="";
         try{
-            signStr= RSACoderUtil.sign(sb.toString().getBytes(), RSACoderUtil.privateKey);
+            signStr= RSACoderUtil.sign(sb.toString().getBytes(), privateKey);
             session.setAttribute("signStr",signStr);
             System.out.println("signStr===========>"+signStr);
 
@@ -85,7 +92,7 @@ public class InsuranceServiceImpl implements InsuranceService {
 
     //4获取投保地区
     @Override
-    public ApiResult getAgreementAreas(HttpServletRequest request,String agreementProvCode, ApiResult a) {
+    public ApiResult getAgreementAreas(HttpServletRequest request,String agreementProvCode, ApiResult a) throws Exception {
         JSONObject params = new JSONObject();
         params.put("agreementProvCode",agreementProvCode);
 //            System.out.println(params.toString());
@@ -98,7 +105,7 @@ public class InsuranceServiceImpl implements InsuranceService {
 
     //5获取供应商列表
     @Override
-    public ApiResult getProviders(HttpServletRequest request,  String insureAreaCode, ApiResult a) {
+    public ApiResult getProviders(HttpServletRequest request,  String insureAreaCode, ApiResult a) throws Exception {
         JSONObject params = new JSONObject();
         params.put("insureAreaCode",insureAreaCode);
         String response = new APIHttpClient()
@@ -109,7 +116,7 @@ public class InsuranceServiceImpl implements InsuranceService {
 
     //6创建报价（接口A）
     @Override
-    public ApiResult createTaskA(ReqCreateTaskA reqCreateTaskA, HttpServletRequest request, ApiResult a){
+    public ApiResult createTaskA(ReqCreateTaskA reqCreateTaskA, HttpServletRequest request, ApiResult a) throws Exception {
 
         //设置渠道位置编码
         reqCreateTaskA.setChannelUserId(channelUserId);
@@ -133,7 +140,7 @@ public class InsuranceServiceImpl implements InsuranceService {
 
     //7创建报价，接口B
     @Override
-    public ApiResult createTaskB(ReqCreateTaskB reqCreateTaskB, HttpServletRequest request, ApiResult a) {
+    public ApiResult createTaskB(ReqCreateTaskB reqCreateTaskB, HttpServletRequest request, ApiResult a) throws Exception {
         HttpSession session = request.getSession();
 
         System.out.println("=======================================================");
@@ -166,7 +173,7 @@ public class InsuranceServiceImpl implements InsuranceService {
 
     //8查询车型信息
     @Override
-    public ApiResult queryCarModelInfos(HttpServletRequest request, JSONObject params, ApiResult a) {
+    public ApiResult queryCarModelInfos(HttpServletRequest request, JSONObject params, ApiResult a) throws Exception {
         String response = new APIHttpClient()
                 .post("/queryCarModelInfos", request, params.toString(),2);
         //
@@ -176,11 +183,8 @@ public class InsuranceServiceImpl implements InsuranceService {
 
     //9更改报价数据
     @Override
-    public ApiResult updateTask(HttpServletRequest request, ReqUpdateTask reqUpdateTask, ApiResult a) {
+    public ApiResult updateTask(HttpServletRequest request, ReqUpdateTask reqUpdateTask, ApiResult a) throws Exception {
         HttpSession session = request.getSession();
-
-
-
 
         String taskId = (String) session.getAttribute("taskId");
         if(reqUpdateTask.getTaskId() == null){
@@ -188,6 +192,7 @@ public class InsuranceServiceImpl implements InsuranceService {
             reqUpdateTask.setTaskId(taskId);
 
         }
+
 
         ReqUpdateTask reqUpdateTask1 = null;
         try {
@@ -207,10 +212,10 @@ public class InsuranceServiceImpl implements InsuranceService {
         String json = gson.toJson(reqUpdateTask1);
         String response = new APIHttpClient()
                 .post("/updateTask", request, json,2);
-        
+
         getResult(response,a);
 
-        
+
         Map map = gson.fromJson(response, Map.class);
 
 
@@ -230,7 +235,7 @@ public class InsuranceServiceImpl implements InsuranceService {
 
     //10提交报价,等待报价信息结果
     @Override
-    public ApiResult submitQuote(HttpServletRequest request, JSONObject params, ApiResult a) {
+    public ApiResult submitQuote(HttpServletRequest request, JSONObject params, ApiResult a) throws Exception {
         String response = new APIHttpClient()
                 .post("/submitQuote", request, params.toString(),2);
         getResult(response,a);
@@ -239,7 +244,7 @@ public class InsuranceServiceImpl implements InsuranceService {
 
     //11提交核保任务
     @Override
-    public ApiResult submitInsure(JSONObject params, HttpServletRequest request, ApiResult a) {
+    public ApiResult submitInsure(JSONObject params, HttpServletRequest request, ApiResult a) throws Exception {
         String response = new APIHttpClient()
                 .post("/submitInsure", request, params.toString(),2);
         getResult(response,a);
@@ -249,7 +254,7 @@ public class InsuranceServiceImpl implements InsuranceService {
     //13影像识别
     @Override
     @Transactional
-    public ApiResult recognizeImage(JSONObject params, HttpServletRequest request, ApiResult a) {
+    public ApiResult recognizeImage(JSONObject params, HttpServletRequest request, ApiResult a) throws Exception {
         String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+"/";
 
 
@@ -296,7 +301,7 @@ public class InsuranceServiceImpl implements InsuranceService {
 
     //14上传影响
     @Override
-    public ApiResult uploadImage(ReqImgUpload reqImgUpload, HttpServletRequest request, ApiResult a) {
+    public ApiResult uploadImage(ReqImgUpload reqImgUpload, HttpServletRequest request, ApiResult a) throws Exception {
         String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+request.getContextPath()+"/";
 
         HttpSession session = request.getSession();
@@ -361,7 +366,7 @@ public class InsuranceServiceImpl implements InsuranceService {
 
     //15支付
     @Override
-    public ApiResult pay(JSONObject params, HttpServletRequest request, ApiResult a) {
+    public ApiResult pay(JSONObject params, HttpServletRequest request, ApiResult a) throws Exception {
         String response = new APIHttpClient()
                 .post("/pay", request, params.toString(),2);
         getResult(response,a);

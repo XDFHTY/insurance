@@ -50,7 +50,7 @@ public class InsuranceController {
     
     @ApiImplicitParam(name = "id",value = "用户ID",required = true)
     public ApiResult getToken( int id,
-                               HttpServletRequest request) {
+                               HttpServletRequest request) throws Exception {
         request.getSession().setAttribute("userId",id);
 
         ApiResult a = new ApiResult();
@@ -69,7 +69,7 @@ public class InsuranceController {
     
     @ApiImplicitParam(name = "agreementProvCode",value = "省编码或null",required = true)
     public ApiResult getAgreementAreas(HttpServletRequest request,
-                                       String agreementProvCode) {
+                                       String agreementProvCode)  throws Exception {
         ApiResult a =new ApiResult();
         a=insuranceService.getAgreementAreas(request,agreementProvCode,a);
         System.out.println(TimeToString.DateToStr(new Date())+a.toString());
@@ -99,7 +99,7 @@ public class InsuranceController {
     @ApiOperation("5获取供应商列表")
     @ApiImplicitParam(name = "insureAreaCode",value = "国标地区编码(市级)",required = true)
     public ApiResult getProviders(HttpServletRequest request,
-                                  String insureAreaCode ) {
+                                  String insureAreaCode )  throws Exception {
         ApiResult a =new ApiResult();
 
         a = insuranceService.getProviders(request,insureAreaCode,a);
@@ -116,7 +116,7 @@ public class InsuranceController {
     @ApiOperation("6创建报价任务A")
     public ApiResult createTaskA(HttpServletRequest request,
                                  @ApiParam(name = "params",value = "insureAreaCode:地区编码(市级), carInfo(carLicenseNo:车牌号)，carOwner(name：车主姓名)",required = true)
-                                 @RequestBody ReqCreateTaskA reqCreateTaskA) {
+                                 @RequestBody ReqCreateTaskA reqCreateTaskA) throws Exception  {
         ApiResult a =new ApiResult();
         a = insuranceService.createTaskA(reqCreateTaskA,request,a);
         if(-1 == a.getCode()){
@@ -134,7 +134,7 @@ public class InsuranceController {
     @ApiOperation("7创建报价任务B（标准接口）")
     public ApiResult createTaskB(HttpServletRequest request,
                                  @ApiParam(name = "params",value = "很多信息",required = true)
-                                 @RequestBody ReqCreateTaskB reqCreateTaskB) {
+                                 @RequestBody ReqCreateTaskB reqCreateTaskB)  throws Exception {
         ApiResult a =new ApiResult();
         a = insuranceService.createTaskB(reqCreateTaskB,request,a);
         System.out.println(TimeToString.DateToStr(new Date())+a);
@@ -149,7 +149,7 @@ public class InsuranceController {
     @ApiOperation("8查询车型信息")
     public ApiResult queryCarModelInfos(HttpServletRequest request,
                                         @ApiParam(name = "params",value = "pageSize:每页记录数(限制50),pageNum:第几页，vehicleName:车型名称/VIN码,carLicenseNo:车牌号,registDate:初登日期,",required = true)
-                                        @RequestBody JSONObject params) {
+                                        @RequestBody JSONObject params) throws Exception  {
         ApiResult a =new ApiResult();
         a=insuranceService.queryCarModelInfos(request,params,a);
         System.out.println(TimeToString.DateToStr(new Date())+a);
@@ -160,12 +160,10 @@ public class InsuranceController {
     /*  9修改报价/投保数据
      **/
     @PostMapping("/updateTask")
-    
     @ApiOperation("9修改报价/投保数据")
-
     public ApiResult updateTask(HttpServletRequest request,
                                 @ApiParam(name = "params",value = "提交需要修改的数据，JSON格式",required = true)
-                                @RequestBody String json) {
+                                @RequestBody String json) throws Exception  {
         ApiResult a =new ApiResult();
 
 
@@ -187,7 +185,7 @@ public class InsuranceController {
     public ApiResult submitQuote(HttpServletRequest request,
                                  @ApiParam(name = "params",value = "提交报价任务==" +
                                          "初次提交:{taskId:任务号},重新提交=={taskId: 任务号,prvId: 供应商id}",required = true)
-                                 @RequestBody JSONObject params) {
+                                 @RequestBody JSONObject params)  throws Exception {
         ApiResult a =new ApiResult();
         System.out.println("传给提交报价任务的参数为："+params.toString());
         a=insuranceService.submitQuote(request,params,a);
@@ -204,7 +202,7 @@ public class InsuranceController {
     public ApiResult submitInsure(
             HttpServletRequest request,
             @ApiParam(name = "params",value = "提交核保任务（需提供taskId与供应商Id）",required = true)
-            @RequestBody JSONObject params) {
+            @RequestBody JSONObject params)  throws Exception {
         ApiResult a =new ApiResult();
         a=insuranceService.submitInsure(params,request,a);
         System.out.println(TimeToString.DateToStr(new Date())+a.toString());
@@ -243,7 +241,7 @@ public class InsuranceController {
                     "imageMode: 图片格式(jpg、png、bmp)," +
                     "imageUrl: 影像URL," +
                     "imageContent: 影像内容(BASE64编码)",required = true)
-            @RequestBody JSONObject params, HttpServletRequest request) {
+            @RequestBody JSONObject params, HttpServletRequest request) throws Exception  {
         ApiResult a =new ApiResult();
         a = insuranceService.recognizeImage(params,request,a);
         System.out.println(TimeToString.DateToStr(new Date())+a.toString());
@@ -261,7 +259,7 @@ public class InsuranceController {
     public ApiResult uploadImage(HttpServletRequest request,
                                  @ApiParam(name = "params",value = "taskId=任务号，imageInfos=影像信息集合" +
                                          "【imageMode: 图片格式(jpg、png、bmp),imageUrl: 影像URL,imageContent: 影像内容(BASE64编码)】",required = true)
-                                 @RequestBody ReqImgUpload reqImgUpload) {
+                                 @RequestBody ReqImgUpload reqImgUpload) throws Exception  {
         ApiResult a =new ApiResult();
         a = insuranceService.uploadImage(reqImgUpload,request,a);
         System.out.println(TimeToString.DateToStr(new Date())+a.toString());
@@ -278,7 +276,7 @@ public class InsuranceController {
 
     public ApiResult pay(HttpServletRequest request,
                          @ApiParam(name = "params",value = "提交核保任务（需提供taskId与供应商Id）",required = true)
-                         @RequestBody JSONObject params) {
+                         @RequestBody JSONObject params)  throws Exception {
         ApiResult a =new ApiResult();
         a=insuranceService.pay(params,request,a);
         System.out.println(TimeToString.DateToStr(new Date())+a.toString());
