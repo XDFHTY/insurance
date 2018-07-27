@@ -37,8 +37,8 @@ public class AdminController {
     @ResponseBody
     @ApiOperation("1管理员登陆")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "adminName",value = "用户名",required = true,dataType = "String"),
-            @ApiImplicitParam(name = "adminPass",value = "密码",required = true,dataType = "String")
+            @ApiImplicitParam(name = "adminName",value = "用户名",required = true,dataType = "String",defaultValue = "asd"),
+            @ApiImplicitParam(name = "adminPass",value = "密码",required = true,dataType = "String",defaultValue = "123456")
     })
     public ApiResult update(String adminName, String adminPass, HttpServletRequest request){
         ApiResult a = new ApiResult();
