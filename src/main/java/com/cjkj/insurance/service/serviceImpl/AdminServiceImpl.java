@@ -7,12 +7,15 @@ import com.cjkj.insurance.service.AdminService;
 import com.cjkj.insurance.utils.ApiCode;
 import com.cjkj.insurance.utils.ApiResult;
 import com.cjkj.insurance.utils.Md5Utils;
+import com.cjkj.insurance.utils.domain.Pager;
+import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AdminServiceImpl implements AdminService {
@@ -23,25 +26,26 @@ public class AdminServiceImpl implements AdminService {
     /**
      * 管理员登陆
      *
-     * @param username
-     * @param password
+     * @param //username
+     * @param //password
      * @param request
      * @param a
      * @return
      */
     @Override
     public ApiResult login(String adminName, String adminPass, HttpServletRequest request, ApiResult a) {
-        Admin admin = new Admin();
-        admin.setAdminName(adminName);
+        Admin admin0 = new Admin();
+        admin0.setAdminName(adminName);
         String str = Md5Utils.MD5Encode(adminPass, "UTF-8", false);
-        admin.setAdminPass(str);
+        admin0.setAdminPass(str);
         try {
-            Admin user1 = adminMapper.login(admin);
-            if (user1 == null) {
+            Admin admin1 = adminMapper.login(admin0);
+            if (admin1 == null) {
                 a.setCode(ApiCode.userpwd_not_exist);
                 a.setMsg(ApiCode.userpwd_not_exist_MSG);
             } else {
-                request.getSession().setAttribute("admin", user1);
+                request.getSession().setAttribute("adminId", admin1.getId());
+                request.getSession().setAttribute("adminType", admin1.getAdminType());
                 a.setCode(ApiCode.SUCCESS);
                 a.setMsg(ApiCode.SUCCESS_MSG);
             }
@@ -256,11 +260,6 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public ApiResult deleteAdmin(String adminName, HttpServletRequest request, ApiResult a) {
         //登陆校验
-        Object obj = request.getSession().getAttribute("admin");
-        if (obj == null) {
-            a.setCode(ApiCode.no_login);
-            a.setMsg(ApiCode.no_login_MSG);
-        } else {
             //查询该用户
             Admin admin = adminMapper.findAdmin(adminName);
             if (admin != null) {
@@ -294,7 +293,6 @@ public class AdminServiceImpl implements AdminService {
                 a.setMsg(ApiCode.no_admin_error_MSG);
             }
 
-        }
         return a;
     }
 
@@ -311,6 +309,171 @@ public class AdminServiceImpl implements AdminService {
         a.setData(list);
         return a;
     }
+
+    /**
+     * 管理员查询订单列表
+     */
+    @Override
+    public ApiResult findAllOrderBypager(Pager pager){
+
+
+
+        List<List<?>> lists = adminMapper.findAllOrderBypager(pager);
+        List<OrderList> lists0 = (List<OrderList>) lists.get(0);
+        List<Map> list1 = (List<Map>) lists.get(1);
+        Long rows = (Long) list1.get(0).get("rows");
+
+        pager.setContent(lists0);
+        pager.setRecordTotal(rows.intValue());
+
+        ApiResult apiResult = new ApiResult();
+        apiResult.setCode(ApiCode.SUCCESS);
+        apiResult.setMsg(ApiCode.SUCCESS_MSG);
+        apiResult.setData(pager);
+
+        return apiResult;
+
+
+
+    }
+
+    @Override
+    public ApiResult findAllAdminByPager(Pager pager) {
+
+        List<List<?>> lists = adminMapper.findAllAdminByPager(pager);
+        List<OrderList> lists0 = (List<OrderList>) lists.get(0);
+        List<Map> list1 = (List<Map>) lists.get(1);
+        Long rows = (Long) list1.get(0).get("rows");
+
+        pager.setContent(lists0);
+        pager.setRecordTotal(rows.intValue());
+
+        ApiResult apiResult = new ApiResult();
+        apiResult.setCode(ApiCode.SUCCESS);
+        apiResult.setMsg(ApiCode.SUCCESS_MSG);
+        apiResult.setData(pager);
+
+        return apiResult;
+    }
+
+    @Override
+    public ApiResult updatePass(String oldPass, String newPass,HttpServletRequest request) {
+        ApiResult apiResult = new ApiResult();
+        Long adminId = (Long) request.getSession().getAttribute("adminId");
+        Admin admin0 = adminMapper.findAdminById(adminId);
+
+        String oldAdminPass = Md5Utils.MD5Encode(oldPass, "UTF-8", false);
+        if(oldAdminPass.equals(admin0.getAdminPass())){
+            String newAdminPass = Md5Utils.MD5Encode(newPass, "UTF-8", false);
+            Admin admin1 = new Admin();
+            admin1.setId(admin0.getId());
+            admin1.setAdminPass(newAdminPass);
+            int i = adminMapper.updateByPrimaryKeySelective(admin1);
+            if(i>0){
+                apiResult.setCode(ApiCode.SUCCESS);
+                apiResult.setMsg(ApiCode.SUCCESS_MSG);
+            }else {
+                apiResult.setCode(ApiCode.error_update_failed);
+                apiResult.setMsg(ApiCode.error_update_failed_MSG);
+            }
+
+        }else {
+            apiResult.setCode(ApiCode.pass_exist);
+            apiResult.setMsg(ApiCode.pass_exist_MSG);
+        }
+
+
+        return apiResult;
+    }
+
+    @Override
+    public ApiResult updateOtherPass(Long adminId, String newPass) {
+        ApiResult apiResult = new ApiResult();
+        String newAdminPass = Md5Utils.MD5Encode(newPass, "UTF-8", false);
+        Admin admin1 = new Admin();
+        admin1.setId(adminId);
+        admin1.setAdminPass(newAdminPass);
+        int i = adminMapper.updateByPrimaryKeySelective(admin1);
+        if(i>0){
+            apiResult.setCode(ApiCode.SUCCESS);
+            apiResult.setMsg(ApiCode.SUCCESS_MSG);
+        }else {
+            apiResult.setCode(ApiCode.error_update_failed);
+            apiResult.setMsg(ApiCode.error_update_failed_MSG);
+        }
+
+
+        return apiResult;
+    }
+
+
+    @Override
+    public ApiResult addAdmin(Admin admin) {
+        ApiResult apiResult = new ApiResult();
+
+        Admin admin0 = adminMapper.findAdminByName(admin.getAdminName());
+        if(admin0 !=null){
+            apiResult.setCode(ApiCode.error_create_failed);
+            apiResult.setMsg(ApiCode.error_create_failed_MSG+",此用户名存在，需先清理数据库记录才能添加");
+            return apiResult;
+        }
+        Admin admin1 = new Admin();
+        admin1.setAdminName(admin.getAdminName());
+        admin1.setAdminPass(Md5Utils.MD5Encode(admin.getAdminPass(), "UTF-8", false));
+        admin1.setRoleId(1l);
+        admin1.setAdminType(admin.getAdminType());
+        admin1.setAdminState("1");
+        admin1.setCreateTime(new Date());
+
+        int i = adminMapper.insertAdmin(admin1);
+
+        if(i>0){
+            apiResult.setCode(ApiCode.SUCCESS);
+            apiResult.setMsg(ApiCode.SUCCESS_MSG);
+        }else {
+            apiResult.setCode(ApiCode.error_create_failed);
+            apiResult.setMsg(ApiCode.error_create_failed_MSG);
+        }
+
+
+        return apiResult;
+    }
+
+    @Override
+    public ApiResult deleteAdmin(Long adminId) {
+        ApiResult apiResult = new ApiResult();
+
+        Admin admin1 = new Admin();
+        admin1.setId(adminId);
+        admin1.setAdminState("0");
+        int i = adminMapper.updateByPrimaryKeySelective(admin1);
+        if(i>0){
+            apiResult.setCode(ApiCode.SUCCESS);
+            apiResult.setMsg(ApiCode.SUCCESS_MSG);
+        }else {
+            apiResult.setCode(ApiCode.error_delete_failed);
+            apiResult.setMsg(ApiCode.error_delete_failed_MSG);
+        }
+
+
+        return apiResult;
+    }
+
+    Gson gson = new Gson();
+    @Override
+    public ApiResult findOrderInfo(String json) {
+        Map map = gson.fromJson(json,Map.class);
+
+        ApiResult apiResult = new ApiResult();
+        apiResult.setCode(ApiCode.SUCCESS);
+        apiResult.setMsg(ApiCode.SUCCESS_MSG);
+        apiResult.setData(adminMapper.findOrderInfo(map));
+
+
+        return apiResult;
+    }
+
+    ;
 
 
 }

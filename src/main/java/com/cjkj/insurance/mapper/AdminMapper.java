@@ -1,11 +1,15 @@
 package com.cjkj.insurance.mapper;
 
 import com.cjkj.insurance.entity.*;
+import com.cjkj.insurance.entity.other.OrderInfo;
 import com.cjkj.insurance.entity.other.RespOrder;
 import com.cjkj.insurance.entity.other.RespOrderItme;
+import com.cjkj.insurance.utils.ApiResult;
+import com.cjkj.insurance.utils.domain.Pager;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface AdminMapper {
     /**
@@ -92,5 +96,32 @@ public interface AdminMapper {
      * @return
      */
     List<Order> findOrder(Integer userId);
+
+    //=============================================================================================
+
+    /**
+     * 查询订单列表
+     */
+    public List<List<?>> findAllOrderBypager(Pager pager);
+
+
+    //查询管理员列表
+    public List<List<?>> findAllAdminByPager(Pager pager);
+
+    //根据Id查询admin
+    public Admin findAdminById(Long adminId);
+
+    //修改管理员信息，修改自己密码，修改他人密码
+    int updateByPrimaryKeySelective(Admin record);
+
+    //根据adminName查询管理员
+    public Admin findAdminByName(String adminName);
+
+    //添加管理员
+    int insertSelective(Admin record);
+
+    //查询订单详情
+    public OrderInfo findOrderInfo(Map map);
+
 }
 

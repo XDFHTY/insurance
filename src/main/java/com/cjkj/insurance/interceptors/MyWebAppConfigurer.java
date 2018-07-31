@@ -57,7 +57,7 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
         // 多个拦截器组成一个拦截器链
         // addPathPatterns 用于添加拦截规则
         // excludePathPatterns 用户排除拦截（传入字符串数组）
-        registry.addInterceptor(new UserInterceptors()).addPathPatterns("/**");
+        registry.addInterceptor(new CheckInterceptors()).addPathPatterns("/**");
         super.addInterceptors(registry);
     }
 
@@ -133,6 +133,7 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
     public void addViewControllers(ViewControllerRegistry registry) {
 //        registry.addViewController("/").setViewName("redirect:/static/main.html");
         registry.addViewController("/").setViewName("redirect:/static/bx/bx-chzluru.html");
+        registry.addViewController("/api").setViewName("redirect:/swagger-ui.html");
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
         super.addViewControllers(registry);
     }
