@@ -47,7 +47,6 @@ public class InsuranceController {
      */
     @GetMapping("/getToken")
     @ApiOperation("3添加接口访问规则中所需的header信息")
-    
     @ApiImplicitParam(name = "id",value = "用户ID",required = true)
     public ApiResult getToken( int id,
                                HttpServletRequest request) throws Exception {

@@ -213,7 +213,7 @@ public class AdminController {
             @ApiImplicitParam(name = "oldPass",value = "原密码",required = true),
             @ApiImplicitParam(name = "newPass",value = "新密码",required = true)
     })
-    @PutMapping("/updatePass")
+    @PostMapping("/updatePass")
     public ApiResult updatePass(String oldPass,String newPass,HttpServletRequest request){
         ApiResult apiResult = adminService.updatePass(oldPass,newPass,request);
 
@@ -228,7 +228,7 @@ public class AdminController {
             @ApiImplicitParam(name = "adminId",value = "管理员Id",required = true),
             @ApiImplicitParam(name = "newPass",value = "新密码",required = true)
     })
-    @PutMapping("/updateOtherPass")
+    @PostMapping("/updateOtherPass")
     public ApiResult updateOtherPass(Long adminId,String newPass){
         ApiResult apiResult = adminService.updateOtherPass(adminId,newPass);
 
@@ -256,7 +256,7 @@ public class AdminController {
 
     //删除管理员 非物理
     @ApiOperation("删除管理员 非物理 2018-07-31")
-    @PutMapping("/deleteAdmin")
+    @PostMapping("/deleteAdmin")
     @ApiImplicitParam(name = "adminId",value = "管理员ID",required = true)
     public ApiResult deleteAdmin(Long adminId){
         ApiResult apiResult = adminService.deleteAdmin(adminId);
@@ -264,11 +264,11 @@ public class AdminController {
         return apiResult;
     }
 
-    @GetMapping("/findOrderInfo")
+    @PostMapping("/findOrderInfo")
     @ApiImplicitParam(name = "json",value = "userId=用户ID,taskId=任务号，prvId=供应商ID,taskState=任务状态",
             defaultValue = "{'userId':'1234','taskId':'45061466','prvId':'20214419#20214419','taskState':'30'}")
     @ApiOperation("查询订单详情 2018-07-31")
-    public ApiResult findOrderInfo(String json){
+    public ApiResult findOrderInfo(@RequestBody String json){
         ApiResult apiResult = adminService.findOrderInfo(json);
 
         return apiResult;

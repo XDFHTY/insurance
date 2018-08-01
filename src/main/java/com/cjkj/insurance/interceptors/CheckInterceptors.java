@@ -50,21 +50,23 @@ public class CheckInterceptors implements HandlerInterceptor {
         String sessionId = request.getSession().getId();
         System.out.println("sessionId--before================"+sessionId);
 
-        String reqUrl = request.getRequestURI();
-        System.out.println("请求URL============"+reqUrl);
+        StringBuffer reqURL = request.getRequestURL();
+        String reqUri = request.getRequestURI();
+        System.out.println("请求URL============"+reqURL);
+        System.out.println("请求URI============"+reqUri);
 
         //是否校验登录
         Boolean b1 = false;
         //是否校验权限
         Boolean b2 = false;
         for (String url : loginStrs){
-            if(reqUrl.equals(url)){
+            if(reqUri.equals(url)){
                 b1 = true;
                 break;
             }
         }
         for (String url : powerStrs){
-            if(reqUrl.equals(url)){
+            if(reqUri.equals(url)){
                 b2 = true;
                 break;
             }
@@ -109,32 +111,48 @@ public class CheckInterceptors implements HandlerInterceptor {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler,
                            ModelAndView modelAndView) throws Exception {
 //        System.out.println(">>>UserInterceptors>>>>>>>请求处理之后进行调用，但是在视图被渲染之前（Controller方法调用之后）");
-        Integer userId = (Integer)request.getSession().getAttribute("userId");
+
+        //不匹配sessionid
+        String uri = request.getRequestURI();
+        //uri为/api/v1/admin/** 不用重写sessionid
+//        if(uri.indexOf("/api/v1/admin") ==-1 || uri.indexOf("/boss") ==-1) {
+
+        Integer userId = (Integer) request.getSession().getAttribute("userId");
+        Long adminId = (Long) request.getSession().getAttribute("adminId");
         String sessionId = request.getSession().getId();
 
-        if(sessionMap.containsKey(userId)){  //存在
-            String oldSessionId = (String) sessionMap.get(userId);
-            if(sessionId.equals(oldSessionId)){  //新旧sessionId匹配上了
+        if(userId != null && !"".equals(userId)){
+            System.out.println("=============这是用户请求");
 
-                System.out.println("============================jsessionid--after 匹配成功=====================================");
-                CookieTool.addCookie(response,"jsessionid",oldSessionId,1800);
-            }else {
+            if (sessionMap.containsKey(userId)) {  //存在
+                String oldSessionId = (String) sessionMap.get(userId);
+                if (sessionId.equals(oldSessionId)) {  //新旧sessionId匹配上了
 
-                System.out.println("============================重写用户的 cookie（sessionId--存在）--after=====================================");
-                System.out.println("oldSessionId--after==========="+oldSessionId);
-                CookieTool.addCookie(response,"jsessionid",oldSessionId,1800);
+                    System.out.println("============================jsessionid--after 匹配成功=====================================");
+                    CookieTool.addCookie(response, "jsessionid", oldSessionId, 1800);
+                } else {
+
+                    System.out.println("============================重写用户的 cookie（sessionId--存在并不一致）--after=====================================");
+                    System.out.println("oldSessionId--after===========" + oldSessionId);
+                    CookieTool.addCookie(response, "jsessionid", oldSessionId, 1800);
+                }
+            } else {  //不存在
+                System.out.println("sessionId--不存在===========" + sessionId);
+                //将用户的sessionId写入sessionMap
+                sessionMap.put(userId, sessionId);
+                System.out.println("============================重写用户的 cookie（sessionId--不存在）--after=====================================");
+                CookieTool.addCookie(response, "jsessionid", sessionId, 1800);
+
             }
-        }else {  //不存在
-            System.out.println("sessionId--不存在==========="+sessionId);
-            //将用户的sessionId写入sessionMap
-            sessionMap.put(userId,sessionId);
-            System.out.println("============================重写用户的 cookie（sessionId--不存在）--after=====================================");
-            CookieTool.addCookie(response,"jsessionid",sessionId,1800);
+
+
+        }else if(adminId != null && !"".equals(adminId)){
+            System.out.println("=============这是管理员请求");
+
+        }else {
+            System.out.println("=============这是非法请求");
 
         }
-
-
-
 
 
     }

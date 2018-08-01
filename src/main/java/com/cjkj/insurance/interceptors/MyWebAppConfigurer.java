@@ -133,6 +133,7 @@ public class MyWebAppConfigurer extends WebMvcConfigurerAdapter {
     public void addViewControllers(ViewControllerRegistry registry) {
 //        registry.addViewController("/").setViewName("redirect:/static/main.html");
         registry.addViewController("/").setViewName("redirect:/static/bx/bx-chzluru.html");
+        registry.addViewController("/boss").setViewName("redirect:/static/index.html");
         registry.addViewController("/api").setViewName("redirect:/swagger-ui.html");
         registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
         super.addViewControllers(registry);
